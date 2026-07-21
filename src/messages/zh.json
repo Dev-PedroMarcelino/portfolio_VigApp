@@ -1,0 +1,269 @@
+{
+  "meta": {
+    "title": "VigApp — 软件与数字营销工作室",
+    "description": "VigApp 设计并打造定制软件、SaaS 平台、电商与高转化数字体验，再以效果营销驱动持续增长。"
+  },
+  "nav": {
+    "home": "首页",
+    "work": "作品",
+    "marketing": "增长",
+    "contact": "联系",
+    "search": "搜索",
+    "searchPlaceholder": "搜索项目、行业…",
+    "searchEmpty": "没有找到结果，换个行业试试。",
+    "language": "语言",
+    "theme": "切换主题",
+    "menu": "打开菜单",
+    "close": "关闭菜单",
+    "cta": "开启项目",
+    "whatsappMessage": "你好，VigApp！我想聊聊一个项目。",
+    "categoriesTitle": "行业",
+    "featuredTitle": "精选作品",
+    "viewAllWork": "查看全部作品"
+  },
+  "categories": {
+    "food": "餐饮美食",
+    "spaces": "建筑与空间",
+    "health": "健康与养生",
+    "retail": "零售与时尚",
+    "corporate": "企业与法律",
+    "hospitality": "酒店与旅行",
+    "education": "教育",
+    "saas": "SaaS 与平台",
+    "dashboards": "仪表盘与系统",
+    "commerce": "电商与配送",
+    "marketing": "营销与网站"
+  },
+  "home": {
+    "hero": {
+      "kicker": "软件工作室 × 增长伙伴",
+      "title": "数字产品",
+      "titleAccent": "为赢而生",
+      "subtitle": "我们为各行各业设计、开发并规模化定制软件、平台与营销活动。整个网站就是我们的作品集——下方每一个项目，都是一个可以真实探索的鲜活产品。",
+      "ctaPrimary": "探索作品",
+      "ctaSecondary": "联系我们",
+      "scroll": "向下滚动探索",
+      "badge": "41 个行业，一家工作室。"
+    },
+    "services": {
+      "kicker": "我们打造什么",
+      "title": "一个伙伴，全部能力",
+      "subtitle": "从第一张线框图，到为你带来源源客源的广告投放——策略、设计、工程与增长，尽在同一屋檐下。",
+      "items": {
+        "software": {
+          "title": "定制软件",
+          "description": "企业系统、内部平台、CRM、ERP 与数据看板，完全围绕你的业务实际运转方式打造。"
+        },
+        "saas": {
+          "title": "SaaS 与产品",
+          "description": "订阅制平台的全流程产品设计与开发——从 MVP 到规模化，内置 AI 与 API 集成。"
+        },
+        "web": {
+          "title": "网站与落地页",
+          "description": "企业官网、高转化销售页与营销网站，对动效与细节的打磨近乎偏执。"
+        },
+        "commerce": {
+          "title": "电商与在线点单",
+          "description": "在线商城、餐厅点单、外卖配送与 WhatsApp 销售自动化，让浏览者变成下单人。"
+        },
+        "automation": {
+          "title": "AI 与自动化",
+          "description": "AI 集成、对话自动化与工作流编排，把重复的人工操作从你的运营中彻底移除。"
+        },
+        "growth": {
+          "title": "数字营销",
+          "description": "Google Ads、Meta Ads、SEO、转化漏斗与数据分析——效果营销与我们打造的产品直接打通。"
+        }
+      }
+    },
+    "showcase": {
+      "kicker": "作品集",
+      "title": "选一个行业，走进去。",
+      "subtitle": "每个项目都是可完整探索的概念作品——拥有自己的品牌、自己的动效语言、自己的产品逻辑。",
+      "viewAll": "浏览全部项目",
+      "explore": "探索"
+    },
+    "stats": {
+      "kicker": "为什么选择 VigApp",
+      "title": "会转化的设计，经得住时间的代码",
+      "projects": "作品集中的可交互项目",
+      "industries": "覆盖的行业",
+      "capabilities": "服务能力",
+      "languages": "自动识别的语言"
+    },
+    "marketingTeaser": {
+      "kicker": "软件 × 营销",
+      "title": "为上线而造，为增长布线。",
+      "subtitle": "没有流量，再美的产品也只是秘密；不能转化，再多的流量也只是流失。漏斗的两端，我们都亲手打造。",
+      "cta": "查看增长服务"
+    },
+    "cta": {
+      "title": "你的行业，就藏在这里的某个角落。",
+      "subtitle": "告诉我们你在经营什么——餐厅、诊所、基金还是车队——我们让你看到它能变成什么样。",
+      "whatsapp": "WhatsApp 在线聊",
+      "call": "致电我们",
+      "orWrite": "或写信至"
+    }
+  },
+  "work": {
+    "kicker": "精选概念",
+    "title": "作品陈列室",
+    "subtitle": "四十一个行业，四十一种设计语言。每张卡片背后，都是一个可以点击、滚动、下单的鲜活产品。",
+    "all": "全部",
+    "open": "打开项目",
+    "demos": {
+      "luxury-restaurant": { "tagline": "精致料理、品鉴菜单与烛光中的预订" },
+      "burger-restaurant": { "tagline": "态度拉满的碾压汉堡，连购物车都滋滋作响" },
+      "pizzeria": { "tagline": "那不勒斯风格家族柴火窑里的现烤披萨" },
+      "coffee-shop": { "tagline": "精品咖啡、慢下来的清晨与单一产地咖啡豆" },
+      "architecture-studio": { "tagline": "为屡获殊荣的建筑事务所打造的巨构风作品集" },
+      "interior-design": { "tagline": "温暖的极简主义，与会呼吸的空间" },
+      "construction": { "tagline": "重型土木工程，施工进度尽在掌握" },
+      "real-estate": { "tagline": "高端房源，配地图搜索与线上看房" },
+      "law-firm": { "tagline": "承袭百年判例的企业法律顾问" },
+      "medical-clinic": { "tagline": "有温度的医疗，线上预约也令人安心" },
+      "dental-clinic": { "tagline": "微笑设计、种植牙与轻松从容的就诊体验" },
+      "gym": { "tagline": "电光四射的力量训练课表与会员方案" },
+      "beauty-salon": { "tagline": "美发、护肤与仪式感——三次点击即可预约" },
+      "fashion-brand": { "tagline": "单色调时装屋，配以金箔质感的时尚大片" },
+      "sneaker-store": { "tagline": "限量发售、抽签购与自带 3D 热度的旋转陈列" },
+      "luxury-jewelry": { "tagline": "黑丝绒上的高级珠宝，附专属定制配置器" },
+      "electronics-store": { "tagline": "旗舰级科技零售，内置参数比价引擎" },
+      "furniture-store": { "tagline": "北欧家具，配真实空间比例可视化" },
+      "automotive-dealer": { "tagline": "性能车展厅，自选配置即时报价" },
+      "hotel": { "tagline": "森林深处的度假酒店：套房、水疗与预订流程" },
+      "travel-agency": { "tagline": "量身定制的旅程，与目的地故事叙事" },
+      "school": { "tagline": "让家长一见倾心的明亮 K-12 学校" },
+      "university": { "tagline": "学府底蕴，专业设置与招生一览" },
+      "tech-startup": { "tagline": "获风投加持、产品故事熠熠生辉的初创公司" },
+      "enterprise-saas": { "tagline": "玻璃拟态的平台官网，内嵌真实产品界面" },
+      "crm-platform": { "tagline": "管线、联系人与商机，尽在一个专注的工作区" },
+      "erp-dashboard": { "tagline": "库存与财务的运营指挥中心" },
+      "analytics-dashboard": { "tagline": "实时指标，与仿佛有生命的图表" },
+      "finance-platform": { "tagline": "暗色金融科技：卡片、余额与转账" },
+      "investment-platform": { "tagline": "财富管理，配投资组合模拟" },
+      "insurance": { "tagline": "让保障条款一目了然的即时报价流程" },
+      "marketing-agency": { "tagline": "用案例大声说话的粗野主义机构官网" },
+      "corporate-website": { "tagline": "投资者级质感的全球控股集团官网" },
+      "landing-page": { "tagline": "为转化而生的单品页面" },
+      "online-course": { "tagline": "班期制在线课程，课程体系与报名一应俱全" },
+      "subscription-platform": { "tagline": "可自选套餐的零食订阅盒子" },
+      "scheduling-platform": { "tagline": "Calendly 式预约，实时选定空闲时段" },
+      "whatsapp-ordering": { "tagline": "对话式点单，最终汇入 WhatsApp 购物车" },
+      "food-delivery": { "tagline": "多餐厅外卖配送，订单实时追踪" },
+      "ai-platform": { "tagline": "自带流式演练场手感的 AI 工作空间" },
+      "business-dashboard": { "tagline": "KPI、团队与目标，尽收一屏的高管视图" }
+    }
+  },
+  "marketing": {
+    "hero": {
+      "kicker": "增长工程",
+      "title": "流量。转化。营收。",
+      "subtitle": "软件给你一个产品，营销为它带来客户。我们把两者当作一个系统来运营——你正在浏览的这个网站，就是最好的证明。",
+      "cta": "规划我的增长"
+    },
+    "services": {
+      "kicker": "增长服务",
+      "title": "完整的获客体系",
+      "items": {
+        "traffic": { "title": "流量获取", "description": "围绕你的单位经济模型设计付费与自然获客策略，而不是追逐虚荣指标。" },
+        "googleAds": { "title": "Google Ads", "description": "搜索、购物、YouTube 与 Performance Max 广告系列，配以颗粒度极细的转化追踪。" },
+        "metaAds": { "title": "Meta Ads", "description": "覆盖 Instagram 与 Facebook 的全漏斗广告，规模化测试创意素材。" },
+        "seo": { "title": "SEO", "description": "技术 SEO、内容架构与 Core Web Vitals——写进代码里，而不是事后补丁。" },
+        "content": { "title": "内容策略", "description": "会产生复利的编辑体系：支柱内容、分发网络与内容再利用循环。" },
+        "branding": { "title": "品牌定位", "description": "命名、识别与信息传达，让高端定价显得理所当然。" },
+        "cro": { "title": "转化率优化", "description": "以研究驱动的 A/B 测试，覆盖页面、流程与报价方案。每个像素都要证明自己的价值。" },
+        "leads": { "title": "线索获取", "description": "落地页、引流内容与线索筛选流程，让你的 CRM 装满真正的买家。" },
+        "funnels": { "title": "转化漏斗", "description": "从首次点击到成交签约的完整旅程地图——每一处流失都被度量并修复。" },
+        "automation": { "title": "营销自动化", "description": "邮件、WhatsApp 与 CRM 自动化，在你睡觉时替你持续跟进。" },
+        "analytics": { "title": "数据分析", "description": "仪表盘只呈现一个真相：花了多少、赚回多少、该在哪里加码。" }
+      }
+    },
+    "synergy": {
+      "kicker": "复利效应",
+      "title": "为什么软件加营销，胜过两者单打独斗",
+      "body": "当构建你产品的团队同时负责你的获客，反馈就以提交代码的速度流转。营销创意诞生的同一周，落地页就能上线。数据追踪原生内建，而非事后拼贴。漏斗本身，成为产品的一项功能。",
+      "points": {
+        "speed": { "title": "以投放的节奏发布", "description": "新报价、新页面、新实验，几天内即可上线——没有代理商与开发之间的交接损耗。" },
+        "data": { "title": "统一的数据主干", "description": "产品分析与广告平台共享同一个数据真相源，营收归因清清楚楚。" },
+        "iteration": { "title": "复利式迭代", "description": "每一次投放都在打磨产品；每一次产品发布都在反哺投放。" }
+      }
+    },
+    "cta": {
+      "title": "准备好有章法地增长了吗？",
+      "subtitle": "把你的目标和当前数据发给我们，我们为你规划两点之间最快的路径。",
+      "whatsapp": "在 WhatsApp 上聊增长"
+    }
+  },
+  "contact": {
+    "kicker": "联系",
+    "title": "说说你正在打造什么",
+    "subtitle": "一条消息即可开始。我们会在一个工作日内回复——通常快得多。",
+    "form": {
+      "name": "你的姓名",
+      "email": "邮箱",
+      "phone": "电话 / WhatsApp",
+      "company": "公司",
+      "service": "你需要什么？",
+      "services": {
+        "software": "定制软件 / SaaS",
+        "website": "网站 / 落地页",
+        "commerce": "电商 / 在线点单",
+        "marketing": "数字营销",
+        "other": "其他需求"
+      },
+      "message": "介绍一下你的项目",
+      "submit": "发送消息",
+      "sending": "发送中…",
+      "success": "消息已收到，我们会尽快回复你。",
+      "successNote": "想立刻沟通？点击下方 WhatsApp 直接联系。",
+      "errors": {
+        "name": "请告诉我们你的姓名。",
+        "email": "请输入有效的邮箱地址。",
+        "message": "请至少用一句话介绍你的项目。"
+      }
+    },
+    "channels": {
+      "title": "直达渠道",
+      "whatsapp": "WhatsApp",
+      "whatsappMessage": "你好，VigApp！我想聊聊一个项目。",
+      "call": "电话",
+      "email": "邮箱"
+    },
+    "schedule": {
+      "kicker": "或预约一次通话",
+      "title": "挑一个适合你的时间",
+      "subtitle": "30 分钟的需求探索通话——免费、聚焦，并坦诚评估我们是否是合适的伙伴。",
+      "duration": "30 分钟 · 视频通话",
+      "confirm": "申请此时段",
+      "confirmed": "时段已申请！我们会通过 WhatsApp 确认。",
+      "timezone": "时间以你所在时区显示"
+    },
+    "map": {
+      "title": "工作室位于巴西坎皮纳斯",
+      "note": "远程优先，服务全球客户。"
+    }
+  },
+  "footer": {
+    "marquee": "软件 · 设计 · 增长",
+    "tagline": "一家为各行各业设计、开发并助推数字产品的工作室——从第一笔草图，到最后一次转化。",
+    "navigate": "导航",
+    "talk": "联系我们",
+    "whatsappMessage": "你好，VigApp！我通过作品集找到了你们。",
+    "rights": "版权所有。",
+    "location": "巴西坎皮纳斯 · 服务全球"
+  },
+  "demoShell": {
+    "conceptNote": "{name} 是 VigApp 的概念作品——每一屏都由我们设计并开发",
+    "hireTitle": "想让你的品牌也拥有这般工艺？",
+    "hireBody": "{name} 由 VigApp 端到端设计与开发，是作品集中的概念项目。属于你的版本，将围绕你真实的产品、客户与目标量身打造。",
+    "hireCta": "开启一个这样的项目",
+    "moreWork": "查看更多行业",
+    "whatsappMessage": "你好，VigApp！我看到了 {name} 这个概念作品，想做一个类似的。"
+  },
+  "notFound": {
+    "title": "此页面不存在",
+    "body": "链接也许旧了——但作品集依然鲜活。",
+    "back": "返回首页"
+  }
+}

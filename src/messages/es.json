@@ -1,0 +1,269 @@
+{
+  "meta": {
+    "title": "VigApp — Estudio de Software y Marketing Digital",
+    "description": "VigApp diseña y desarrolla software a la medida, plataformas SaaS, e-commerce y experiencias digitales de alta conversión — y luego las hace crecer con marketing de performance."
+  },
+  "nav": {
+    "home": "Inicio",
+    "work": "Portafolio",
+    "marketing": "Crecimiento",
+    "contact": "Contacto",
+    "search": "Buscar",
+    "searchPlaceholder": "Busca proyectos, industrias…",
+    "searchEmpty": "No encontramos nada. Prueba con otra industria.",
+    "language": "Idioma",
+    "theme": "Cambiar tema",
+    "menu": "Abrir menú",
+    "close": "Cerrar menú",
+    "cta": "Iniciar un proyecto",
+    "whatsappMessage": "¡Hola, VigApp! Me gustaría hablar sobre un proyecto.",
+    "categoriesTitle": "Industrias",
+    "featuredTitle": "Trabajos destacados",
+    "viewAllWork": "Ver todo el portafolio"
+  },
+  "categories": {
+    "food": "Gastronomía",
+    "spaces": "Arquitectura & Espacios",
+    "health": "Salud & Bienestar",
+    "retail": "Retail & Moda",
+    "corporate": "Corporativo & Legal",
+    "hospitality": "Hotelería & Viajes",
+    "education": "Educación",
+    "saas": "SaaS & Plataformas",
+    "dashboards": "Dashboards & Sistemas",
+    "commerce": "Comercio & Delivery",
+    "marketing": "Marketing & Web"
+  },
+  "home": {
+    "hero": {
+      "kicker": "Estudio de software & socio de crecimiento",
+      "title": "Productos digitales",
+      "titleAccent": "hechos para ganar",
+      "subtitle": "Diseñamos, construimos y escalamos software a la medida, plataformas y campañas para cualquier industria. Este sitio entero es nuestro portafolio — cada proyecto de abajo es un producto vivo y explorable.",
+      "ctaPrimary": "Explora el portafolio",
+      "ctaSecondary": "Hablemos",
+      "scroll": "Desplázate para explorar",
+      "badge": "41 industrias. Un estudio."
+    },
+    "services": {
+      "kicker": "Lo que construimos",
+      "title": "Un socio, todas las capacidades",
+      "subtitle": "Del primer wireframe a la campaña que llena tu pipeline — estrategia, diseño, ingeniería y crecimiento bajo un mismo techo.",
+      "items": {
+        "software": {
+          "title": "Software a la Medida",
+          "description": "Sistemas empresariales, plataformas internas, CRMs, ERPs y dashboards construidos en torno a cómo opera realmente tu negocio."
+        },
+        "saas": {
+          "title": "SaaS & Producto",
+          "description": "Diseño e ingeniería de producto completos para plataformas de suscripción — del MVP a la escala, con integraciones de IA y APIs."
+        },
+        "web": {
+          "title": "Sitios Web & Landing Pages",
+          "description": "Sitios corporativos, páginas de ventas de alta conversión y sitios de marketing con una atención obsesiva al movimiento y al detalle."
+        },
+        "commerce": {
+          "title": "E-commerce & Pedidos",
+          "description": "Tiendas en línea, pedidos para restaurantes, delivery y automatización de ventas por WhatsApp que convierten visitantes en compradores."
+        },
+        "automation": {
+          "title": "IA & Automatización",
+          "description": "Integraciones de IA, automatización de chat y orquestación de flujos que eliminan el trabajo manual de tu operación."
+        },
+        "growth": {
+          "title": "Marketing Digital",
+          "description": "Google Ads, Meta Ads, SEO, embudos y analítica — marketing de performance conectado directamente al producto que construimos."
+        }
+      }
+    },
+    "showcase": {
+      "kicker": "El portafolio",
+      "title": "Elige una industria. Entra a recorrerla.",
+      "subtitle": "Cada proyecto es un concepto totalmente explorable — con su propia marca, su propio lenguaje de movimiento y su propia lógica de producto.",
+      "viewAll": "Ver todos los proyectos",
+      "explore": "Explorar"
+    },
+    "stats": {
+      "kicker": "Por qué VigApp",
+      "title": "Diseño que convierte, código que perdura",
+      "projects": "Proyectos interactivos en este portafolio",
+      "industries": "Industrias cubiertas",
+      "capabilities": "Capacidades de servicio",
+      "languages": "Idiomas, detectados automáticamente"
+    },
+    "marketingTeaser": {
+      "kicker": "Software × Marketing",
+      "title": "Hecho para lanzar. Conectado para crecer.",
+      "subtitle": "Un producto hermoso sin tráfico es un secreto. Tráfico sin un producto que convierte es una fuga. Nosotros diseñamos ambos lados del embudo.",
+      "cta": "Ver servicios de crecimiento"
+    },
+    "cta": {
+      "title": "Tu industria está aquí, en algún lugar.",
+      "subtitle": "Cuéntanos qué manejas — un restaurante, una clínica, un fondo, una flota — y te mostramos cómo podría verse.",
+      "whatsapp": "Escríbenos por WhatsApp",
+      "call": "Llámanos",
+      "orWrite": "o escribe a"
+    }
+  },
+  "work": {
+    "kicker": "Conceptos seleccionados",
+    "title": "El showroom",
+    "subtitle": "Cuarenta y una industrias, cuarenta y un lenguajes de diseño. Cada tarjeta abre un producto vivo para hacer clic, recorrer y pedir.",
+    "all": "Todos",
+    "open": "Abrir proyecto",
+    "demos": {
+      "luxury-restaurant": { "tagline": "Alta cocina, menús degustación y reservas a la luz de las velas" },
+      "burger-restaurant": { "tagline": "Smash burgers con actitud y un carrito que chisporrotea" },
+      "pizzeria": { "tagline": "Pizza al horno de leña con alma napolitana" },
+      "coffee-shop": { "tagline": "Café de especialidad, mañanas lentas y granos de origen único" },
+      "architecture-studio": { "tagline": "Portafolio monolítico para un estudio premiado" },
+      "interior-design": { "tagline": "Minimalismo cálido y espacios que respiran" },
+      "construction": { "tagline": "Ingeniería civil pesada con avance que puedes seguir" },
+      "real-estate": { "tagline": "Propiedades premium con búsqueda en mapa y visitas virtuales" },
+      "law-firm": { "tagline": "Asesoría corporativa con un siglo de precedentes" },
+      "medical-clinic": { "tagline": "Salud humanizada con agendamiento en línea que transmite calma" },
+      "dental-clinic": { "tagline": "Diseño de sonrisa, implantes y citas amables" },
+      "gym": { "tagline": "Entrenamiento de fuerza con energía volt y planes de membresía" },
+      "beauty-salon": { "tagline": "Cabello, piel y ritual — reservado en tres toques" },
+      "fashion-brand": { "tagline": "Una maison monocromática con editoriales en hoja de oro" },
+      "sneaker-store": { "tagline": "Drops, sorteos y productos en rotación con efecto 3D" },
+      "luxury-jewelry": { "tagline": "Alta joyería sobre terciopelo negro con configurador" },
+      "electronics-store": { "tagline": "Retail de tecnología insignia con motor de comparación" },
+      "furniture-store": { "tagline": "Piezas escandinavas con visualización a escala real" },
+      "automotive-dealer": { "tagline": "Showroom de performance donde armas y cotizas tu auto" },
+      "hotel": { "tagline": "Un refugio en el bosque con suites, spa y flujo de reservas" },
+      "travel-agency": { "tagline": "Viajes a la medida con narrativa de destinos" },
+      "school": { "tagline": "Una escuela luminosa que enamora a los padres" },
+      "university": { "tagline": "Tradición universitaria con programas y admisiones" },
+      "tech-startup": { "tagline": "Una startup con capital de riesgo y una historia de producto que brilla" },
+      "enterprise-saas": { "tagline": "Marketing de plataforma glassmórfico con UI de producto en vivo" },
+      "crm-platform": { "tagline": "Pipeline, contactos y negocios en un espacio de trabajo enfocado" },
+      "erp-dashboard": { "tagline": "Centro de comando de operaciones para inventario y finanzas" },
+      "analytics-dashboard": { "tagline": "Métricas en tiempo real con gráficos que se sienten vivos" },
+      "finance-platform": { "tagline": "Fintech en modo oscuro con tarjetas, saldos y transferencias" },
+      "investment-platform": { "tagline": "Gestión patrimonial con simulación de portafolio" },
+      "insurance": { "tagline": "Coberturas claras con cotización al instante" },
+      "marketing-agency": { "tagline": "Sitio brutalista de agencia que grita sus casos de éxito" },
+      "corporate-website": { "tagline": "Holding global con acabado nivel inversionista" },
+      "landing-page": { "tagline": "Una sola página de producto diseñada para convertir" },
+      "online-course": { "tagline": "Cursos por cohortes con plan de estudios e inscripción" },
+      "subscription-platform": { "tagline": "Una suscripción de snacks con armador de planes" },
+      "scheduling-platform": { "tagline": "Reservas estilo Calendly con selección de horarios en vivo" },
+      "whatsapp-ordering": { "tagline": "Pedidos conversacionales que terminan en un carrito de WhatsApp" },
+      "food-delivery": { "tagline": "Delivery multirrestaurante con seguimiento del pedido en vivo" },
+      "ai-platform": { "tagline": "Un workspace de IA con sensación de playground en streaming" },
+      "business-dashboard": { "tagline": "KPIs, equipos y metas en una sola pantalla ejecutiva" }
+    }
+  },
+  "marketing": {
+    "hero": {
+      "kicker": "Ingeniería de crecimiento",
+      "title": "Tráfico. Conversión. Ingresos.",
+      "subtitle": "El software te da un producto. El marketing le consigue clientes. Operamos ambos como un solo sistema — el sitio que estás navegando es la prueba.",
+      "cta": "Planear mi crecimiento"
+    },
+    "services": {
+      "kicker": "Servicios de crecimiento",
+      "title": "El stack completo de adquisición",
+      "items": {
+        "traffic": { "title": "Generación de Tráfico", "description": "Estrategias de adquisición paga y orgánica diseñadas en torno a tu economía unitaria, no a métricas de vanidad." },
+        "googleAds": { "title": "Google Ads", "description": "Campañas de Búsqueda, Shopping, YouTube y Performance Max con seguimiento granular de conversiones." },
+        "metaAds": { "title": "Meta Ads", "description": "Campañas full-funnel en Instagram y Facebook con testeo de creativos a escala." },
+        "seo": { "title": "SEO", "description": "SEO técnico, arquitectura de contenido y Core Web Vitals — integrados en el código, no pegados encima." },
+        "content": { "title": "Estrategia de Contenido", "description": "Sistemas editoriales que se acumulan: contenido pilar, distribución y ciclos de reutilización." },
+        "branding": { "title": "Posicionamiento de Marca", "description": "Naming, identidad y mensajes que hacen que el precio premium se sienta obvio." },
+        "cro": { "title": "Optimización de Conversión", "description": "Tests A/B basados en investigación sobre páginas, flujos y ofertas. Cada píxel se gana su lugar." },
+        "leads": { "title": "Generación de Leads", "description": "Landing pages, lead magnets y flujos de calificación que llenan tu CRM de compradores reales." },
+        "funnels": { "title": "Embudos de Conversión", "description": "Recorridos mapeados del primer clic al trato cerrado — con cada fuga medida y reparada." },
+        "automation": { "title": "Automatización de Marketing", "description": "Automatizaciones de email, WhatsApp y CRM que hacen seguimiento mientras duermes." },
+        "analytics": { "title": "Analytics", "description": "Dashboards que muestran una sola verdad: cuánto invertiste, cuánto volvió y dónde doblar la apuesta." }
+      }
+    },
+    "synergy": {
+      "kicker": "El efecto compuesto",
+      "title": "Por qué software más marketing supera a ambos por separado",
+      "body": "Cuando el equipo que construye tu producto también opera tu adquisición, el feedback se mueve a velocidad de commit. Las landing pages salen al aire la misma semana en que nace el concepto de la campaña. El tracking es nativo, no un parche. El embudo se convierte en una funcionalidad del producto.",
+      "points": {
+        "speed": { "title": "Lanza a velocidad de campaña", "description": "Nuevas ofertas, páginas y experimentos desplegados en días — sin traspasos entre agencia y desarrollo." },
+        "data": { "title": "Una sola columna de datos", "description": "La analítica de producto y las plataformas de anuncios comparten una única fuente de verdad para la atribución de ingresos." },
+        "iteration": { "title": "Iteración compuesta", "description": "Cada campaña le enseña al producto; cada versión del producto alimenta las campañas." }
+      }
+    },
+    "cta": {
+      "title": "¿Listo para crecer con intención?",
+      "subtitle": "Envíanos tus metas y tus números actuales. Trazamos la ruta más rápida entre ambos.",
+      "whatsapp": "Hablemos de crecimiento por WhatsApp"
+    }
+  },
+  "contact": {
+    "kicker": "Contacto",
+    "title": "Cuéntanos qué estás construyendo",
+    "subtitle": "Un mensaje basta para empezar. Respondemos en un día hábil — casi siempre mucho antes.",
+    "form": {
+      "name": "Tu nombre",
+      "email": "Email",
+      "phone": "Teléfono / WhatsApp",
+      "company": "Empresa",
+      "service": "¿Qué necesitas?",
+      "services": {
+        "software": "Software a la medida / SaaS",
+        "website": "Sitio web / Landing page",
+        "commerce": "E-commerce / Pedidos",
+        "marketing": "Marketing digital",
+        "other": "Otra cosa"
+      },
+      "message": "Cuéntanos sobre el proyecto",
+      "submit": "Enviar mensaje",
+      "sending": "Enviando…",
+      "success": "Mensaje recibido. Te respondemos muy pronto.",
+      "successNote": "¿Prefieres algo inmediato? Escríbenos por WhatsApp aquí abajo.",
+      "errors": {
+        "name": "Dinos tu nombre, por favor.",
+        "email": "Ingresa un email válido.",
+        "message": "Cuéntanos al menos una frase sobre el proyecto."
+      }
+    },
+    "channels": {
+      "title": "Canales directos",
+      "whatsapp": "WhatsApp",
+      "whatsappMessage": "¡Hola, VigApp! Quiero hablar sobre un proyecto.",
+      "call": "Llamar",
+      "email": "Email"
+    },
+    "schedule": {
+      "kicker": "O agenda una llamada",
+      "title": "Elige el horario que te acomode",
+      "subtitle": "Una llamada de descubrimiento de 30 minutos — gratuita, enfocada y honesta sobre si somos el socio indicado.",
+      "duration": "30 min · Videollamada",
+      "confirm": "Solicitar este horario",
+      "confirmed": "¡Horario solicitado! Te confirmamos por WhatsApp.",
+      "timezone": "Horarios en tu zona horaria local"
+    },
+    "map": {
+      "title": "Con base en Campinas, Brasil",
+      "note": "Trabajamos con clientes de todo el mundo, remote-first."
+    }
+  },
+  "footer": {
+    "marquee": "Software · Diseño · Crecimiento",
+    "tagline": "Un estudio que diseña, construye y hace crecer productos digitales para cualquier industria — del primer boceto a la última conversión.",
+    "navigate": "Navega",
+    "talk": "Hablemos",
+    "whatsappMessage": "¡Hola, VigApp! Los encontré por el portafolio.",
+    "rights": "Todos los derechos reservados.",
+    "location": "Campinas — Brasil · Todo el mundo"
+  },
+  "demoShell": {
+    "conceptNote": "{name} es un concepto de VigApp — cada pantalla diseñada y construida por nosotros",
+    "hireTitle": "¿Quieres este nivel de oficio en tu marca?",
+    "hireBody": "{name} fue diseñado y desarrollado de principio a fin por VigApp como concepto de portafolio. Tu versión se construiría en torno a tus productos, clientes y metas reales.",
+    "hireCta": "Iniciar un proyecto como este",
+    "moreWork": "Ver más industrias",
+    "whatsappMessage": "¡Hola, VigApp! Vi el concepto {name} y quiero algo así."
+  },
+  "notFound": {
+    "title": "Esta página no existe",
+    "body": "Puede que el enlace sea viejo — pero el portafolio está más vivo que nunca.",
+    "back": "Volver al inicio"
+  }
+}
