@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { animate, motion, useInView, useReducedMotion } from "framer-motion";
+import { animate, useInView, useReducedMotion } from "framer-motion";
 import { Plus, PiggyBank } from "lucide-react";
 import type { NuvexContent, GoalSeed } from "./content";
 import { GOALS } from "./content";
