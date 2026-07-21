@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { ArrowRight, Check } from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import type { AtelierContent } from "./content";
 
 export function Contact({ content }: { content: AtelierContent["contact"] }) {
@@ -36,12 +36,12 @@ export function Contact({ content }: { content: AtelierContent["contact"] }) {
             </p>
 
             <div className="mt-12 max-w-md">
-              <AnimatePresence mode="wait">
-                {sent ? (
+              {sent ? (
                   <motion.div
                     key="ok"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4 }}
                     className="flex items-center gap-4 border-b border-[var(--d-bg)] pb-4"
                   >
                     <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--d-bg)] text-[var(--d-ink)]">
@@ -57,7 +57,7 @@ export function Contact({ content }: { content: AtelierContent["contact"] }) {
                     onSubmit={submit}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.4 }}
                     className="flex items-center gap-3 border-b border-[var(--d-bg-dim)] pb-3 focus-within:border-[var(--d-bg)]"
                   >
                     <label htmlFor="am-brief" className="sr-only">
@@ -81,7 +81,6 @@ export function Contact({ content }: { content: AtelierContent["contact"] }) {
                     </button>
                   </motion.form>
                 )}
-              </AnimatePresence>
               <p className="mt-3 [font-family:var(--demo-display)] text-[9px] uppercase tracking-[0.3em] text-[var(--d-bg-faint)]">
                 {content.cta}
               </p>

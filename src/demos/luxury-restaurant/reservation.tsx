@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowLeft, ArrowRight, CalendarDays, Check, Clock3, Users } from "lucide-react";
 import type { LumiereContent } from "./content";
 
@@ -103,12 +103,13 @@ export function ReservationSection({
       ? `${guests} ${guests === 1 ? content.guestSingular : content.guestPlural}`
       : "";
 
+  // Enter-only, keyed by step: the DOM always reflects the active step, so the
+  // stepper never deadlocks under prefers-reduced-motion (no exit, no mode="wait").
   const panelMotion = {
-    initial: reduceMotion ? undefined : { opacity: 0, y: 18 },
+    initial: reduceMotion ? false : { opacity: 0, y: 18 },
     animate: { opacity: 1, y: 0 },
-    exit: reduceMotion ? undefined : { opacity: 0, y: -12 },
     transition: { duration: 0.55, ease: EASE_SLOW },
-  };
+  } as const;
 
   return (
     <section id="reserve" className="relative bg-[var(--d-bg)] py-28 sm:py-36">
@@ -155,9 +156,9 @@ export function ReservationSection({
         </ol>
 
         <div className="mt-10 border border-[var(--d-line-soft)] bg-[var(--d-bg-soft)] px-6 py-10 sm:px-12">
-          <AnimatePresence mode="wait" initial={false}>
+          <motion.div key={step} {...panelMotion}>
             {step === 0 && (
-              <motion.div key="guests" {...panelMotion}>
+              <div>
                 <h3 className="[font-family:var(--demo-display)] text-center text-2xl italic text-[var(--d-ink)]">
                   {content.guestsTitle}
                 </h3>
@@ -181,11 +182,11 @@ export function ReservationSection({
                 <p className="mt-6 text-center text-xs font-light leading-relaxed text-[var(--d-ink-faint)]">
                   {content.largerParty}
                 </p>
-              </motion.div>
+              </div>
             )}
 
             {step === 1 && (
-              <motion.div key="date" {...panelMotion}>
+              <div>
                 <h3 className="[font-family:var(--demo-display)] text-center text-2xl italic text-[var(--d-ink)]">
                   {content.dateTitle}
                 </h3>
@@ -222,11 +223,11 @@ export function ReservationSection({
                     </button>
                   ))}
                 </div>
-              </motion.div>
+              </div>
             )}
 
             {step === 2 && (
-              <motion.div key="time" {...panelMotion}>
+              <div>
                 <h3 className="[font-family:var(--demo-display)] text-center text-2xl italic text-[var(--d-ink)]">
                   {content.timeTitle}
                 </h3>
@@ -269,11 +270,11 @@ export function ReservationSection({
                     </p>
                   </div>
                 )}
-              </motion.div>
+              </div>
             )}
 
             {step === 3 && guests !== null && chosenEvening && slotIndex !== null && (
-              <motion.div key="confirmed" {...panelMotion} className="text-center">
+              <div className="text-center">
                 <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-[var(--d-gold)]">
                   <Check aria-hidden className="h-6 w-6 text-[var(--d-gold)]" strokeWidth={1.5} />
                 </span>
@@ -329,9 +330,9 @@ export function ReservationSection({
                 >
                   {content.resetLabel}
                 </button>
-              </motion.div>
+              </div>
             )}
-          </AnimatePresence>
+          </motion.div>
 
           {step < 3 && (
             <div className="mt-10 flex items-center justify-between border-t border-[var(--d-line-soft)] pt-7">

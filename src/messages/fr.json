@@ -43,7 +43,7 @@
       "ctaPrimary": "Découvrir nos réalisations",
       "ctaSecondary": "Parlons-en",
       "scroll": "Faites défiler pour explorer",
-      "badge": "41 secteurs. Un seul studio."
+      "badge": "Six réalisations phares. Un seul studio."
     },
     "services": {
       "kicker": "Ce que nous créons",
@@ -108,7 +108,7 @@
   "work": {
     "kicker": "Concepts sélectionnés",
     "title": "Le showroom",
-    "subtitle": "Quarante et un secteurs, quarante et un langages de design. Chaque carte ouvre un produit vivant où cliquer, scroller et commander.",
+    "subtitle": "Six concepts phares, six langages de design — chacun avec sa propre 3D en temps réel. Chaque carte ouvre un produit vivant où cliquer, scroller et explorer.",
     "all": "Tous",
     "open": "Ouvrir le projet",
     "demos": {

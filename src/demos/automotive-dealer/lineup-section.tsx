@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import type { LineupContent } from "./content";
 import { SectionLabel, formatCurrency, scrollToId } from "./ui";
@@ -61,15 +61,15 @@ export function LineupSection({ content }: { content: LineupContent }) {
           })}
         </div>
 
-        {/* active model panel */}
-        <AnimatePresence mode="wait">
+        {/* active model panel — keyed enter-only swap (no AnimatePresence/exit,
+            which deadlocks under prefers-reduced-motion) */}
+        <div className="mt-8">
           <motion.div
             key={model.id}
             initial={reduced ? false : { opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={reduced ? undefined : { opacity: 0, y: -12 }}
             transition={{ duration: 0.4, ease: "easeOut" }}
-            className="mt-8 grid gap-8 lg:grid-cols-[1.3fr_1fr]"
+            className="grid gap-8 lg:grid-cols-[1.3fr_1fr]"
           >
             {/* image */}
             <div className="relative aspect-[16/10] overflow-hidden border border-[var(--d-line)] bg-black">
@@ -145,7 +145,7 @@ export function LineupSection({ content }: { content: LineupContent }) {
               </div>
             </div>
           </motion.div>
-        </AnimatePresence>
+        </div>
       </div>
     </section>
   );

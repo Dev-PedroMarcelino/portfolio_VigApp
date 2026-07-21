@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import {
   ArrowDownLeft,
   ArrowLeftRight,
@@ -213,52 +213,50 @@ export function DashboardSection({
               })}
             </div>
 
-            {/* Ledger */}
-            <ul className="mt-4 flex flex-col">
-              <AnimatePresence initial={false} mode="popLayout">
-                {visible.map((t) => {
-                  const Icon = CATEGORY_ICON[t.category];
-                  const credit = t.amount > 0;
-                  const whenLabel =
-                    t.time === "now" ? content.whenLabels.today : content.whenLabels[t.when];
-                  return (
-                    <motion.li
-                      key={t.id}
-                      layout={!reduced}
-                      initial={reduced ? false : { opacity: 0, y: -8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={reduced ? { opacity: 0 } : { opacity: 0, height: 0 }}
-                      transition={{ duration: 0.22 }}
-                      className="flex items-center gap-3 border-b border-[var(--d-line)]/60 py-3 last:border-0"
+            {/* Ledger — keyed by filter so switching swaps the list with an
+                enter-only animation. No AnimatePresence/exit, so it can never
+                deadlock or leave stale rows under prefers-reduced-motion. */}
+            <ul key={filter} className="mt-4 flex flex-col">
+              {visible.map((t, i) => {
+                const Icon = CATEGORY_ICON[t.category];
+                const credit = t.amount > 0;
+                const whenLabel =
+                  t.time === "now" ? content.whenLabels.today : content.whenLabels[t.when];
+                return (
+                  <motion.li
+                    key={t.id}
+                    initial={reduced ? false : { opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.22, delay: reduced ? 0 : Math.min(i * 0.03, 0.24) }}
+                    className="flex items-center gap-3 border-b border-[var(--d-line)]/60 py-3 last:border-0"
+                  >
+                    <span
+                      className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
+                        credit
+                          ? "bg-[var(--d-accent)]/12 text-[var(--d-accent-soft)]"
+                          : "bg-[var(--d-bg-soft)] text-[var(--d-ink-soft)]"
+                      }`}
                     >
-                      <span
-                        className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
-                          credit
-                            ? "bg-[var(--d-accent)]/12 text-[var(--d-accent-soft)]"
-                            : "bg-[var(--d-bg-soft)] text-[var(--d-ink-soft)]"
-                        }`}
-                      >
-                        <Icon className="h-[18px] w-[18px]" strokeWidth={1.8} />
-                      </span>
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate text-sm text-[var(--d-ink)]">{t.merchant}</p>
-                        <p className="truncate text-[0.7rem] text-[var(--d-ink-soft)] [font-family:var(--demo-mono)]">
-                          {content.categoryLabels[t.category]} · {whenLabel}
-                          {t.time !== "now" ? ` · ${t.time}` : ""}
-                        </p>
-                      </div>
-                      <span
-                        className={`shrink-0 text-sm font-semibold [font-family:var(--demo-mono)] ${
-                          credit ? "text-[var(--d-accent-soft)]" : "text-[var(--d-ink)]"
-                        }`}
-                      >
-                        {credit ? "+" : "-"}
-                        {fmtMoney(Math.abs(t.amount), localeTag, currency)}
-                      </span>
-                    </motion.li>
-                  );
-                })}
-              </AnimatePresence>
+                      <Icon className="h-[18px] w-[18px]" strokeWidth={1.8} />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm text-[var(--d-ink)]">{t.merchant}</p>
+                      <p className="truncate text-[0.7rem] text-[var(--d-ink-soft)] [font-family:var(--demo-mono)]">
+                        {content.categoryLabels[t.category]} · {whenLabel}
+                        {t.time !== "now" ? ` · ${t.time}` : ""}
+                      </p>
+                    </div>
+                    <span
+                      className={`shrink-0 text-sm font-semibold [font-family:var(--demo-mono)] ${
+                        credit ? "text-[var(--d-accent-soft)]" : "text-[var(--d-ink)]"
+                      }`}
+                    >
+                      {credit ? "+" : "-"}
+                      {fmtMoney(Math.abs(t.amount), localeTag, currency)}
+                    </span>
+                  </motion.li>
+                );
+              })}
               {visible.length === 0 && (
                 <li className="flex flex-col items-center gap-2 py-10 text-center">
                   <Plus className="h-5 w-5 text-[var(--d-ink-soft)]" />

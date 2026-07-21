@@ -5,6 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Check, RotateCcw } from "lucide-react";
 import type { ConfiguratorContent } from "./content";
 import { CarSilhouette } from "./car-silhouette";
+import { WheelStage } from "./wheel-stage";
 import { CarbonTexture, SectionLabel, formatCurrency } from "./ui";
 
 export function ConfiguratorSection({ content }: { content: ConfiguratorContent }) {
@@ -67,6 +68,11 @@ export function ConfiguratorSection({ content }: { content: ConfiguratorContent 
                     {content.powerNote}
                   </p>
                 </div>
+              </div>
+              {/* Signature 3D moment: forged alloy wheel whose caliper + centre-cap
+                  accent live-repaints to the chosen paint colour. */}
+              <div className="relative mt-4 border-y border-[var(--d-line)]/60">
+                <WheelStage accentColor={color.hex} />
               </div>
               <div className="relative mt-4">
                 <CarSilhouette color={color.hex} finish={color.finish} />

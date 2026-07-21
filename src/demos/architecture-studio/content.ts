@@ -92,6 +92,15 @@ export interface AtelierContent {
     principles: Principle[];
     imageAlt: string;
   };
+  maquette: {
+    eyebrow: string;
+    title: string;
+    body: string;
+    caption: string;
+    frameLabel: string;
+    liveLabel: string;
+    scaleLabel: string;
+  };
   awards: {
     eyebrow: string;
     title: string;
@@ -213,6 +222,15 @@ const en: AtelierContent = {
       },
     ],
     imageAlt: "A concrete gallery interior lit by a single high window",
+  },
+  maquette: {
+    eyebrow: "Massing study",
+    title: "The model comes first",
+    body: "Every commission begins as a physical maquette — bone-white volumes turned in raking light until the composition holds. This one is built and lit in real time: a small skyline of concrete masses you can turn with your cursor.",
+    caption: "Real-time massing model · bone & concrete",
+    frameLabel: "Massing model · study 1:200",
+    liveLabel: "Real-time",
+    scaleLabel: "5 m",
   },
   awards: {
     eyebrow: "Recognition",
@@ -513,6 +531,15 @@ const pt: AtelierContent = {
     ],
     imageAlt: "Interior de uma galeria de betão iluminada por uma única janela alta",
   },
+  maquette: {
+    eyebrow: "Estudo de massas",
+    title: "A maquete vem primeiro",
+    body: "Cada encomenda começa como uma maquete física — volumes cor de osso girados sob luz rasante até a composição se firmar. Esta é construída e iluminada em tempo real: um pequeno horizonte de massas de betão que se gira com o cursor.",
+    caption: "Maquete de massas em tempo real · osso e betão",
+    frameLabel: "Maquete de massas · estudo 1:200",
+    liveLabel: "Tempo real",
+    scaleLabel: "5 m",
+  },
   awards: {
     eyebrow: "Reconhecimento",
     title: "Prêmios e distinções",
@@ -811,6 +838,15 @@ const es: AtelierContent = {
       },
     ],
     imageAlt: "Interior de una galería de hormigón iluminada por una única ventana alta",
+  },
+  maquette: {
+    eyebrow: "Estudio de masas",
+    title: "La maqueta va primero",
+    body: "Cada encargo comienza como una maqueta física — volúmenes de color hueso girados bajo luz rasante hasta que la composición se sostiene. Esta se construye e ilumina en tiempo real: un pequeño horizonte de masas de hormigón que se gira con el cursor.",
+    caption: "Maqueta de masas en tiempo real · hueso y hormigón",
+    frameLabel: "Maqueta de masas · estudio 1:200",
+    liveLabel: "Tiempo real",
+    scaleLabel: "5 m",
   },
   awards: {
     eyebrow: "Reconocimiento",

@@ -59,6 +59,37 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ---------------------------------------------------------------------------
+ * Monochrome identity — "the simple that does a lot".
+ * The global brand is strictly black & white; colour is reserved for the
+ * showcased projects so they pop against the neutral chrome. These rules strip
+ * the browser's default chromatic UI (blue accents, focus rings, autofill
+ * tints) so nothing outside a demo introduces colour. `color-scheme` keeps
+ * native controls and scrollbars matched to the active theme.
+ * ------------------------------------------------------------------------- */
+:root {
+  color-scheme: light;
+  accent-color: #0a0a0a;
+}
+
+.dark {
+  color-scheme: dark;
+  accent-color: #f5f5f5;
+}
+
+/* Neutralise the blue/lavender autofill wash browsers paint over inputs. */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-text-fill-color: var(--foreground);
+  caret-color: var(--foreground);
+  -webkit-box-shadow: 0 0 0 1000px var(--surface) inset;
+  transition: background-color 9999s ease-out 0s;
 }
 
 html.lenis,

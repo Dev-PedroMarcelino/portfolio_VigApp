@@ -1,10 +1,17 @@
 "use client";
 
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import { motion, useReducedMotion } from "framer-motion";
 import type { LumiereContent } from "./content";
 
 const EASE_SLOW: [number, number, number, number] = [0.16, 1, 0.3, 1];
+
+/** Lazy, client-only so the 3D bundle never blocks the hero's first paint. */
+const Scene = dynamic(() => import("./scene"), {
+  ssr: false,
+  loading: () => <div aria-hidden />,
+});
 
 export function Hero({ content }: { content: LumiereContent["hero"] }) {
   const reduceMotion = useReducedMotion();
@@ -28,6 +35,7 @@ export function Hero({ content }: { content: LumiereContent["hero"] }) {
           aria-hidden
           className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_38%,rgba(14,12,8,0.65)_100%)]"
         />
+        <Scene />
       </div>
 
       <div className="relative z-10 mx-auto flex w-full max-w-5xl flex-1 flex-col items-center justify-center px-6 pb-28 pt-40 text-center">

@@ -59,24 +59,21 @@ export function LatestDrop({
           {/* gallery */}
           <div>
             <div className="relative aspect-square overflow-hidden rounded-[2rem] border border-[var(--d-line)] bg-[var(--d-panel)]">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeThumb}
-                  initial={reduce ? undefined : { opacity: 0, scale: 1.04 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={reduce ? undefined : { opacity: 0 }}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
-                  className="absolute inset-0"
-                >
-                  <Image
-                    src={shot(gallery[activeThumb], 1200)}
-                    alt={galleryAlts[activeThumb]}
-                    fill
-                    sizes="(min-width: 1024px) 620px, 92vw"
-                    className="object-cover"
-                  />
-                </motion.div>
-              </AnimatePresence>
+              <motion.div
+                key={activeThumb}
+                initial={reduce ? false : { opacity: 0, scale: 1.04 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="absolute inset-0"
+              >
+                <Image
+                  src={shot(gallery[activeThumb], 1200)}
+                  alt={galleryAlts[activeThumb]}
+                  fill
+                  sizes="(min-width: 1024px) 620px, 92vw"
+                  className="object-cover"
+                />
+              </motion.div>
               <div
                 aria-hidden
                 className="pointer-events-none absolute inset-0"

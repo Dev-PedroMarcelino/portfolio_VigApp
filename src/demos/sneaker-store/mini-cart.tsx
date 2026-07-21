@@ -139,18 +139,15 @@ export function MiniCart({
                 <span className="text-[0.66rem] font-bold uppercase tracking-[0.2em] text-[var(--d-ink-soft)] [font-family:var(--demo-body)]">
                   {content.subtotal}
                 </span>
-                <AnimatePresence mode="wait">
-                  <motion.span
-                    key={subtotal}
-                    initial={reduce ? undefined : { opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={reduce ? undefined : { opacity: 0, y: -8 }}
-                    transition={{ duration: 0.2 }}
-                    className="[font-family:var(--demo-display)] text-3xl text-[var(--d-ink)]"
-                  >
-                    {money(locale, currency, subtotal)}
-                  </motion.span>
-                </AnimatePresence>
+                <motion.span
+                  key={subtotal}
+                  initial={reduce ? false : { opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="[font-family:var(--demo-display)] text-3xl text-[var(--d-ink)]"
+                >
+                  {money(locale, currency, subtotal)}
+                </motion.span>
               </div>
               <p className="mt-1.5 text-[0.66rem] text-[var(--d-mute)] [font-family:var(--demo-body)]">
                 {content.shippingNote}

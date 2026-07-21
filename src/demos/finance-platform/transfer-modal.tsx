@@ -184,15 +184,16 @@ export function TransferModal({
               </div>
             )}
 
-            <div className="px-5 pb-6 pt-5">
-              <AnimatePresence mode="wait">
+            {/* Steps are keyed by `step` on a plain container with enter-only
+                motion — no AnimatePresence/mode="wait", which can deadlock under
+                prefers-reduced-motion when an exit transition never resolves. */}
+            <div key={step} className="px-5 pb-6 pt-5">
+              <>
                 {/* STEP 1 - recipient */}
                 {step === "recipient" && (
                   <motion.div
-                    key="recipient"
                     initial={reduced ? false : { opacity: 0, x: 16 }}
                     animate={{ opacity: 1, x: 0 }}
-                    exit={reduced ? { opacity: 0 } : { opacity: 0, x: -16 }}
                     transition={{ duration: 0.24 }}
                   >
                     <div className="relative">
@@ -246,10 +247,8 @@ export function TransferModal({
                 {/* STEP 2 - amount */}
                 {step === "amount" && recipient && (
                   <motion.div
-                    key="amount"
                     initial={reduced ? false : { opacity: 0, x: 16 }}
                     animate={{ opacity: 1, x: 0 }}
-                    exit={reduced ? { opacity: 0 } : { opacity: 0, x: -16 }}
                     transition={{ duration: 0.24 }}
                   >
                     <div className="mb-5 flex items-center gap-3 rounded-xl border border-[var(--d-line)] bg-[var(--d-bg-soft)] px-3 py-2.5">
@@ -336,10 +335,8 @@ export function TransferModal({
                 {/* STEP 3 - confirm */}
                 {step === "confirm" && recipient && (
                   <motion.div
-                    key="confirm"
                     initial={reduced ? false : { opacity: 0, x: 16 }}
                     animate={{ opacity: 1, x: 0 }}
-                    exit={reduced ? { opacity: 0 } : { opacity: 0, x: -16 }}
                     transition={{ duration: 0.24 }}
                   >
                     <div className="flex flex-col items-center">
@@ -386,7 +383,6 @@ export function TransferModal({
                 {/* STEP 4 - success */}
                 {step === "success" && recipient && (
                   <motion.div
-                    key="success"
                     initial={reduced ? false : { opacity: 0, scale: 0.96 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.3 }}
@@ -421,7 +417,7 @@ export function TransferModal({
                     </button>
                   </motion.div>
                 )}
-              </AnimatePresence>
+              </>
             </div>
           </motion.div>
         </motion.div>

@@ -2,7 +2,7 @@
 
 import { useId, useState } from "react";
 import Image from "next/image";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Check, ShieldCheck } from "lucide-react";
 import type { TestDriveContent } from "./content";
 import { CarbonTexture, SectionLabel } from "./ui";
@@ -68,13 +68,13 @@ export function TestDriveSection({ content }: { content: TestDriveContent }) {
 
           {/* right: form / success */}
           <div className="relative border border-[var(--d-line)] bg-[var(--d-surface)]">
-            <AnimatePresence mode="wait">
+            {/* Keyed enter-only swap (no AnimatePresence/exit, which deadlocks
+                under prefers-reduced-motion) */}
+            <div key={submitted ? "success" : "form"}>
               {submitted ? (
                 <motion.div
-                  key="success"
                   initial={reduced ? false : { opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={reduced ? undefined : { opacity: 0 }}
                   className="flex min-h-full flex-col items-start justify-center gap-4 p-8"
                 >
                   <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-[var(--d-accent)]">
@@ -100,10 +100,8 @@ export function TestDriveSection({ content }: { content: TestDriveContent }) {
                 </motion.div>
               ) : (
                 <motion.form
-                  key="form"
                   initial={reduced ? false : { opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  exit={reduced ? undefined : { opacity: 0 }}
                   onSubmit={(e) => {
                     e.preventDefault();
                     if (valid) setSubmitted(true);
@@ -223,7 +221,7 @@ export function TestDriveSection({ content }: { content: TestDriveContent }) {
                   </button>
                 </motion.form>
               )}
-            </AnimatePresence>
+            </div>
           </div>
         </div>
       </div>

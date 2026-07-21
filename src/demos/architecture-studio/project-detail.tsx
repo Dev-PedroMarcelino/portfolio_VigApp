@@ -66,7 +66,6 @@ export function ProjectDetail({
         <div className="mt-6 grid grid-cols-1 gap-x-16 gap-y-12 lg:grid-cols-[1.35fr_1fr]">
           {/* left: hero image + description */}
           <div>
-            <AnimatePresence mode="wait">
               <motion.button
                 key={project.id}
                 type="button"
@@ -74,7 +73,6 @@ export function ProjectDetail({
                 aria-label={content.openGalleryLabel}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
                 transition={{ duration: 0.5 }}
                 className="group relative block aspect-[4/3] w-full overflow-hidden"
               >
@@ -118,7 +116,6 @@ export function ProjectDetail({
                   </p>
                 ))}
               </motion.div>
-            </AnimatePresence>
           </div>
 
           {/* right: facts + thumbnails */}
@@ -195,25 +192,22 @@ export function ProjectDetail({
             </div>
 
             <div className="relative flex-1 px-4 pb-6 sm:px-16">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={lightbox}
-                  initial={{ opacity: 0, scale: 0.98 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.98 }}
-                  transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                  className="relative h-full w-full"
-                >
-                  <Image
-                    src={unsplash(project.gallery[lightbox].id, 1800)}
-                    alt={project.gallery[lightbox].alt}
-                    fill
-                    sizes="100vw"
-                    className="object-contain"
-                    style={{ filter: "grayscale(1) contrast(1.04)" }}
-                  />
-                </motion.div>
-              </AnimatePresence>
+              <motion.div
+                key={lightbox}
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                className="relative h-full w-full"
+              >
+                <Image
+                  src={unsplash(project.gallery[lightbox].id, 1800)}
+                  alt={project.gallery[lightbox].alt}
+                  fill
+                  sizes="100vw"
+                  className="object-contain"
+                  style={{ filter: "grayscale(1) contrast(1.04)" }}
+                />
+              </motion.div>
 
               <button
                 type="button"

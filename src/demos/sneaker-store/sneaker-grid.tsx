@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { Check, Plus } from "lucide-react";
 import type { CartLine, GridContent, GridSneaker } from "./content";
 import { Kicker, Chip, TiltCard, money, shot } from "./ui";
@@ -109,17 +109,18 @@ function SneakerCard({
                 : "bg-[var(--d-accent)] text-[#12081F] hover:scale-110"
             }`}
           >
-            <AnimatePresence mode="wait" initial={false}>
+            <motion.span
+              key={added ? "ok" : "add"}
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.18, ease: "easeOut" }}
+            >
               {added ? (
-                <motion.span key="ok" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}>
-                  <Check className="h-4 w-4" strokeWidth={2.6} aria-hidden />
-                </motion.span>
+                <Check className="h-4 w-4" strokeWidth={2.6} aria-hidden />
               ) : (
-                <motion.span key="add" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}>
-                  <Plus className="h-4 w-4" strokeWidth={2.6} aria-hidden />
-                </motion.span>
+                <Plus className="h-4 w-4" strokeWidth={2.6} aria-hidden />
               )}
-            </AnimatePresence>
+            </motion.span>
           </button>
         </div>
       </TiltCard>

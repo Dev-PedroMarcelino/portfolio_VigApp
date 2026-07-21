@@ -43,7 +43,7 @@
       "ctaPrimary": "Explore the work",
       "ctaSecondary": "Talk to us",
       "scroll": "Scroll to explore",
-      "badge": "41 industries. One studio."
+      "badge": "Six flagship builds. One studio."
     },
     "services": {
       "kicker": "What we build",
@@ -108,7 +108,7 @@
   "work": {
     "kicker": "Selected concepts",
     "title": "The showroom",
-    "subtitle": "Forty-one industries, forty-one design languages. Every card opens a living product you can click, scroll and order from.",
+    "subtitle": "Six flagship concepts, six design languages — each with its own real-time 3D. Every card opens a living product you can click, scroll and explore.",
     "all": "All",
     "open": "Open project",
     "demos": {

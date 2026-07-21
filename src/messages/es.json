@@ -43,7 +43,7 @@
       "ctaPrimary": "Explora el portafolio",
       "ctaSecondary": "Hablemos",
       "scroll": "Desplázate para explorar",
-      "badge": "41 industrias. Un estudio."
+      "badge": "Seis proyectos insignia. Un estudio."
     },
     "services": {
       "kicker": "Lo que construimos",
@@ -108,7 +108,7 @@
   "work": {
     "kicker": "Conceptos seleccionados",
     "title": "El showroom",
-    "subtitle": "Cuarenta y una industrias, cuarenta y un lenguajes de diseño. Cada tarjeta abre un producto vivo para hacer clic, recorrer y pedir.",
+    "subtitle": "Seis conceptos insignia, seis lenguajes de diseño, cada uno con su propio 3D en tiempo real. Cada tarjeta abre un producto vivo para hacer clic, recorrer y explorar.",
     "all": "Todos",
     "open": "Abrir proyecto",
     "demos": {

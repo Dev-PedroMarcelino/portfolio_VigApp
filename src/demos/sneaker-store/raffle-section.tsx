@@ -147,14 +147,12 @@ export function RaffleSection({ content }: { content: RaffleContent }) {
                 <X className="h-4 w-4" strokeWidth={2} />
               </button>
 
-              <AnimatePresence mode="wait">
-                {!done ? (
+              {!done ? (
                   <motion.form
                     key="form"
                     onSubmit={submit}
-                    initial={reduce ? undefined : { opacity: 0 }}
+                    initial={reduce ? false : { opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    exit={reduce ? undefined : { opacity: 0 }}
                   >
                     <Chip tone="violet">{content.prizeName}</Chip>
                     <h3 className="mt-4 [font-family:var(--demo-display)] text-3xl tracking-tight text-[var(--d-ink)]">
@@ -233,9 +231,8 @@ export function RaffleSection({ content }: { content: RaffleContent }) {
                 ) : (
                   <motion.div
                     key="done"
-                    initial={reduce ? undefined : { opacity: 0, y: 12 }}
+                    initial={reduce ? false : { opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={reduce ? undefined : { opacity: 0 }}
                     className="py-2 text-center"
                   >
                     <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[var(--d-accent)] text-[#12081F]">
@@ -268,7 +265,6 @@ export function RaffleSection({ content }: { content: RaffleContent }) {
                     </button>
                   </motion.div>
                 )}
-              </AnimatePresence>
             </motion.div>
           </motion.div>
         )}

@@ -1,12 +1,13 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Check, Sparkles } from "lucide-react";
 import type { PricingContent, ModelTierId } from "./content";
 import { Glow, SectionHeading, scrollToId } from "./ui";
 
 export function Pricing({ content }: { content: PricingContent }) {
+  const reduce = useReducedMotion();
   const { calc } = content;
   const [requests, setRequests] = useState(500000);
   const [tierId, setTierId] = useState<ModelTierId>("core");
@@ -125,7 +126,7 @@ export function Pricing({ content }: { content: PricingContent }) {
               <div className="mt-1 flex items-baseline gap-1.5">
                 <motion.span
                   key={money.format(Math.round(cost))}
-                  initial={{ opacity: 0.4, y: 4 }}
+                  initial={reduce ? false : { opacity: 0.4, y: 4 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.25 }}
                   className="[font-family:var(--demo-display)] text-4xl font-semibold text-[var(--d-ink)] sm:text-5xl"

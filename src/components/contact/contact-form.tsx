@@ -68,12 +68,12 @@ export function ContactForm() {
         <div>
           <label className="sr-only" htmlFor="contact-name">{t("name")}</label>
           <input id="contact-name" placeholder={t("name")} className={inputClass} {...register("name")} />
-          {errors.name ? <p role="alert" className="mt-1.5 text-xs text-red-500">{errors.name.message}</p> : null}
+          {errors.name ? <p role="alert" className="mt-1.5 text-xs font-medium text-foreground/70">{errors.name.message}</p> : null}
         </div>
         <div>
           <label className="sr-only" htmlFor="contact-email">{t("email")}</label>
           <input id="contact-email" type="email" placeholder={t("email")} className={inputClass} {...register("email")} />
-          {errors.email ? <p role="alert" className="mt-1.5 text-xs text-red-500">{errors.email.message}</p> : null}
+          {errors.email ? <p role="alert" className="mt-1.5 text-xs font-medium text-foreground/70">{errors.email.message}</p> : null}
         </div>
         <div>
           <label className="sr-only" htmlFor="contact-phone">{t("phone")}</label>
@@ -116,7 +116,7 @@ export function ContactForm() {
           className={cn(inputClass, "resize-none")}
           {...register("message")}
         />
-        {errors.message ? <p role="alert" className="mt-1.5 text-xs text-red-500">{errors.message.message}</p> : null}
+        {errors.message ? <p role="alert" className="mt-1.5 text-xs font-medium text-foreground/70">{errors.message.message}</p> : null}
       </div>
 
       <button

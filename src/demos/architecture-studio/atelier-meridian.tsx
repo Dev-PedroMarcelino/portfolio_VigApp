@@ -7,6 +7,7 @@ import { Hero } from "./hero";
 import { ProjectIndex } from "./project-index";
 import { ProjectDetail } from "./project-detail";
 import { Philosophy } from "./philosophy";
+import { Maquette } from "./maquette";
 import { Awards } from "./awards";
 import { Contact } from "./contact";
 import { BrandFooter } from "./footer";
@@ -126,6 +127,7 @@ export function AtelierMeridianRoot({ locale }: { locale: string }) {
           areaValue={areaFormatter.format(selected.area)}
         />
         <Philosophy content={content.philosophy} />
+        <Maquette content={content.maquette} />
         <Awards content={content.awards} />
         <Contact content={content.contact} />
       </main>

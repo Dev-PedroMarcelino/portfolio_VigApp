@@ -2,12 +2,13 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Check } from "lucide-react";
 import type { UseCasesContent, UseCaseId } from "./content";
 import { Glow, SectionHeading } from "./ui";
 
 export function UseCases({ content }: { content: UseCasesContent }) {
+  const reduce = useReducedMotion();
   const [active, setActive] = useState<UseCaseId>("support");
   const tab = content.tabs.find((t) => t.id === active) ?? content.tabs[0];
 
@@ -47,12 +48,10 @@ export function UseCases({ content }: { content: UseCasesContent }) {
         </div>
 
         <div className="mt-8 grid items-stretch gap-6 lg:grid-cols-[1fr_1fr]">
-          <AnimatePresence mode="wait">
-            <motion.div
+          <motion.div
               key={`copy-${tab.id}`}
-              initial={{ opacity: 0, y: 16 }}
+              initial={reduce ? false : { opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.3 }}
               className="flex flex-col justify-between rounded-2xl border border-[var(--d-line)] bg-[rgba(11,10,20,0.55)] p-7 backdrop-blur-sm"
             >
@@ -79,14 +78,11 @@ export function UseCases({ content }: { content: UseCasesContent }) {
                 <span className="text-[0.8rem] leading-tight text-[var(--d-ink-soft)]">{tab.metricLabel}</span>
               </div>
             </motion.div>
-          </AnimatePresence>
 
-          <AnimatePresence mode="wait">
-            <motion.div
+          <motion.div
               key={`img-${tab.id}`}
-              initial={{ opacity: 0, scale: 0.97 }}
+              initial={reduce ? false : { opacity: 0, scale: 0.97 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.98 }}
               transition={{ duration: 0.35 }}
               className="relative min-h-72 overflow-hidden rounded-2xl border border-[var(--d-line)]"
             >
@@ -112,7 +108,6 @@ export function UseCases({ content }: { content: UseCasesContent }) {
                 style={{ boxShadow: "inset 0 0 100px -20px rgba(167,139,250,0.4)" }}
               />
             </motion.div>
-          </AnimatePresence>
         </div>
       </div>
     </section>
