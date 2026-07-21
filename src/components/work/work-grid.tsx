@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { demoCategories, demos, type DemoCategory } from "@/lib/demos";
 import { DemoCard } from "./demo-card";
@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 export function WorkGrid({ initialCategory }: { initialCategory?: string }) {
   const t = useTranslations("work");
   const tc = useTranslations("categories");
+  const reduce = useReducedMotion();
   const [active, setActive] = useState<DemoCategory | "all">(
     demoCategories.includes(initialCategory as DemoCategory)
       ? (initialCategory as DemoCategory)
@@ -46,22 +47,29 @@ export function WorkGrid({ initialCategory }: { initialCategory?: string }) {
         ))}
       </div>
 
-      <motion.ul layout className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        <AnimatePresence mode="popLayout">
-          {visible.map((demo) => (
-            <motion.li
-              key={demo.slug}
-              layout
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.96 }}
-              transition={{ duration: 0.35, ease: [0.22, 0.61, 0.2, 1] }}
-            >
-              <DemoCard demo={demo} className="h-full" />
-            </motion.li>
-          ))}
-        </AnimatePresence>
-      </motion.ul>
+      {/*
+        Keyed by `active` so switching filters remounts the list: React unmounts
+        the previous set immediately (no exit animation to leak) and the new
+        cards play their enter animation. This stays correct under
+        prefers-reduced-motion, where AnimatePresence exit callbacks may never
+        fire and would otherwise strand filtered-out cards in the DOM.
+      */}
+      <ul key={active} className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {visible.map((demo, i) => (
+          <motion.li
+            key={demo.slug}
+            initial={reduce ? false : { opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.4,
+              delay: reduce ? 0 : Math.min(i * 0.03, 0.3),
+              ease: [0.22, 0.61, 0.2, 1],
+            }}
+          >
+            <DemoCard demo={demo} className="h-full" />
+          </motion.li>
+        ))}
+      </ul>
     </div>
   );
 }
