@@ -110,7 +110,7 @@ export interface GridContent {
 }
 
 export interface RaffleField {
-  id: "name" | "email" | "size" | "city";
+  id: "name" | "email" | "city";
   label: string;
   placeholder: string;
 }
