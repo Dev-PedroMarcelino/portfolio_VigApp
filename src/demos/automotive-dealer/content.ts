@@ -1,1017 +1,1034 @@
 import type { DemoDictionary } from "@/demos/content";
 
 /* ------------------------------------------------------------------ */
-/* Types                                                               */
+/* Shared, locale-independent data (vehicles, prices, 3D references)   */
 /* ------------------------------------------------------------------ */
 
-export interface NavItem {
+/** Fictitious dealership WhatsApp — used by every conversion CTA. */
+export const WHATSAPP_NUMBER = "5511981230911";
+
+export function waLink(message: string): string {
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+}
+
+/** Real Sketchfab model shown on the hero showroom stage (CC BY-SA). */
+export const SKETCHFAB_911 = {
+  uid: "d01b254483794de3819786d93e0e1ebf",
+  thumb:
+    "https://media.sketchfab.com/models/d01b254483794de3819786d93e0e1ebf/thumbnails/f28bf7eb32e646019bbaf886ff705679/3703397e693c47b2a66894bfb2ae7ea0.jpeg",
+  credit: {
+    model: "Porsche 911 Carrera 4S",
+    author: "Lionsharp Studios",
+    license: "CC BY-SA",
+  },
+} as const;
+
+export type BrandId =
+  | "audi"
+  | "bmw"
+  | "honda"
+  | "landrover"
+  | "mercedes"
+  | "porsche"
+  | "toyota";
+
+export type FuelId = "gas" | "diesel" | "hybrid";
+export type TransId = "auto" | "manual";
+export type BadgeId = "armored" | "oneOwner" | "factoryWarranty";
+
+export interface VehicleSeed {
+  id: string;
+  brand: BrandId;
+  /** Proper noun, identical in every locale. */
+  brandLabel: string;
+  /** Model + trim, identical in every locale. */
+  name: string;
+  year: number;
+  km: number;
+  /** Always in BRL — the dealership sells in reais in every language. */
+  price: number;
+  trans: TransId;
+  fuel: FuelId;
+  badge?: BadgeId;
+  photo: string;
+}
+
+const U = "?q=80&w=1600&auto=format&fit=crop";
+
+/** Showroom stock, curated dark-premium photography (all verified 200). */
+export const VEHICLES: VehicleSeed[] = [
+  {
+    id: "g63",
+    brand: "mercedes",
+    brandLabel: "Mercedes-AMG",
+    name: "G 63",
+    year: 2022,
+    km: 14900,
+    price: 1199900,
+    trans: "auto",
+    fuel: "gas",
+    badge: "armored",
+    photo: `https://images.unsplash.com/photo-1623671228672-7f56ddea1e0b${U}`,
+  },
+  {
+    id: "rrsport",
+    brand: "landrover",
+    brandLabel: "Land Rover",
+    name: "Range Rover Sport Dynamic SE",
+    year: 2023,
+    km: 12400,
+    price: 799900,
+    trans: "auto",
+    fuel: "gas",
+    badge: "armored",
+    photo: `https://images.unsplash.com/photo-1736572199224-c78b1a7f46c3${U}`,
+  },
+  {
+    id: "cayenne",
+    brand: "porsche",
+    brandLabel: "Porsche",
+    name: "Cayenne Coupé",
+    year: 2022,
+    km: 25700,
+    price: 689900,
+    trans: "auto",
+    fuel: "gas",
+    badge: "armored",
+    photo: `https://images.unsplash.com/photo-1643055359735-908c15445d09${U}`,
+  },
+  {
+    id: "c63",
+    brand: "mercedes",
+    brandLabel: "Mercedes-AMG",
+    name: "C 63 S Coupé",
+    year: 2021,
+    km: 27400,
+    price: 549900,
+    trans: "auto",
+    fuel: "gas",
+    badge: "oneOwner",
+    photo: `https://images.unsplash.com/photo-1618373444305-3a77b7719a59${U}`,
+  },
+  {
+    id: "m340i",
+    brand: "bmw",
+    brandLabel: "BMW",
+    name: "M340i xDrive",
+    year: 2022,
+    km: 31800,
+    price: 424900,
+    trans: "auto",
+    fuel: "gas",
+    badge: "oneOwner",
+    photo: `https://images.unsplash.com/photo-1594051673969-172a6f721d3c${U}`,
+  },
+  {
+    id: "q5",
+    brand: "audi",
+    brandLabel: "Audi",
+    name: "Q5 Sportback S line",
+    year: 2024,
+    km: 8200,
+    price: 389900,
+    trans: "auto",
+    fuel: "hybrid",
+    badge: "factoryWarranty",
+    photo: `https://images.unsplash.com/photo-1769641156833-d5789dd62875${U}`,
+  },
+  {
+    id: "530i",
+    brand: "bmw",
+    brandLabel: "BMW",
+    name: "530i M Sport",
+    year: 2023,
+    km: 22300,
+    price: 379900,
+    trans: "auto",
+    fuel: "gas",
+    badge: "factoryWarranty",
+    photo: `https://images.unsplash.com/photo-1769641240938-1125d7421364${U}`,
+  },
+  {
+    id: "hilux",
+    brand: "toyota",
+    brandLabel: "Toyota",
+    name: "Hilux GR-Sport 4x4",
+    year: 2024,
+    km: 9800,
+    price: 344900,
+    trans: "auto",
+    fuel: "diesel",
+    badge: "factoryWarranty",
+    photo: `https://images.unsplash.com/photo-1641333326784-24a9c21d3c4e${U}`,
+  },
+  {
+    id: "a5",
+    brand: "audi",
+    brandLabel: "Audi",
+    name: "A5 Sportback Prestige",
+    year: 2023,
+    km: 19600,
+    price: 329900,
+    trans: "auto",
+    fuel: "gas",
+    badge: "oneOwner",
+    photo: `https://images.unsplash.com/photo-1542282088-72c9c27ed0cd${U}`,
+  },
+  {
+    id: "civic",
+    brand: "honda",
+    brandLabel: "Honda",
+    name: "Civic Si",
+    year: 2022,
+    km: 38500,
+    price: 154900,
+    trans: "manual",
+    fuel: "gas",
+    badge: "oneOwner",
+    photo: `https://images.unsplash.com/photo-1594070319944-7c0cbebb6f58${U}`,
+  },
+];
+
+/** Brand filter chips — proper nouns, shared across locales. */
+export const BRAND_FILTERS: { id: BrandId; label: string }[] = [
+  { id: "audi", label: "Audi" },
+  { id: "bmw", label: "BMW" },
+  { id: "honda", label: "Honda" },
+  { id: "landrover", label: "Land Rover" },
+  { id: "mercedes", label: "Mercedes-AMG" },
+  { id: "porsche", label: "Porsche" },
+  { id: "toyota", label: "Toyota" },
+];
+
+/** Featured car of the week — the one on the 3D showroom stage. */
+export const FEATURED = {
+  id: "911c4s",
+  name: "Porsche 911 Carrera 4S",
+  year: 2022,
+  km: 18400,
+  price: 899900,
+} as const;
+
+/** Financing constants — Price table, monthly rate. */
+export const MONTHLY_RATE = 0.0149;
+export const TERM_OPTIONS = [24, 36, 48, 60] as const;
+export const DOWN_MIN = 20;
+export const DOWN_MAX = 70;
+
+/** Fixed weekday chips for the visit scheduler (no Date.now needed). */
+export const VISIT_TIMES = ["9h", "10h30", "12h", "14h", "15h30", "17h", "18h30"] as const;
+
+/* ------------------------------------------------------------------ */
+/* Content shape                                                        */
+/* ------------------------------------------------------------------ */
+
+export interface NavLink {
   href: string;
   label: string;
 }
 
-export interface HeaderContent {
-  nav: NavItem[];
-  cta: string;
-  openMenu: string;
-  closeMenu: string;
-}
-
-export interface HeroStat {
-  value: number;
-  decimals: number;
-  suffix: string;
-  label: string;
-}
-
-export interface HeroContent {
-  kicker: string;
-  model: string;
-  line1: string;
-  line2: string;
-  sub: string;
-  ctaBuild: string;
-  ctaDrive: string;
-  imageAlt: string;
-  marquee: string;
-  stats: HeroStat[];
-  scrollHint: string;
-}
-
-export interface ModelSpec {
+export interface SpecRow {
   label: string;
   value: string;
 }
 
-export interface LineupModel {
-  id: string;
-  name: string;
-  category: string;
-  tagline: string;
-  image: string;
-  imageAlt: string;
-  power: string;
-  accel: string;
-  topSpeed: string;
-  priceFrom: number;
-  description: string;
-  specs: ModelSpec[];
-}
-
-export interface LineupContent {
-  label: string;
-  title: string;
-  intro: string;
-  fromLabel: string;
-  powerLabel: string;
-  accelLabel: string;
-  topSpeedLabel: string;
-  buildCta: string;
-  priceLocale: string;
-  currency: string;
-  models: LineupModel[];
-}
-
-export interface TrimOption {
-  id: string;
-  name: string;
-  note: string;
-  priceDelta: number;
-  power: string;
-}
-
-export interface ColorOption {
-  id: string;
-  name: string;
-  hex: string;
-  finish: string;
-  priceDelta: number;
-}
-
-export interface WheelOption {
-  id: string;
-  name: string;
-  note: string;
-  priceDelta: number;
-}
-
-export interface ConfiguratorContent {
-  label: string;
-  title: string;
-  intro: string;
-  baseName: string;
-  basePrice: number;
-  trimLabel: string;
-  colorLabel: string;
-  wheelLabel: string;
-  totalLabel: string;
-  fromNote: string;
-  powerNote: string;
-  reserveCta: string;
-  reserveNote: string;
-  successTitle: string;
-  successBody: string;
-  reset: string;
-  summaryTitle: string;
-  addLabel: string;
-  includedLabel: string;
-  priceLocale: string;
-  currency: string;
-  trims: TrimOption[];
-  colors: ColorOption[];
-  wheels: WheelOption[];
-}
-
-export interface PerfMetric {
-  id: string;
-  label: string;
-  value: number;
-  decimals: number;
-  suffix: string;
-  fill: number;
-  note: string;
-}
-
-export interface LadderRow {
-  label: string;
-  value: string;
-}
-
-export interface PerfContent {
-  label: string;
-  title: string;
-  intro: string;
-  imageAlt: string;
-  metricsTitle: string;
-  metrics: PerfMetric[];
-  ladderTitle: string;
-  ladder: LadderRow[];
-  curveTitle: string;
-  curveNote: string;
-  powerCurveLabel: string;
-  torqueCurveLabel: string;
-  rpmLabel: string;
-}
-
-export interface TestDriveContent {
-  label: string;
-  title: string;
-  intro: string;
-  imageAlt: string;
-  nameLabel: string;
-  namePlaceholder: string;
-  emailLabel: string;
-  emailPlaceholder: string;
-  phoneLabel: string;
-  phonePlaceholder: string;
-  modelLabel: string;
-  models: string[];
-  locationLabel: string;
-  locations: string[];
-  dateLabel: string;
-  slotLabel: string;
-  slots: string[];
-  submit: string;
-  successTitle: string;
-  successBody: string;
-  another: string;
-  refPrefix: string;
-  assurances: string[];
-}
-
-export interface FinancingContent {
-  label: string;
-  title: string;
-  intro: string;
-  priceLabel: string;
-  downLabel: string;
-  termLabel: string;
-  termUnit: string;
-  aprLabel: string;
-  apr: number;
-  installmentLabel: string;
-  monthlyUnit: string;
-  totalLabel: string;
-  interestLabel: string;
-  financedLabel: string;
-  downPctLabel: string;
-  disclaimer: string;
-  ctaDrive: string;
-  priceMin: number;
-  priceMax: number;
-  priceDefault: number;
-  priceStep: number;
-  downMax: number;
-  downDefault: number;
-  downStep: number;
-  terms: number[];
-  termDefault: number;
-  priceLocale: string;
-  currency: string;
-}
-
-export interface FooterContent {
-  tagline: string;
-  exploreLabel: string;
-  visitLabel: string;
-  followLabel: string;
-  nav: NavItem[];
-  addressLines: string[];
-  hoursNote: string;
-  phone: string;
-  email: string;
-  social: { label: string; handle: string }[];
-  legal: string[];
-  fine: string;
-  credit: string;
-}
-
-export interface ApexContent {
-  header: HeaderContent;
-  hero: HeroContent;
-  lineup: LineupContent;
-  configurator: ConfiguratorContent;
-  performance: PerfContent;
-  testDrive: TestDriveContent;
-  financing: FinancingContent;
-  footer: FooterContent;
+export interface BarcellosContent {
+  header: {
+    nav: NavLink[];
+    cta: string;
+    menuOpen: string;
+    menuClose: string;
+    whatsappMsg: string;
+  };
+  hero: {
+    badge: string;
+    titleLead: string;
+    titleAccent: string;
+    subtitle: string;
+    bullets: string[];
+    ctaPrimary: string;
+    ctaSecondary: string;
+    stats: { value: string; label: string }[];
+    stage: {
+      eyebrow: string;
+      title: string;
+      loadLabel: string;
+      hint: string;
+      priceTag: string;
+      fichaCta: string;
+    };
+  };
+  featured: {
+    label: string;
+    title: string;
+    subtitle: string;
+    specs: SpecRow[];
+    badges: string[];
+    priceLabel: string;
+    priceNote: string;
+    ctaInterest: string;
+    ctaTestDrive: string;
+    back3d: string;
+    whatsappMsg: string;
+  };
+  stock: {
+    label: string;
+    title: string;
+    subtitle: string;
+    brandLabel: string;
+    allBrands: string;
+    priceLabel: string;
+    priceAny: string;
+    priceUnder400: string;
+    price400to700: string;
+    priceOver700: string;
+    sortLabel: string;
+    sortFeatured: string;
+    sortPriceAsc: string;
+    sortPriceDesc: string;
+    sortKmAsc: string;
+    resultOne: string;
+    resultMany: string;
+    emptyTitle: string;
+    emptyBody: string;
+    emptyReset: string;
+    badges: Record<BadgeId, string>;
+    fuel: Record<FuelId, string>;
+    trans: Record<TransId, string>;
+    cardCta: string;
+    whatsappMsg: string;
+  };
+  financing: {
+    label: string;
+    title: string;
+    subtitle: string;
+    vehicleLabel: string;
+    customOption: string;
+    customLabel: string;
+    downLabel: string;
+    downHint: string;
+    termLabel: string;
+    termUnit: string;
+    rateLabel: string;
+    rateValue: string;
+    installmentLabel: string;
+    perMonth: string;
+    financedLabel: string;
+    totalLabel: string;
+    cetLabel: string;
+    disclaimer: string;
+    cta: string;
+    whatsappMsg: string;
+  };
+  tradein: {
+    label: string;
+    title: string;
+    subtitle: string;
+    fields: {
+      brand: string;
+      brandPh: string;
+      model: string;
+      modelPh: string;
+      year: string;
+      yearPh: string;
+      km: string;
+      kmPh: string;
+      phone: string;
+      phonePh: string;
+    };
+    errors: { required: string; phone: string };
+    submit: string;
+    successTitle: string;
+    successBody: string;
+    successAgain: string;
+    note: string;
+  };
+  visit: {
+    label: string;
+    title: string;
+    subtitle: string;
+    dayLabel: string;
+    days: string[];
+    timeLabel: string;
+    submit: string;
+    successTitle: string;
+    successBody: string;
+    addressLabel: string;
+    address: string;
+    hoursLabel: string;
+    hours: string;
+    mapTitle: string;
+    mapCta: string;
+  };
+  testimonials: {
+    label: string;
+    title: string;
+    items: { name: string; car: string; quote: string }[];
+    sealsLabel: string;
+    seals: { icon: "award" | "shield" | "badge"; title: string; sub: string }[];
+  };
+  footer: {
+    blurb: string;
+    navLabel: string;
+    nav: NavLink[];
+    contactLabel: string;
+    phone: string;
+    whatsapp: string;
+    instagram: string;
+    hoursLabel: string;
+    hours: string;
+    address: string;
+    disclaimer: string;
+    rights: string;
+  };
 }
 
 /* ------------------------------------------------------------------ */
-/* Shared, locale-independent image ids                                */
+/* Dictionaries                                                         */
 /* ------------------------------------------------------------------ */
 
-const IMG = {
-  corsa: "photo-1553440569-bcc63803a83d",
-  stradale: "photo-1583121274602-3e2820c69888",
-  veloce: "photo-1552519507-da3b142c6e3d",
-  perf: "photo-1542362567-b07e54358753",
-  interior: "photo-1511919884226-fd3cad34687c",
-} as const;
+const NAV_ANCHORS = ["#destaque", "#estoque", "#financiamento", "#avaliacao", "#visita"];
 
-/* ------------------------------------------------------------------ */
-/* Dictionary                                                          */
-/* ------------------------------------------------------------------ */
-
-export const apexDict: DemoDictionary<ApexContent> = {
-  en: {
-    header: {
-      nav: [
-        { href: "#lineup", label: "Lineup" },
-        { href: "#configurator", label: "Build" },
-        { href: "#performance", label: "Performance" },
-        { href: "#financing", label: "Financing" },
-      ],
-      cta: "Book test drive",
-      openMenu: "Open navigation",
-      closeMenu: "Close navigation",
-    },
-    hero: {
-      kicker: "Apex Motors · Stradale Series",
-      model: "Stradale RS",
-      line1: "Built to bend",
-      line2: "the horizon.",
-      sub: "A twin-turbo V8 wrapped in a carbon-fibre monocoque. The Stradale RS is our purest expression of speed — engineered in Maranello, tuned on the Nurburgring, delivered to your door.",
-      ctaBuild: "Build yours",
-      ctaDrive: "Book a test drive",
-      imageAlt: "Apex Motors Stradale RS sports car photographed at dusk on an open road",
-      marquee: "TWIN-TURBO V8 · CARBON MONOCOQUE · 830 HP · REAR-WHEEL STEER · ACTIVE AERO · ",
-      stats: [
-        { value: 2.6, decimals: 1, suffix: "s", label: "0 – 100 km/h" },
-        { value: 830, decimals: 0, suffix: "hp", label: "Maximum power" },
-        { value: 340, decimals: 0, suffix: "km/h", label: "Top speed" },
-      ],
-      scrollHint: "Scroll to explore",
-    },
-    lineup: {
-      label: "The lineup",
-      title: "Three machines, one obsession",
-      intro: "Every Apex is hand-assembled in Maranello and signed by the engineer who built its engine. Choose the character; the precision is a given.",
-      fromLabel: "From",
-      powerLabel: "Power",
-      accelLabel: "0 – 100",
-      topSpeedLabel: "Top speed",
-      buildCta: "Configure this model",
-      priceLocale: "en-US",
-      currency: "USD",
-      models: [
-        {
-          id: "corsa",
-          name: "Corsa GT",
-          category: "Grand tourer",
-          tagline: "Continents, quartered.",
-          image: IMG.corsa,
-          imageAlt: "Apex Motors Corsa GT grand touring coupe on a coastal highway",
-          power: "640 hp",
-          accel: "3.1 s",
-          topSpeed: "318 km/h",
-          priceFrom: 189000,
-          description: "A front-mid V8 grand tourer that swallows a thousand kilometres before breakfast, then hunts an apex on the way home.",
-          specs: [
-            { label: "Engine", value: "3.9L twin-turbo V8" },
-            { label: "Torque", value: "760 Nm" },
-            { label: "Drivetrain", value: "Rear-wheel drive" },
-            { label: "Weight", value: "1,570 kg" },
-          ],
-        },
-        {
-          id: "stradale",
-          name: "Stradale RS",
-          category: "Supercar",
-          tagline: "Built to bend the horizon.",
-          image: IMG.stradale,
-          imageAlt: "Apex Motors Stradale RS supercar with the doors open in a studio",
-          power: "830 hp",
-          accel: "2.6 s",
-          topSpeed: "340 km/h",
-          priceFrom: 268000,
-          description: "The flagship. A carbon monocoque, active aerodynamics and rear-wheel steering that shrink the track around you.",
-          specs: [
-            { label: "Engine", value: "4.0L twin-turbo V8" },
-            { label: "Torque", value: "900 Nm" },
-            { label: "Drivetrain", value: "Rear-wheel drive" },
-            { label: "Weight", value: "1,470 kg" },
-          ],
-        },
-        {
-          id: "veloce",
-          name: "Veloce Spyder",
-          category: "Open-top roadster",
-          tagline: "Sky optional, never off.",
-          image: IMG.veloce,
-          imageAlt: "Apex Motors Veloce Spyder open-top roadster in racing red",
-          power: "720 hp",
-          accel: "2.9 s",
-          topSpeed: "325 km/h",
-          priceFrom: 312000,
-          description: "A folding hardtop roadster with a naturally aspirated soundtrack — the loudest way to lose the roof and gain a horizon.",
-          specs: [
-            { label: "Engine", value: "4.5L V8, naturally aspirated" },
-            { label: "Torque", value: "690 Nm" },
-            { label: "Drivetrain", value: "Rear-wheel drive" },
-            { label: "Weight", value: "1,520 kg" },
-          ],
-        },
-      ],
-    },
-    configurator: {
-      label: "Build & price",
-      title: "Configure your Stradale RS",
-      intro: "Three moves to your specification. The silhouette repaints as you choose — the total updates the instant you commit.",
-      baseName: "Stradale RS",
-      basePrice: 268000,
-      trimLabel: "Trim",
-      colorLabel: "Paint",
-      wheelLabel: "Wheels",
-      totalLabel: "Your build",
-      fromNote: "Estimated on-the-road price",
-      powerNote: "Output",
-      reserveCta: "Reserve this build",
-      reserveNote: "Refundable deposit · Delivery in 14 months",
-      successTitle: "Build reserved.",
-      successBody: "Reference APX-6620 is locked in. A product specialist from Maranello will call within one business day to confirm your specification and delivery slot.",
-      reset: "Configure another",
-      summaryTitle: "Specification",
-      addLabel: "Options",
-      includedLabel: "Included",
-      priceLocale: "en-US",
-      currency: "USD",
-      trims: [
-        { id: "corsa", name: "Stradale", note: "The definitive road car", priceDelta: 0, power: "830 hp" },
-        { id: "competizione", name: "Competizione", note: "Track-honed aero and titanium exhaust", priceDelta: 42000, power: "870 hp" },
-        { id: "trackpack", name: "Corsa Track Pack", note: "Roll cage, telemetry, magnesium everything", priceDelta: 78000, power: "910 hp" },
-      ],
-      colors: [
-        { id: "rosso", name: "Rosso Apex", hex: "#C8102E", finish: "Gloss", priceDelta: 0 },
-        { id: "nero", name: "Nero Carbonio", hex: "#0C0C0F", finish: "Matte", priceDelta: 0 },
-        { id: "argento", name: "Argento Pista", hex: "#B8BAC2", finish: "Metallic", priceDelta: 2500 },
-        { id: "titanio", name: "Grigio Titanio", hex: "#3A3D44", finish: "Matte metallic", priceDelta: 2500 },
-        { id: "blu", name: "Blu Nurburg", hex: "#24406B", finish: "Metallic", priceDelta: 3800 },
-        { id: "bianco", name: "Bianco Ghiaccio", hex: "#E9EAEC", finish: "Gloss", priceDelta: 2500 },
-      ],
-      wheels: [
-        { id: "forged20", name: "Forged 20-inch Corsa", note: "Diamond-cut, gloss black", priceDelta: 0 },
-        { id: "forged21", name: "Forged 21-inch Aero", note: "Turbine-vane, satin finish", priceDelta: 6500 },
-        { id: "mag21", name: "Magnesium 21-inch Track", note: "Centre-lock, minus 11 kg", priceDelta: 14000 },
-      ],
-    },
-    performance: {
-      label: "Performance data",
-      title: "Numbers that leave a mark",
-      intro: "Measured at the Fiorano test track, dry tarmac, one occupant. No launch-control asterisks, no rolling starts.",
-      imageAlt: "Front view of the Apex Motors Stradale RS showing its aggressive intakes and headlights",
-      metricsTitle: "Envelope",
-      metrics: [
-        { id: "power", label: "Peak power", value: 830, decimals: 0, suffix: "hp", fill: 92, note: "at 8,000 rpm" },
-        { id: "torque", label: "Peak torque", value: 900, decimals: 0, suffix: "Nm", fill: 88, note: "at 3,000 rpm" },
-        { id: "downforce", label: "Downforce", value: 390, decimals: 0, suffix: "kg", fill: 78, note: "at 250 km/h" },
-        { id: "lateral", label: "Lateral grip", value: 1.35, decimals: 2, suffix: "g", fill: 84, note: "sustained cornering" },
-        { id: "ratio", label: "Power-to-weight", value: 565, decimals: 0, suffix: "hp/t", fill: 90, note: "dry weight basis" },
-      ],
-      ladderTitle: "Standing acceleration",
-      ladder: [
-        { label: "0 – 100 km/h", value: "2.6 s" },
-        { label: "0 – 200 km/h", value: "7.4 s" },
-        { label: "0 – 300 km/h", value: "18.9 s" },
-        { label: "400 m", value: "10.1 s" },
-        { label: "100 – 0 km/h braking", value: "29 m" },
-      ],
-      curveTitle: "Power delivery",
-      curveNote: "Power climbs to 8,000 rpm while torque holds a plateau from 3,000 — the reason it pulls hard everywhere, not just at the top.",
-      powerCurveLabel: "Power (hp)",
-      torqueCurveLabel: "Torque (Nm)",
-      rpmLabel: "Engine speed (rpm)",
-    },
-    testDrive: {
-      label: "Test drive",
-      title: "Feel it before you commit",
-      intro: "Ninety minutes, a professional co-driver and a route we designed to show a car its manners. Choose a showroom and a time.",
-      imageAlt: "Driver-focused cockpit of an Apex Motors car with a carbon steering wheel",
-      nameLabel: "Full name",
-      namePlaceholder: "Marina Albuquerque",
-      emailLabel: "Email",
-      emailPlaceholder: "you@example.com",
-      phoneLabel: "Phone",
-      phonePlaceholder: "+1 (555) 018 4420",
-      modelLabel: "Model of interest",
-      models: ["Corsa GT", "Stradale RS", "Veloce Spyder", "Undecided — surprise me"],
-      locationLabel: "Showroom",
-      locations: ["Apex Manhattan — 11th Ave", "Apex Miami — Design District", "Apex Los Angeles — Beverly Hills"],
-      dateLabel: "Preferred date",
-      slotLabel: "Time slot",
-      slots: ["09:00", "11:00", "14:00", "16:30"],
-      submit: "Request my drive",
-      successTitle: "Your drive is pencilled in.",
-      successBody: "We have reserved the car and the route. A concierge will confirm your slot by phone within a few hours.",
-      another: "Book another drive",
-      refPrefix: "Booking reference",
-      assurances: [
-        "No obligation, no sales pressure",
-        "Full insurance on every drive",
-        "Bring a passenger, we insist",
-      ],
-    },
-    financing: {
-      label: "Financing",
-      title: "Own it on your terms",
-      intro: "Move the sliders. The monthly figure recalculates live, so you can find the shape of the deal before you ever sign a line.",
-      priceLabel: "Vehicle price",
-      downLabel: "Down payment",
-      termLabel: "Term",
-      termUnit: "months",
-      aprLabel: "Fixed APR",
-      apr: 5.9,
-      installmentLabel: "Estimated monthly",
-      monthlyUnit: "/mo",
-      totalLabel: "Total of payments",
-      interestLabel: "Total interest",
-      financedLabel: "Amount financed",
-      downPctLabel: "of price",
-      disclaimer: "Illustrative figures for a fictional concept. Actual terms depend on approved credit, residual value and jurisdiction.",
-      ctaDrive: "Speak to a specialist",
-      priceMin: 150000,
-      priceMax: 400000,
-      priceDefault: 268000,
-      priceStep: 1000,
-      downMax: 240000,
-      downDefault: 80000,
-      downStep: 1000,
-      terms: [24, 36, 48, 60, 72],
-      termDefault: 48,
-      priceLocale: "en-US",
-      currency: "USD",
-    },
-    footer: {
-      tagline: "Hand-built performance, delivered worldwide.",
-      exploreLabel: "Explore",
-      visitLabel: "Flagship atelier",
-      followLabel: "Follow",
-      nav: [
-        { href: "#lineup", label: "Lineup" },
-        { href: "#configurator", label: "Build & price" },
-        { href: "#performance", label: "Performance" },
-        { href: "#testdrive", label: "Test drive" },
-        { href: "#financing", label: "Financing" },
-      ],
-      addressLines: ["Apex Motors Atelier", "Via dei Piloti 12, Maranello, Italy"],
-      hoursNote: "Showroom open Mon – Sat, 09:00 – 19:00",
-      phone: "+39 0536 949 200",
-      email: "atelier@apexmotors.com",
-      social: [
-        { label: "Instagram", handle: "@apexmotors" },
-        { label: "YouTube", handle: "/apexmotors" },
-        { label: "Newsletter", handle: "The Pit Wall" },
-      ],
-      legal: ["Privacy", "Terms", "Cookie preferences"],
-      fine: "Apex Motors is a fictional brand imagined as a design concept. Vehicles, specifications and prices are illustrative.",
-      credit: "Concept, design and build by VigApp.",
+const pt: BarcellosContent = {
+  header: {
+    nav: [
+      { href: NAV_ANCHORS[0], label: "Destaque" },
+      { href: NAV_ANCHORS[1], label: "Estoque" },
+      { href: NAV_ANCHORS[2], label: "Financiamento" },
+      { href: NAV_ANCHORS[3], label: "Avaliação" },
+      { href: NAV_ANCHORS[4], label: "Visita" },
+    ],
+    cta: "WhatsApp",
+    menuOpen: "Abrir menu",
+    menuClose: "Fechar menu",
+    whatsappMsg: "Olá! Vi o site da Barcellos Veículos e quero falar com um consultor.",
+  },
+  hero: {
+    badge: "Jardins · São Paulo · desde 1998",
+    titleLead: "O seu próximo carro",
+    titleAccent: "já está no nosso showroom.",
+    subtitle:
+      "Seminovos premium e blindados com procedência auditada item a item, garantia Barcellos de 1 ano e entrega assistida em todo o Brasil.",
+    bullets: ["Procedência auditada", "Garantia de 1 ano", "Entrega em todo o Brasil"],
+    ctaPrimary: "Ver estoque",
+    ctaSecondary: "Falar no WhatsApp",
+    stats: [
+      { value: "27", label: "anos de mercado" },
+      { value: "+11.400", label: "carros entregues" },
+      { value: "4,9★", label: "avaliação Google" },
+    ],
+    stage: {
+      eyebrow: "Destaque da semana",
+      title: "Gire o carro — Porsche 911 Carrera 4S",
+      loadLabel: "Ver em 3D",
+      hint: "Arraste para girar · role para zoom",
+      priceTag: "R$ 899.900",
+      fichaCta: "Ver ficha completa",
     },
   },
-
-  pt: {
-    header: {
-      nav: [
-        { href: "#lineup", label: "Linha" },
-        { href: "#configurator", label: "Configurar" },
-        { href: "#performance", label: "Desempenho" },
-        { href: "#financing", label: "Financiamento" },
-      ],
-      cta: "Agendar test drive",
-      openMenu: "Abrir navegação",
-      closeMenu: "Fechar navegação",
-    },
-    hero: {
-      kicker: "Apex Motors · Série Stradale",
-      model: "Stradale RS",
-      line1: "Feito para curvar",
-      line2: "o horizonte.",
-      sub: "Um V8 biturbo envolto num monocoque de fibra de carbono. O Stradale RS é a nossa expressão mais pura de velocidade — projetado em Maranello, afinado em Nurburgring, entregue na sua porta.",
-      ctaBuild: "Monte o seu",
-      ctaDrive: "Agendar test drive",
-      imageAlt: "Esportivo Apex Motors Stradale RS fotografado ao anoitecer numa estrada aberta",
-      marquee: "V8 BITURBO · MONOCOQUE DE CARBONO · 830 CV · ESTERÇAMENTO TRASEIRO · AERO ATIVO · ",
-      stats: [
-        { value: 2.6, decimals: 1, suffix: "s", label: "0 – 100 km/h" },
-        { value: 830, decimals: 0, suffix: "cv", label: "Potência máxima" },
-        { value: 340, decimals: 0, suffix: "km/h", label: "Velocidade máxima" },
-      ],
-      scrollHint: "Role para explorar",
-    },
-    lineup: {
-      label: "A linha",
-      title: "Três máquinas, uma obsessão",
-      intro: "Cada Apex é montado à mão em Maranello e assinado pelo engenheiro que construiu seu motor. Escolha o caráter; a precisão é garantida.",
-      fromLabel: "A partir de",
-      powerLabel: "Potência",
-      accelLabel: "0 – 100",
-      topSpeedLabel: "Velocidade máx.",
-      buildCta: "Configurar este modelo",
-      priceLocale: "pt-BR",
-      currency: "BRL",
-      models: [
-        {
-          id: "corsa",
-          name: "Corsa GT",
-          category: "Grande turismo",
-          tagline: "Continentes, em frações.",
-          image: IMG.corsa,
-          imageAlt: "Cupê grande turismo Apex Motors Corsa GT numa estrada litorânea",
-          power: "640 cv",
-          accel: "3,1 s",
-          topSpeed: "318 km/h",
-          priceFrom: 1090000,
-          description: "Um grande turismo V8 central-dianteiro que devora mil quilômetros antes do café e ainda caça uma curva no caminho de volta.",
-          specs: [
-            { label: "Motor", value: "V8 3.9L biturbo" },
-            { label: "Torque", value: "760 Nm" },
-            { label: "Tração", value: "Traseira" },
-            { label: "Peso", value: "1.570 kg" },
-          ],
-        },
-        {
-          id: "stradale",
-          name: "Stradale RS",
-          category: "Superesportivo",
-          tagline: "Feito para curvar o horizonte.",
-          image: IMG.stradale,
-          imageAlt: "Superesportivo Apex Motors Stradale RS com as portas abertas em estúdio",
-          power: "830 cv",
-          accel: "2,6 s",
-          topSpeed: "340 km/h",
-          priceFrom: 1540000,
-          description: "O carro-chefe. Monocoque de carbono, aerodinâmica ativa e esterçamento traseiro que encolhem a pista à sua volta.",
-          specs: [
-            { label: "Motor", value: "V8 4.0L biturbo" },
-            { label: "Torque", value: "900 Nm" },
-            { label: "Tração", value: "Traseira" },
-            { label: "Peso", value: "1.470 kg" },
-          ],
-        },
-        {
-          id: "veloce",
-          name: "Veloce Spyder",
-          category: "Conversível",
-          tagline: "Céu opcional, nunca desligado.",
-          image: IMG.veloce,
-          imageAlt: "Conversível Apex Motors Veloce Spyder na cor vermelho de corrida",
-          power: "720 cv",
-          accel: "2,9 s",
-          topSpeed: "325 km/h",
-          priceFrom: 1790000,
-          description: "Um roadster de teto rígido retrátil com trilha sonora aspirada — a forma mais barulhenta de perder o teto e ganhar horizonte.",
-          specs: [
-            { label: "Motor", value: "V8 4.5L aspirado" },
-            { label: "Torque", value: "690 Nm" },
-            { label: "Tração", value: "Traseira" },
-            { label: "Peso", value: "1.520 kg" },
-          ],
-        },
-      ],
-    },
-    configurator: {
-      label: "Monte e calcule",
-      title: "Configure seu Stradale RS",
-      intro: "Três passos até a sua especificação. A silhueta se repinta a cada escolha — o total se atualiza no instante em que você decide.",
-      baseName: "Stradale RS",
-      basePrice: 1540000,
-      trimLabel: "Versão",
-      colorLabel: "Pintura",
-      wheelLabel: "Rodas",
-      totalLabel: "Sua configuração",
-      fromNote: "Preço estimado com documentação",
-      powerNote: "Potência",
-      reserveCta: "Reservar esta configuração",
-      reserveNote: "Depósito reembolsável · Entrega em 14 meses",
-      successTitle: "Configuração reservada.",
-      successBody: "A referência APX-6620 está garantida. Um especialista de Maranello ligará em até um dia útil para confirmar sua especificação e a data de entrega.",
-      reset: "Montar outra",
-      summaryTitle: "Especificação",
-      addLabel: "Opcionais",
-      includedLabel: "Incluído",
-      priceLocale: "pt-BR",
-      currency: "BRL",
-      trims: [
-        { id: "corsa", name: "Stradale", note: "O carro de rua definitivo", priceDelta: 0, power: "830 cv" },
-        { id: "competizione", name: "Competizione", note: "Aero de pista e escapamento de titânio", priceDelta: 240000, power: "870 cv" },
-        { id: "trackpack", name: "Corsa Track Pack", note: "Santantônio, telemetria e magnésio por toda parte", priceDelta: 448000, power: "910 cv" },
-      ],
-      colors: [
-        { id: "rosso", name: "Rosso Apex", hex: "#C8102E", finish: "Brilhante", priceDelta: 0 },
-        { id: "nero", name: "Nero Carbonio", hex: "#0C0C0F", finish: "Fosco", priceDelta: 0 },
-        { id: "argento", name: "Argento Pista", hex: "#B8BAC2", finish: "Metálico", priceDelta: 14000 },
-        { id: "titanio", name: "Grigio Titanio", hex: "#3A3D44", finish: "Metálico fosco", priceDelta: 14000 },
-        { id: "blu", name: "Blu Nurburg", hex: "#24406B", finish: "Metálico", priceDelta: 21000 },
-        { id: "bianco", name: "Bianco Ghiaccio", hex: "#E9EAEC", finish: "Brilhante", priceDelta: 14000 },
-      ],
-      wheels: [
-        { id: "forged20", name: "Forjada 20 pol. Corsa", note: "Usinagem diamantada, preto brilhante", priceDelta: 0 },
-        { id: "forged21", name: "Forjada 21 pol. Aero", note: "Pás de turbina, acabamento acetinado", priceDelta: 37000 },
-        { id: "mag21", name: "Magnésio 21 pol. Track", note: "Fixação central, menos 11 kg", priceDelta: 80000 },
-      ],
-    },
-    performance: {
-      label: "Dados de desempenho",
-      title: "Números que deixam marca",
-      intro: "Medido no circuito de Fiorano, asfalto seco, um ocupante. Sem asteriscos de largada, sem partidas lançadas.",
-      imageAlt: "Vista frontal do Apex Motors Stradale RS mostrando as tomadas de ar e os faróis agressivos",
-      metricsTitle: "Envelope",
-      metrics: [
-        { id: "power", label: "Potência de pico", value: 830, decimals: 0, suffix: "cv", fill: 92, note: "a 8.000 rpm" },
-        { id: "torque", label: "Torque de pico", value: 900, decimals: 0, suffix: "Nm", fill: 88, note: "a 3.000 rpm" },
-        { id: "downforce", label: "Downforce", value: 390, decimals: 0, suffix: "kg", fill: 78, note: "a 250 km/h" },
-        { id: "lateral", label: "Aderência lateral", value: 1.35, decimals: 2, suffix: "g", fill: 84, note: "curva sustentada" },
-        { id: "ratio", label: "Peso-potência", value: 565, decimals: 0, suffix: "cv/t", fill: 90, note: "base peso a seco" },
-      ],
-      ladderTitle: "Aceleração parada",
-      ladder: [
-        { label: "0 – 100 km/h", value: "2,6 s" },
-        { label: "0 – 200 km/h", value: "7,4 s" },
-        { label: "0 – 300 km/h", value: "18,9 s" },
-        { label: "400 m", value: "10,1 s" },
-        { label: "Frenagem 100 – 0 km/h", value: "29 m" },
-      ],
-      curveTitle: "Entrega de potência",
-      curveNote: "A potência sobe até 8.000 rpm enquanto o torque mantém um platô desde 3.000 — o motivo de ele puxar forte em qualquer faixa, não só no alto.",
-      powerCurveLabel: "Potência (cv)",
-      torqueCurveLabel: "Torque (Nm)",
-      rpmLabel: "Rotação (rpm)",
-    },
-    testDrive: {
-      label: "Test drive",
-      title: "Sinta antes de decidir",
-      intro: "Noventa minutos, um copiloto profissional e um trajeto que desenhamos para revelar os modos de um carro. Escolha uma loja e um horário.",
-      imageAlt: "Cabine voltada ao motorista de um Apex Motors com volante de carbono",
-      nameLabel: "Nome completo",
-      namePlaceholder: "Marina Albuquerque",
-      emailLabel: "E-mail",
-      emailPlaceholder: "voce@exemplo.com",
-      phoneLabel: "Telefone",
-      phonePlaceholder: "+55 (11) 91234-5678",
-      modelLabel: "Modelo de interesse",
-      models: ["Corsa GT", "Stradale RS", "Veloce Spyder", "Ainda decidindo — surpreenda-me"],
-      locationLabel: "Loja",
-      locations: ["Apex São Paulo — Jardins", "Apex Rio de Janeiro — Barra", "Apex Curitiba — Batel"],
-      dateLabel: "Data preferida",
-      slotLabel: "Horário",
-      slots: ["09:00", "11:00", "14:00", "16:30"],
-      submit: "Solicitar meu drive",
-      successTitle: "Seu drive está reservado.",
-      successBody: "Separamos o carro e o trajeto. Um concierge confirmará seu horário por telefone em poucas horas.",
-      another: "Agendar outro drive",
-      refPrefix: "Código da reserva",
-      assurances: [
-        "Sem compromisso, sem pressão de venda",
-        "Seguro total em cada drive",
-        "Traga um acompanhante, insistimos",
-      ],
-    },
-    financing: {
-      label: "Financiamento",
-      title: "Tenha nas suas condições",
-      intro: "Mova os controles. O valor mensal recalcula ao vivo, para você encontrar o formato do negócio antes de assinar qualquer linha.",
-      priceLabel: "Preço do veículo",
-      downLabel: "Entrada",
-      termLabel: "Prazo",
-      termUnit: "meses",
-      aprLabel: "Juros fixos ao ano",
-      apr: 12.9,
-      installmentLabel: "Parcela estimada",
-      monthlyUnit: "/mês",
-      totalLabel: "Total pago",
-      interestLabel: "Juros totais",
-      financedLabel: "Valor financiado",
-      downPctLabel: "do preço",
-      disclaimer: "Valores ilustrativos de um conceito fictício. Condições reais dependem de crédito aprovado, valor residual e legislação.",
-      ctaDrive: "Falar com um especialista",
-      priceMin: 900000,
-      priceMax: 2200000,
-      priceDefault: 1540000,
-      priceStep: 5000,
-      downMax: 1300000,
-      downDefault: 460000,
-      downStep: 5000,
-      terms: [24, 36, 48, 60, 72],
-      termDefault: 48,
-      priceLocale: "pt-BR",
-      currency: "BRL",
-    },
-    footer: {
-      tagline: "Desempenho feito à mão, entregue no mundo todo.",
-      exploreLabel: "Explore",
-      visitLabel: "Ateliê principal",
-      followLabel: "Siga",
-      nav: [
-        { href: "#lineup", label: "Linha" },
-        { href: "#configurator", label: "Monte e calcule" },
-        { href: "#performance", label: "Desempenho" },
-        { href: "#testdrive", label: "Test drive" },
-        { href: "#financing", label: "Financiamento" },
-      ],
-      addressLines: ["Apex Motors Ateliê", "Via dei Piloti 12, Maranello, Itália"],
-      hoursNote: "Showroom aberto de seg a sáb, 09:00 – 19:00",
-      phone: "+39 0536 949 200",
-      email: "atelier@apexmotors.com",
-      social: [
-        { label: "Instagram", handle: "@apexmotors" },
-        { label: "YouTube", handle: "/apexmotors" },
-        { label: "Newsletter", handle: "The Pit Wall" },
-      ],
-      legal: ["Privacidade", "Termos", "Preferências de cookies"],
-      fine: "Apex Motors é uma marca fictícia criada como conceito de design. Veículos, especificações e preços são ilustrativos.",
-      credit: "Conceito, design e código por VigApp.",
-    },
+  featured: {
+    label: "Destaque da semana",
+    title: "Porsche 911 Carrera 4S",
+    subtitle:
+      "O mesmo carro que você acabou de girar em 3D, esperando na Av. Europa. Seminovo de único dono, com todas as revisões feitas na concessionária.",
+    specs: [
+      { label: "Potência", value: "450 cv" },
+      { label: "0–100 km/h", value: "3,8 s" },
+      { label: "Rodados", value: "18.400 km" },
+      { label: "Ano", value: "2022" },
+      { label: "Câmbio", value: "PDK 8" },
+      { label: "Combustível", value: "Gasolina" },
+    ],
+    badges: ["Único dono", "Revisões na concessionária", "Laudo cautelar aprovado"],
+    priceLabel: "Preço à vista",
+    priceNote: "Aceitamos seu usado na troca",
+    ctaInterest: "Tenho interesse",
+    ctaTestDrive: "Agendar test drive",
+    back3d: "Voltar ao modelo 3D",
+    whatsappMsg:
+      "Olá! Tenho interesse no Porsche 911 Carrera 4S 2022 (destaque da semana) por R$ 899.900.",
   },
-
-  es: {
-    header: {
-      nav: [
-        { href: "#lineup", label: "Gama" },
-        { href: "#configurator", label: "Configurar" },
-        { href: "#performance", label: "Prestaciones" },
-        { href: "#financing", label: "Financiación" },
-      ],
-      cta: "Reservar prueba",
-      openMenu: "Abrir navegación",
-      closeMenu: "Cerrar navegación",
+  stock: {
+    label: "Estoque",
+    title: "Selecionados um a um.",
+    subtitle:
+      "Cada carro passa por auditoria de procedência com 160 itens antes de entrar no showroom. Preços em reais, à vista.",
+    brandLabel: "Marca",
+    allBrands: "Todas",
+    priceLabel: "Faixa de preço",
+    priceAny: "Qualquer preço",
+    priceUnder400: "Até R$ 400 mil",
+    price400to700: "R$ 400 a 700 mil",
+    priceOver700: "Acima de R$ 700 mil",
+    sortLabel: "Ordenar",
+    sortFeatured: "Destaques",
+    sortPriceAsc: "Menor preço",
+    sortPriceDesc: "Maior preço",
+    sortKmAsc: "Menor km",
+    resultOne: "1 veículo disponível",
+    resultMany: "{n} veículos disponíveis",
+    emptyTitle: "Nenhum veículo com esses filtros",
+    emptyBody: "Ajuste a faixa de preço ou a marca — ou fale com a gente: todo mês chegam carros novos ao estoque.",
+    emptyReset: "Limpar filtros",
+    badges: {
+      armored: "Blindado",
+      oneOwner: "Único dono",
+      factoryWarranty: "Garantia de fábrica",
     },
-    hero: {
-      kicker: "Apex Motors · Serie Stradale",
-      model: "Stradale RS",
-      line1: "Hecho para doblar",
-      line2: "el horizonte.",
-      sub: "Un V8 biturbo envuelto en un monocasco de fibra de carbono. El Stradale RS es nuestra expresión más pura de velocidad — diseñado en Maranello, afinado en Nurburgring, entregado en tu puerta.",
-      ctaBuild: "Configura el tuyo",
-      ctaDrive: "Reservar una prueba",
-      imageAlt: "Deportivo Apex Motors Stradale RS fotografiado al anochecer en una carretera abierta",
-      marquee: "V8 BITURBO · MONOCASCO DE CARBONO · 830 CV · DIRECCIÓN TRASERA · AERO ACTIVO · ",
-      stats: [
-        { value: 2.6, decimals: 1, suffix: "s", label: "0 – 100 km/h" },
-        { value: 830, decimals: 0, suffix: "cv", label: "Potencia máxima" },
-        { value: 340, decimals: 0, suffix: "km/h", label: "Velocidad máxima" },
-      ],
-      scrollHint: "Desplázate para explorar",
+    fuel: { gas: "Gasolina", diesel: "Diesel", hybrid: "Híbrido" },
+    trans: { auto: "Automático", manual: "Manual" },
+    cardCta: "Tenho interesse",
+    whatsappMsg: "Olá! Tenho interesse no {car} anunciado por {price} no site da Barcellos.",
+  },
+  financing: {
+    label: "Financiamento",
+    title: "Simule a parcela em segundos.",
+    subtitle:
+      "Trabalhamos com os principais bancos e aprovamos crédito no mesmo dia. Ajuste entrada e prazo e veja a parcela na hora.",
+    vehicleLabel: "Veículo",
+    customOption: "Outro valor…",
+    customLabel: "Valor do veículo (R$)",
+    downLabel: "Entrada",
+    downHint: "arraste para ajustar",
+    termLabel: "Prazo",
+    termUnit: "meses",
+    rateLabel: "Taxa a partir de",
+    rateValue: "1,49% a.m.",
+    installmentLabel: "Parcela estimada",
+    perMonth: "/mês",
+    financedLabel: "Total financiado",
+    totalLabel: "Total do contrato",
+    cetLabel: "CET aproximado",
+    disclaimer:
+      "Simulação ilustrativa pela Tabela Price, sem IOF e tarifas. Crédito sujeito a aprovação; taxa varia conforme perfil e banco.",
+    cta: "Quero essa condição",
+    whatsappMsg:
+      "Olá! Simulei no site: {car}, entrada de {down}, {n} parcelas de {pmt}. Podemos avançar?",
+  },
+  tradein: {
+    label: "Avalie seu usado",
+    title: "Seu carro vale a entrada.",
+    subtitle:
+      "Conte o básico sobre o seu carro e nossa equipe devolve uma proposta referenciada na tabela FIPE — sem precisar sair de casa.",
+    fields: {
+      brand: "Marca",
+      brandPh: "Ex.: Volkswagen",
+      model: "Modelo",
+      modelPh: "Ex.: T-Cross Highline",
+      year: "Ano",
+      yearPh: "2021",
+      km: "Quilometragem",
+      kmPh: "45.000",
+      phone: "WhatsApp",
+      phonePh: "(11) 98765-4321",
     },
-    lineup: {
-      label: "La gama",
-      title: "Tres máquinas, una obsesión",
-      intro: "Cada Apex se ensambla a mano en Maranello y lo firma el ingeniero que construyó su motor. Elige el carácter; la precisión está garantizada.",
-      fromLabel: "Desde",
-      powerLabel: "Potencia",
-      accelLabel: "0 – 100",
-      topSpeedLabel: "Vel. máxima",
-      buildCta: "Configurar este modelo",
-      priceLocale: "es-ES",
-      currency: "EUR",
-      models: [
-        {
-          id: "corsa",
-          name: "Corsa GT",
-          category: "Gran turismo",
-          tagline: "Continentes, en cuartos.",
-          image: IMG.corsa,
-          imageAlt: "Cupé gran turismo Apex Motors Corsa GT en una carretera costera",
-          power: "640 cv",
-          accel: "3,1 s",
-          topSpeed: "318 km/h",
-          priceFrom: 176000,
-          description: "Un gran turismo V8 central-delantero que devora mil kilómetros antes del desayuno y aún caza un vértice de vuelta a casa.",
-          specs: [
-            { label: "Motor", value: "V8 3.9L biturbo" },
-            { label: "Par", value: "760 Nm" },
-            { label: "Tracción", value: "Trasera" },
-            { label: "Peso", value: "1.570 kg" },
-          ],
-        },
-        {
-          id: "stradale",
-          name: "Stradale RS",
-          category: "Superdeportivo",
-          tagline: "Hecho para doblar el horizonte.",
-          image: IMG.stradale,
-          imageAlt: "Superdeportivo Apex Motors Stradale RS con las puertas abiertas en estudio",
-          power: "830 cv",
-          accel: "2,6 s",
-          topSpeed: "340 km/h",
-          priceFrom: 249000,
-          description: "El buque insignia. Monocasco de carbono, aerodinámica activa y dirección trasera que encogen el trazado a tu alrededor.",
-          specs: [
-            { label: "Motor", value: "V8 4.0L biturbo" },
-            { label: "Par", value: "900 Nm" },
-            { label: "Tracción", value: "Trasera" },
-            { label: "Peso", value: "1.470 kg" },
-          ],
-        },
-        {
-          id: "veloce",
-          name: "Veloce Spyder",
-          category: "Descapotable",
-          tagline: "Cielo opcional, nunca apagado.",
-          image: IMG.veloce,
-          imageAlt: "Descapotable Apex Motors Veloce Spyder en rojo de competición",
-          power: "720 cv",
-          accel: "2,9 s",
-          topSpeed: "325 km/h",
-          priceFrom: 289000,
-          description: "Un roadster de techo rígido plegable con banda sonora atmosférica: la forma más ruidosa de perder el techo y ganar horizonte.",
-          specs: [
-            { label: "Motor", value: "V8 4.5L atmosférico" },
-            { label: "Par", value: "690 Nm" },
-            { label: "Tracción", value: "Trasera" },
-            { label: "Peso", value: "1.520 kg" },
-          ],
-        },
-      ],
+    errors: {
+      required: "Preencha este campo",
+      phone: "Informe um WhatsApp válido com DDD",
     },
-    configurator: {
-      label: "Configura y calcula",
-      title: "Configura tu Stradale RS",
-      intro: "Tres gestos hasta tu especificación. La silueta se repinta con cada elección — el total se actualiza en el instante en que decides.",
-      baseName: "Stradale RS",
-      basePrice: 249000,
-      trimLabel: "Acabado",
-      colorLabel: "Pintura",
-      wheelLabel: "Llantas",
-      totalLabel: "Tu configuración",
-      fromNote: "Precio estimado con matriculación",
-      powerNote: "Potencia",
-      reserveCta: "Reservar esta configuración",
-      reserveNote: "Depósito reembolsable · Entrega en 14 meses",
-      successTitle: "Configuración reservada.",
-      successBody: "La referencia APX-6620 queda bloqueada. Un especialista de Maranello llamará en un día hábil para confirmar tu especificación y la fecha de entrega.",
-      reset: "Configurar otra",
-      summaryTitle: "Especificación",
-      addLabel: "Opciones",
-      includedLabel: "Incluido",
-      priceLocale: "es-ES",
-      currency: "EUR",
-      trims: [
-        { id: "corsa", name: "Stradale", note: "El coche de calle definitivo", priceDelta: 0, power: "830 cv" },
-        { id: "competizione", name: "Competizione", note: "Aero de circuito y escape de titanio", priceDelta: 39000, power: "870 cv" },
-        { id: "trackpack", name: "Corsa Track Pack", note: "Arco antivuelco, telemetría y magnesio por doquier", priceDelta: 72000, power: "910 cv" },
-      ],
-      colors: [
-        { id: "rosso", name: "Rosso Apex", hex: "#C8102E", finish: "Brillante", priceDelta: 0 },
-        { id: "nero", name: "Nero Carbonio", hex: "#0C0C0F", finish: "Mate", priceDelta: 0 },
-        { id: "argento", name: "Argento Pista", hex: "#B8BAC2", finish: "Metalizado", priceDelta: 2300 },
-        { id: "titanio", name: "Grigio Titanio", hex: "#3A3D44", finish: "Metalizado mate", priceDelta: 2300 },
-        { id: "blu", name: "Blu Nurburg", hex: "#24406B", finish: "Metalizado", priceDelta: 3500 },
-        { id: "bianco", name: "Bianco Ghiaccio", hex: "#E9EAEC", finish: "Brillante", priceDelta: 2300 },
-      ],
-      wheels: [
-        { id: "forged20", name: "Forjada 20 pulg. Corsa", note: "Diamantada, negro brillo", priceDelta: 0 },
-        { id: "forged21", name: "Forjada 21 pulg. Aero", note: "Álabes de turbina, acabado satinado", priceDelta: 6000 },
-        { id: "mag21", name: "Magnesio 21 pulg. Track", note: "Cierre central, menos 11 kg", priceDelta: 13000 },
-      ],
-    },
-    performance: {
-      label: "Datos de prestaciones",
-      title: "Cifras que dejan huella",
-      intro: "Medido en el circuito de Fiorano, asfalto seco, un ocupante. Sin asteriscos de salida ni arrancadas lanzadas.",
-      imageAlt: "Vista frontal del Apex Motors Stradale RS con sus tomas de aire y faros agresivos",
-      metricsTitle: "Envolvente",
-      metrics: [
-        { id: "power", label: "Potencia máxima", value: 830, decimals: 0, suffix: "cv", fill: 92, note: "a 8.000 rpm" },
-        { id: "torque", label: "Par máximo", value: 900, decimals: 0, suffix: "Nm", fill: 88, note: "a 3.000 rpm" },
-        { id: "downforce", label: "Carga aerodinámica", value: 390, decimals: 0, suffix: "kg", fill: 78, note: "a 250 km/h" },
-        { id: "lateral", label: "Agarre lateral", value: 1.35, decimals: 2, suffix: "g", fill: 84, note: "curva sostenida" },
-        { id: "ratio", label: "Peso-potencia", value: 565, decimals: 0, suffix: "cv/t", fill: 90, note: "base peso en seco" },
-      ],
-      ladderTitle: "Aceleración desde parado",
-      ladder: [
-        { label: "0 – 100 km/h", value: "2,6 s" },
-        { label: "0 – 200 km/h", value: "7,4 s" },
-        { label: "0 – 300 km/h", value: "18,9 s" },
-        { label: "400 m", value: "10,1 s" },
-        { label: "Frenada 100 – 0 km/h", value: "29 m" },
-      ],
-      curveTitle: "Entrega de potencia",
-      curveNote: "La potencia sube hasta 8.000 rpm mientras el par mantiene una meseta desde 3.000 — la razón de que empuje fuerte en todas partes, no solo arriba.",
-      powerCurveLabel: "Potencia (cv)",
-      torqueCurveLabel: "Par (Nm)",
-      rpmLabel: "Régimen (rpm)",
-    },
-    testDrive: {
-      label: "Prueba de conducción",
-      title: "Siéntelo antes de decidir",
-      intro: "Noventa minutos, un copiloto profesional y una ruta diseñada para mostrar los modales de un coche. Elige un concesionario y una hora.",
-      imageAlt: "Habitáculo orientado al conductor de un Apex Motors con volante de carbono",
-      nameLabel: "Nombre completo",
-      namePlaceholder: "Marina Albuquerque",
-      emailLabel: "Correo",
-      emailPlaceholder: "tu@ejemplo.com",
-      phoneLabel: "Teléfono",
-      phonePlaceholder: "+34 612 345 678",
-      modelLabel: "Modelo de interés",
-      models: ["Corsa GT", "Stradale RS", "Veloce Spyder", "Sin decidir — sorpréndeme"],
-      locationLabel: "Concesionario",
-      locations: ["Apex Madrid — Salamanca", "Apex Barcelona — Diagonal", "Apex Marbella — Puerto Banús"],
-      dateLabel: "Fecha preferida",
-      slotLabel: "Franja horaria",
-      slots: ["09:00", "11:00", "14:00", "16:30"],
-      submit: "Solicitar mi prueba",
-      successTitle: "Tu prueba está apuntada.",
-      successBody: "Hemos reservado el coche y la ruta. Un concierge confirmará tu hora por teléfono en unas horas.",
-      another: "Reservar otra prueba",
-      refPrefix: "Referencia de reserva",
-      assurances: [
-        "Sin compromiso, sin presión de venta",
-        "Seguro completo en cada prueba",
-        "Trae un acompañante, insistimos",
-      ],
-    },
-    financing: {
-      label: "Financiación",
-      title: "Hazlo tuyo en tus términos",
-      intro: "Mueve los controles. La cuota mensual se recalcula en vivo, para que encuentres la forma del trato antes de firmar una sola línea.",
-      priceLabel: "Precio del vehículo",
-      downLabel: "Entrada",
-      termLabel: "Plazo",
-      termUnit: "meses",
-      aprLabel: "TAE fija",
-      apr: 5.4,
-      installmentLabel: "Cuota estimada",
-      monthlyUnit: "/mes",
-      totalLabel: "Total a pagar",
-      interestLabel: "Intereses totales",
-      financedLabel: "Importe financiado",
-      downPctLabel: "del precio",
-      disclaimer: "Cifras ilustrativas de un concepto ficticio. Las condiciones reales dependen del crédito aprobado, el valor residual y la jurisdicción.",
-      ctaDrive: "Hablar con un especialista",
-      priceMin: 140000,
-      priceMax: 380000,
-      priceDefault: 249000,
-      priceStep: 1000,
-      downMax: 220000,
-      downDefault: 74000,
-      downStep: 1000,
-      terms: [24, 36, 48, 60, 72],
-      termDefault: 48,
-      priceLocale: "es-ES",
-      currency: "EUR",
-    },
-    footer: {
-      tagline: "Prestaciones hechas a mano, entregadas en todo el mundo.",
-      exploreLabel: "Explora",
-      visitLabel: "Taller insignia",
-      followLabel: "Síguenos",
-      nav: [
-        { href: "#lineup", label: "Gama" },
-        { href: "#configurator", label: "Configura y calcula" },
-        { href: "#performance", label: "Prestaciones" },
-        { href: "#testdrive", label: "Prueba" },
-        { href: "#financing", label: "Financiación" },
-      ],
-      addressLines: ["Apex Motors Taller", "Via dei Piloti 12, Maranello, Italia"],
-      hoursNote: "Showroom abierto de lun a sáb, 09:00 – 19:00",
-      phone: "+39 0536 949 200",
-      email: "atelier@apexmotors.com",
-      social: [
-        { label: "Instagram", handle: "@apexmotors" },
-        { label: "YouTube", handle: "/apexmotors" },
-        { label: "Newsletter", handle: "The Pit Wall" },
-      ],
-      legal: ["Privacidad", "Términos", "Preferencias de cookies"],
-      fine: "Apex Motors es una marca ficticia creada como concepto de diseño. Vehículos, especificaciones y precios son ilustrativos.",
-      credit: "Concepto, diseño y desarrollo de VigApp.",
-    },
+    submit: "Pedir avaliação",
+    successTitle: "Recebemos os dados!",
+    successBody: "Nossa equipe te chama no WhatsApp em até 2h úteis com a proposta.",
+    successAgain: "Avaliar outro carro",
+    note: "Avaliação sem compromisso. Pagamos à vista ou usamos como entrada.",
+  },
+  visit: {
+    label: "Visita & test drive",
+    title: "Venha tomar um café no showroom.",
+    subtitle:
+      "Escolha o melhor dia e horário. Deixamos o carro preparado — chave na mão, tanque cheio e rota de test drive pelos Jardins.",
+    dayLabel: "Dia da semana",
+    days: ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"],
+    timeLabel: "Horário",
+    submit: "Reservar horário",
+    successTitle: "Horário reservado!",
+    successBody: "{day}, às {time}. Te esperamos na Av. Europa, 1088 — qualquer imprevisto, é só chamar no WhatsApp.",
+    addressLabel: "Endereço",
+    address: "Av. Europa, 1088 — Jardim Europa, São Paulo/SP",
+    hoursLabel: "Horário de funcionamento",
+    hours: "Segunda a sábado, das 9h às 19h",
+    mapTitle: "Mapa — Barcellos Veículos, Av. Europa 1088, São Paulo",
+    mapCta: "Abrir no OpenStreetMap",
+  },
+  testimonials: {
+    label: "Quem comprou, indica",
+    title: "Histórias que saem daqui de chave nova.",
+    items: [
+      {
+        name: "Ricardo Tavares",
+        car: "Range Rover Sport 2023",
+        quote:
+          "Terceiro carro que compro na Barcellos. O laudo de procedência veio antes mesmo de eu pedir — é outro nível de transparência.",
+      },
+      {
+        name: "Fernanda Lombardi",
+        car: "Audi Q5 Sportback 2024",
+        quote:
+          "Fiz tudo pelo WhatsApp: avaliação do meu usado, financiamento e entrega em Campinas. Em quatro dias o Q5 estava na minha garagem.",
+      },
+      {
+        name: "André Sant'Anna",
+        car: "Porsche Cayenne Coupé 2022",
+        quote:
+          "Test drive marcado no sábado de manhã, café coado e zero pressão de venda. Fechei no mesmo dia, com a blindagem já certificada.",
+      },
+    ],
+    sealsLabel: "Reconhecimentos",
+    seals: [
+      { icon: "award", title: "Top Dealer SP 2025", sub: "Prêmio fictício de excelência em seminovos" },
+      { icon: "shield", title: "Blindagem certificada", sub: "Parceiros homologados nível III-A" },
+      { icon: "badge", title: "Garantia Barcellos", sub: "1 ano de cobertura em motor e câmbio" },
+    ],
+  },
+  footer: {
+    blurb:
+      "Concessionária familiar desde 1998. Seminovos premium e blindados com procedência auditada, nos Jardins, São Paulo.",
+    navLabel: "Navegação",
+    nav: [
+      { href: NAV_ANCHORS[0], label: "Destaque da semana" },
+      { href: NAV_ANCHORS[1], label: "Estoque" },
+      { href: NAV_ANCHORS[2], label: "Financiamento" },
+      { href: NAV_ANCHORS[3], label: "Avalie seu usado" },
+      { href: NAV_ANCHORS[4], label: "Visita & test drive" },
+    ],
+    contactLabel: "Contato",
+    phone: "(11) 4002-1998",
+    whatsapp: "(11) 98123-0911",
+    instagram: "@barcellos.veiculos",
+    hoursLabel: "Funcionamento",
+    hours: "Seg a sáb · 9h às 19h",
+    address: "Av. Europa, 1088 — Jardim Europa, São Paulo/SP",
+    disclaimer: "Barcellos Veículos é um conceito fictício criado pela VigApp.",
+    rights: "© 2026 Barcellos Veículos. Todos os direitos reservados.",
   },
 };
+
+const en: BarcellosContent = {
+  header: {
+    nav: [
+      { href: NAV_ANCHORS[0], label: "Featured" },
+      { href: NAV_ANCHORS[1], label: "Inventory" },
+      { href: NAV_ANCHORS[2], label: "Financing" },
+      { href: NAV_ANCHORS[3], label: "Trade-in" },
+      { href: NAV_ANCHORS[4], label: "Visit" },
+    ],
+    cta: "WhatsApp",
+    menuOpen: "Open menu",
+    menuClose: "Close menu",
+    whatsappMsg: "Hi! I found Barcellos Veículos online and would like to talk to a consultant.",
+  },
+  hero: {
+    badge: "Jardins · São Paulo · since 1998",
+    titleLead: "Your next car",
+    titleAccent: "is already in our showroom.",
+    subtitle:
+      "Premium pre-owned and armored cars with a fully audited history, a 1-year Barcellos warranty and assisted delivery anywhere in Brazil.",
+    bullets: ["Audited provenance", "1-year warranty", "Delivery across Brazil"],
+    ctaPrimary: "Browse inventory",
+    ctaSecondary: "Chat on WhatsApp",
+    stats: [
+      { value: "27", label: "years in business" },
+      { value: "+11,400", label: "cars delivered" },
+      { value: "4.9★", label: "Google rating" },
+    ],
+    stage: {
+      eyebrow: "Car of the week",
+      title: "Spin the car — Porsche 911 Carrera 4S",
+      loadLabel: "View in 3D",
+      hint: "Drag to rotate · scroll to zoom",
+      priceTag: "R$ 899.900",
+      fichaCta: "See the full spec sheet",
+    },
+  },
+  featured: {
+    label: "Car of the week",
+    title: "Porsche 911 Carrera 4S",
+    subtitle:
+      "The very car you just spun in 3D, waiting at Av. Europa. One-owner, every service done at the official dealer.",
+    specs: [
+      { label: "Power", value: "450 hp" },
+      { label: "0–100 km/h", value: "3.8 s" },
+      { label: "Mileage", value: "18,400 km" },
+      { label: "Year", value: "2022" },
+      { label: "Gearbox", value: "8-speed PDK" },
+      { label: "Fuel", value: "Petrol" },
+    ],
+    badges: ["One owner", "Full dealer service history", "Inspection report approved"],
+    priceLabel: "Cash price",
+    priceNote: "We take your current car as trade-in",
+    ctaInterest: "I'm interested",
+    ctaTestDrive: "Book a test drive",
+    back3d: "Back to the 3D model",
+    whatsappMsg:
+      "Hi! I'm interested in the Porsche 911 Carrera 4S 2022 (car of the week) listed at R$ 899.900.",
+  },
+  stock: {
+    label: "Inventory",
+    title: "Hand-picked, one by one.",
+    subtitle:
+      "Every car clears a 160-point provenance audit before it reaches the floor. Prices in Brazilian reais (R$), cash.",
+    brandLabel: "Brand",
+    allBrands: "All",
+    priceLabel: "Price range",
+    priceAny: "Any price",
+    priceUnder400: "Up to R$ 400k",
+    price400to700: "R$ 400k – 700k",
+    priceOver700: "Above R$ 700k",
+    sortLabel: "Sort by",
+    sortFeatured: "Featured",
+    sortPriceAsc: "Lowest price",
+    sortPriceDesc: "Highest price",
+    sortKmAsc: "Lowest mileage",
+    resultOne: "1 vehicle available",
+    resultMany: "{n} vehicles available",
+    emptyTitle: "No vehicles match these filters",
+    emptyBody: "Adjust the price range or brand — or message us: fresh stock arrives every month.",
+    emptyReset: "Clear filters",
+    badges: {
+      armored: "Armored",
+      oneOwner: "One owner",
+      factoryWarranty: "Factory warranty",
+    },
+    fuel: { gas: "Petrol", diesel: "Diesel", hybrid: "Hybrid" },
+    trans: { auto: "Automatic", manual: "Manual" },
+    cardCta: "I'm interested",
+    whatsappMsg: "Hi! I'm interested in the {car} listed at {price} on the Barcellos site.",
+  },
+  financing: {
+    label: "Financing",
+    title: "Estimate your installment in seconds.",
+    subtitle:
+      "We work with Brazil's leading banks and approve credit the same day. Adjust the down payment and term to see your installment.",
+    vehicleLabel: "Vehicle",
+    customOption: "Custom amount…",
+    customLabel: "Vehicle price (R$)",
+    downLabel: "Down payment",
+    downHint: "drag to adjust",
+    termLabel: "Term",
+    termUnit: "months",
+    rateLabel: "Rates from",
+    rateValue: "1.49%/month",
+    installmentLabel: "Estimated installment",
+    perMonth: "/mo",
+    financedLabel: "Amount financed",
+    totalLabel: "Contract total",
+    cetLabel: "Approx. total cost rate",
+    disclaimer:
+      "Illustrative simulation using the Price amortization table, excluding IOF tax and fees. Credit subject to approval; rates vary by profile and bank.",
+    cta: "Lock in this quote",
+    whatsappMsg:
+      "Hi! I ran a simulation on the site: {car}, {down} down, {n} installments of {pmt}. Can we proceed?",
+  },
+  tradein: {
+    label: "Trade-in appraisal",
+    title: "Your current car is your down payment.",
+    subtitle:
+      "Tell us the basics and our team returns a FIPE-referenced offer — without you leaving home.",
+    fields: {
+      brand: "Brand",
+      brandPh: "e.g. Volkswagen",
+      model: "Model",
+      modelPh: "e.g. T-Cross Highline",
+      year: "Year",
+      yearPh: "2021",
+      km: "Mileage (km)",
+      kmPh: "45,000",
+      phone: "WhatsApp",
+      phonePh: "+55 11 98765-4321",
+    },
+    errors: {
+      required: "This field is required",
+      phone: "Enter a valid WhatsApp number with area code",
+    },
+    submit: "Request appraisal",
+    successTitle: "Details received!",
+    successBody: "Our team will message you on WhatsApp within 2 business hours with an offer.",
+    successAgain: "Appraise another car",
+    note: "No-obligation appraisal. We pay cash or apply it as your down payment.",
+  },
+  visit: {
+    label: "Visit & test drive",
+    title: "Come have a coffee at the showroom.",
+    subtitle:
+      "Pick the day and time that suit you. The car will be ready — keys in hand, full tank and a test route through Jardins.",
+    dayLabel: "Day of the week",
+    days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+    timeLabel: "Time",
+    submit: "Reserve this slot",
+    successTitle: "Slot reserved!",
+    successBody: "{day} at {time}. See you at Av. Europa, 1088 — if anything changes, just ping us on WhatsApp.",
+    addressLabel: "Address",
+    address: "Av. Europa, 1088 — Jardim Europa, São Paulo/SP, Brazil",
+    hoursLabel: "Opening hours",
+    hours: "Monday to Saturday, 9 am – 7 pm",
+    mapTitle: "Map — Barcellos Veículos, Av. Europa 1088, São Paulo",
+    mapCta: "Open in OpenStreetMap",
+  },
+  testimonials: {
+    label: "Owners recommend us",
+    title: "Stories that drive away on a fresh set of keys.",
+    items: [
+      {
+        name: "Ricardo Tavares",
+        car: "Range Rover Sport 2023",
+        quote:
+          "Third car I buy from Barcellos. The provenance report arrived before I even asked — a different league of transparency.",
+      },
+      {
+        name: "Fernanda Lombardi",
+        car: "Audi Q5 Sportback 2024",
+        quote:
+          "Everything over WhatsApp: my trade-in appraisal, financing and delivery in Campinas. Four days later the Q5 was in my garage.",
+      },
+      {
+        name: "André Sant'Anna",
+        car: "Porsche Cayenne Coupé 2022",
+        quote:
+          "Test drive booked for Saturday morning, fresh coffee and zero sales pressure. Closed the same day, armor already certified.",
+      },
+    ],
+    sealsLabel: "Recognitions",
+    seals: [
+      { icon: "award", title: "Top Dealer SP 2025", sub: "Fictional excellence award for pre-owned retail" },
+      { icon: "shield", title: "Certified armoring", sub: "Level III-A homologated partners" },
+      { icon: "badge", title: "Barcellos warranty", sub: "1 year of engine and gearbox coverage" },
+    ],
+  },
+  footer: {
+    blurb:
+      "A family-run dealership since 1998. Premium pre-owned and armored cars with audited provenance, in Jardins, São Paulo.",
+    navLabel: "Navigate",
+    nav: [
+      { href: NAV_ANCHORS[0], label: "Car of the week" },
+      { href: NAV_ANCHORS[1], label: "Inventory" },
+      { href: NAV_ANCHORS[2], label: "Financing" },
+      { href: NAV_ANCHORS[3], label: "Trade-in appraisal" },
+      { href: NAV_ANCHORS[4], label: "Visit & test drive" },
+    ],
+    contactLabel: "Contact",
+    phone: "+55 11 4002-1998",
+    whatsapp: "+55 11 98123-0911",
+    instagram: "@barcellos.veiculos",
+    hoursLabel: "Hours",
+    hours: "Mon–Sat · 9 am – 7 pm",
+    address: "Av. Europa, 1088 — Jardim Europa, São Paulo/SP, Brazil",
+    disclaimer: "Barcellos Veículos is a fictional concept created by VigApp.",
+    rights: "© 2026 Barcellos Veículos. All rights reserved.",
+  },
+};
+
+const es: BarcellosContent = {
+  header: {
+    nav: [
+      { href: NAV_ANCHORS[0], label: "Destacado" },
+      { href: NAV_ANCHORS[1], label: "Stock" },
+      { href: NAV_ANCHORS[2], label: "Financiación" },
+      { href: NAV_ANCHORS[3], label: "Tasación" },
+      { href: NAV_ANCHORS[4], label: "Visita" },
+    ],
+    cta: "WhatsApp",
+    menuOpen: "Abrir menú",
+    menuClose: "Cerrar menú",
+    whatsappMsg: "¡Hola! Vi el sitio de Barcellos Veículos y quiero hablar con un asesor.",
+  },
+  hero: {
+    badge: "Jardins · São Paulo · desde 1998",
+    titleLead: "Tu próximo auto",
+    titleAccent: "ya está en nuestro showroom.",
+    subtitle:
+      "Seminuevos premium y blindados con procedencia auditada punto por punto, garantía Barcellos de 1 año y entrega asistida en todo Brasil.",
+    bullets: ["Procedencia auditada", "Garantía de 1 año", "Entrega en todo Brasil"],
+    ctaPrimary: "Ver stock",
+    ctaSecondary: "Hablar por WhatsApp",
+    stats: [
+      { value: "27", label: "años de mercado" },
+      { value: "+11.400", label: "autos entregados" },
+      { value: "4,9★", label: "valoración en Google" },
+    ],
+    stage: {
+      eyebrow: "Destacado de la semana",
+      title: "Gira el auto — Porsche 911 Carrera 4S",
+      loadLabel: "Ver en 3D",
+      hint: "Arrastra para girar · rueda para zoom",
+      priceTag: "R$ 899.900",
+      fichaCta: "Ver ficha completa",
+    },
+  },
+  featured: {
+    label: "Destacado de la semana",
+    title: "Porsche 911 Carrera 4S",
+    subtitle:
+      "El mismo auto que acabas de girar en 3D, esperándote en Av. Europa. Un solo dueño y todas las revisiones hechas en el concesionario oficial.",
+    specs: [
+      { label: "Potencia", value: "450 cv" },
+      { label: "0–100 km/h", value: "3,8 s" },
+      { label: "Kilometraje", value: "18.400 km" },
+      { label: "Año", value: "2022" },
+      { label: "Caja", value: "PDK 8" },
+      { label: "Combustible", value: "Gasolina" },
+    ],
+    badges: ["Único dueño", "Revisiones en el concesionario", "Informe pericial aprobado"],
+    priceLabel: "Precio al contado",
+    priceNote: "Aceptamos tu usado como parte de pago",
+    ctaInterest: "Me interesa",
+    ctaTestDrive: "Agendar test drive",
+    back3d: "Volver al modelo 3D",
+    whatsappMsg:
+      "¡Hola! Me interesa el Porsche 911 Carrera 4S 2022 (destacado de la semana) publicado a R$ 899.900.",
+  },
+  stock: {
+    label: "Stock",
+    title: "Seleccionados uno a uno.",
+    subtitle:
+      "Cada auto pasa una auditoría de procedencia de 160 puntos antes de entrar al showroom. Precios en reales brasileños (R$), al contado.",
+    brandLabel: "Marca",
+    allBrands: "Todas",
+    priceLabel: "Rango de precio",
+    priceAny: "Cualquier precio",
+    priceUnder400: "Hasta R$ 400 mil",
+    price400to700: "R$ 400 a 700 mil",
+    priceOver700: "Más de R$ 700 mil",
+    sortLabel: "Ordenar",
+    sortFeatured: "Destacados",
+    sortPriceAsc: "Menor precio",
+    sortPriceDesc: "Mayor precio",
+    sortKmAsc: "Menos km",
+    resultOne: "1 vehículo disponible",
+    resultMany: "{n} vehículos disponibles",
+    emptyTitle: "Ningún vehículo con esos filtros",
+    emptyBody: "Ajusta el rango de precio o la marca — o escríbenos: cada mes entran autos nuevos al stock.",
+    emptyReset: "Limpiar filtros",
+    badges: {
+      armored: "Blindado",
+      oneOwner: "Único dueño",
+      factoryWarranty: "Garantía de fábrica",
+    },
+    fuel: { gas: "Gasolina", diesel: "Diésel", hybrid: "Híbrido" },
+    trans: { auto: "Automático", manual: "Manual" },
+    cardCta: "Me interesa",
+    whatsappMsg: "¡Hola! Me interesa el {car} publicado a {price} en el sitio de Barcellos.",
+  },
+  financing: {
+    label: "Financiación",
+    title: "Simula tu cuota en segundos.",
+    subtitle:
+      "Trabajamos con los principales bancos de Brasil y aprobamos el crédito el mismo día. Ajusta la entrada y el plazo y mira la cuota al instante.",
+    vehicleLabel: "Vehículo",
+    customOption: "Otro valor…",
+    customLabel: "Valor del vehículo (R$)",
+    downLabel: "Entrada",
+    downHint: "arrastra para ajustar",
+    termLabel: "Plazo",
+    termUnit: "meses",
+    rateLabel: "Tasa desde",
+    rateValue: "1,49% mensual",
+    installmentLabel: "Cuota estimada",
+    perMonth: "/mes",
+    financedLabel: "Total financiado",
+    totalLabel: "Total del contrato",
+    cetLabel: "Costo total aprox.",
+    disclaimer:
+      "Simulación ilustrativa con sistema francés (Tabla Price), sin IOF ni tarifas. Crédito sujeto a aprobación; la tasa varía según perfil y banco.",
+    cta: "Quiero esta condición",
+    whatsappMsg:
+      "¡Hola! Simulé en el sitio: {car}, entrada de {down}, {n} cuotas de {pmt}. ¿Avanzamos?",
+  },
+  tradein: {
+    label: "Tasa tu usado",
+    title: "Tu auto vale la entrada.",
+    subtitle:
+      "Cuéntanos lo básico de tu auto y el equipo te devuelve una oferta referenciada en la tabla FIPE — sin salir de casa.",
+    fields: {
+      brand: "Marca",
+      brandPh: "Ej.: Volkswagen",
+      model: "Modelo",
+      modelPh: "Ej.: T-Cross Highline",
+      year: "Año",
+      yearPh: "2021",
+      km: "Kilometraje",
+      kmPh: "45.000",
+      phone: "WhatsApp",
+      phonePh: "+55 11 98765-4321",
+    },
+    errors: {
+      required: "Completa este campo",
+      phone: "Ingresa un WhatsApp válido con código de área",
+    },
+    submit: "Pedir tasación",
+    successTitle: "¡Datos recibidos!",
+    successBody: "Nuestro equipo te escribe por WhatsApp en hasta 2h hábiles con la oferta.",
+    successAgain: "Tasar otro auto",
+    note: "Tasación sin compromiso. Pagamos al contado o lo tomamos como entrada.",
+  },
+  visit: {
+    label: "Visita y test drive",
+    title: "Ven a tomar un café al showroom.",
+    subtitle:
+      "Elige el mejor día y horario. Dejamos el auto listo — llave en mano, tanque lleno y ruta de test drive por Jardins.",
+    dayLabel: "Día de la semana",
+    days: ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+    timeLabel: "Horario",
+    submit: "Reservar horario",
+    successTitle: "¡Horario reservado!",
+    successBody: "{day}, a las {time}. Te esperamos en Av. Europa, 1088 — ante cualquier imprevisto, escríbenos por WhatsApp.",
+    addressLabel: "Dirección",
+    address: "Av. Europa, 1088 — Jardim Europa, São Paulo/SP, Brasil",
+    hoursLabel: "Horario de atención",
+    hours: "Lunes a sábado, de 9 a 19 h",
+    mapTitle: "Mapa — Barcellos Veículos, Av. Europa 1088, São Paulo",
+    mapCta: "Abrir en OpenStreetMap",
+  },
+  testimonials: {
+    label: "Quien compró, recomienda",
+    title: "Historias que salen de aquí con llave nueva.",
+    items: [
+      {
+        name: "Ricardo Tavares",
+        car: "Range Rover Sport 2023",
+        quote:
+          "Tercer auto que compro en Barcellos. El informe de procedencia llegó antes de que lo pidiera — otro nivel de transparencia.",
+      },
+      {
+        name: "Fernanda Lombardi",
+        car: "Audi Q5 Sportback 2024",
+        quote:
+          "Hice todo por WhatsApp: tasación de mi usado, financiación y entrega en Campinas. En cuatro días el Q5 estaba en mi garaje.",
+      },
+      {
+        name: "André Sant'Anna",
+        car: "Porsche Cayenne Coupé 2022",
+        quote:
+          "Test drive un sábado por la mañana, café recién hecho y cero presión de venta. Cerré el mismo día, con el blindaje certificado.",
+      },
+    ],
+    sealsLabel: "Reconocimientos",
+    seals: [
+      { icon: "award", title: "Top Dealer SP 2025", sub: "Premio ficticio a la excelencia en seminuevos" },
+      { icon: "shield", title: "Blindaje certificado", sub: "Talleres homologados nivel III-A" },
+      { icon: "badge", title: "Garantía Barcellos", sub: "1 año de cobertura en motor y caja" },
+    ],
+  },
+  footer: {
+    blurb:
+      "Concesionario familiar desde 1998. Seminuevos premium y blindados con procedencia auditada, en Jardins, São Paulo.",
+    navLabel: "Navegación",
+    nav: [
+      { href: NAV_ANCHORS[0], label: "Destacado de la semana" },
+      { href: NAV_ANCHORS[1], label: "Stock" },
+      { href: NAV_ANCHORS[2], label: "Financiación" },
+      { href: NAV_ANCHORS[3], label: "Tasa tu usado" },
+      { href: NAV_ANCHORS[4], label: "Visita y test drive" },
+    ],
+    contactLabel: "Contacto",
+    phone: "+55 11 4002-1998",
+    whatsapp: "+55 11 98123-0911",
+    instagram: "@barcellos.veiculos",
+    hoursLabel: "Horario",
+    hours: "Lun a sáb · 9 a 19 h",
+    address: "Av. Europa, 1088 — Jardim Europa, São Paulo/SP, Brasil",
+    disclaimer: "Barcellos Veículos es un concepto ficticio creado por VigApp.",
+    rights: "© 2026 Barcellos Veículos. Todos los derechos reservados.",
+  },
+};
+
+export const barcellosDict: DemoDictionary<BarcellosContent> = { en, pt, es };

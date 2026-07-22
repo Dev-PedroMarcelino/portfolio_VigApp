@@ -5,7 +5,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 
 /*
- * KYNETIK — kinetic drop stage (real-time Three.js).
+ * VIELA — kinetic drop stage (real-time Three.js).
  * A charged turntable rig: instanced neon shards + orbiting torus-knots orbit a
  * pulsing additive core, ringed by a spinning podium halo and additive glow
  * particles. Hot pink (#FF3D81) -> electric violet (#B026FF) with a volt accent.

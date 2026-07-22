@@ -1,12 +1,19 @@
 import type { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
-import { Space_Grotesk, IBM_Plex_Mono } from "next/font/google";
+import { Fraunces, Figtree, IBM_Plex_Mono } from "next/font/google";
 import { DemoShell } from "@/components/demos/demo-shell";
-import { Nuvex } from "@/demos/finance-platform/nuvex";
+import { Zela } from "@/demos/finance-platform/zela";
 
-const display = Space_Grotesk({
+const display = Fraunces({
   subsets: ["latin"],
+  style: ["normal", "italic"],
+  weight: ["400", "500", "600", "700"],
   variable: "--demo-display",
+});
+
+const body = Figtree({
+  subsets: ["latin"],
+  variable: "--demo-body",
 });
 
 const mono = IBM_Plex_Mono({
@@ -16,9 +23,9 @@ const mono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Nuvex — concept by VigApp",
+  title: "Zela — concept by VigApp",
   description:
-    "Dark-futurist neobank concept with a 3D-tilting metal card, a live balance dashboard, an instant transfer flow and animated savings goal rings.",
+    "Warm Brazilian digital-account concept: a cream-and-green anti-obsidian fintech with an interactive Pix flow, compounding savings boxes, a real 3D metal card and a fee-transparency table.",
 };
 
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
@@ -26,9 +33,9 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
   setRequestLocale(locale);
 
   return (
-    <DemoShell demoName="Nuvex">
-      <div className={`${display.variable} ${mono.variable}`}>
-        <Nuvex locale={locale} />
+    <DemoShell demoName="Zela">
+      <div className={`${display.variable} ${body.variable} ${mono.variable}`}>
+        <Zela locale={locale} />
       </div>
     </DemoShell>
   );

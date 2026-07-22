@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useReducedMotionSafe as useReducedMotion } from "@/components/demos/use-reduced-motion-safe";
 import { Ticket, X, Check, Sparkles } from "lucide-react";
 import type { RaffleContent } from "./content";
 import { Kicker, Chip, shot } from "./ui";

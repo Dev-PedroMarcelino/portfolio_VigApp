@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useReducedMotionSafe as useReducedMotion } from "@/components/demos/use-reduced-motion-safe";
 import { Check, Plus, Ruler } from "lucide-react";
 import type { CartLine, LatestContent } from "./content";
 import { Kicker, Chip, money, shot } from "./ui";

@@ -87,27 +87,76 @@ export interface LatestContent {
   thumbs: string[];
 }
 
-export interface GridSneaker {
+/* --------------------------- Catalog ------------------------------ */
+
+export type CatalogCategory = "sneakers" | "apparel" | "accessories";
+export type CatalogFilter = "all" | CatalogCategory;
+export type SortId = "featured" | "new" | "price-asc" | "price-desc";
+
+export interface CatalogItem {
   id: string;
+  category: CatalogCategory;
   name: string;
   colorway: string;
   price: number;
-  tag?: string;
+  /** Available sizes; a single "U" entry means one-size. */
+  sizes: string[];
+  isNew?: boolean;
+  lowStock?: boolean;
   soldOut?: boolean;
   image: string;
   alt: string;
 }
 
-export interface GridContent {
+export interface CatalogContent {
   label: string;
   title: string;
   intro: string;
+  filterLabel: string;
+  categories: { id: CatalogFilter; label: string }[];
+  sizeLabel: string;
+  sizeOptions: string[];
+  sortLabel: string;
+  sortOptions: { id: SortId; label: string }[];
+  resultsSingular: string;
+  resultsPlural: string;
+  emptyTitle: string;
+  emptyBody: string;
+  clearFilters: string;
   quickAdd: string;
+  chooseSize: string;
   added: string;
   soldOut: string;
+  lastUnits: string;
+  newBadge: string;
   oneSize: string;
-  items: GridSneaker[];
+  items: CatalogItem[];
 }
+
+/* -------------------------- Vista 360° ---------------------------- */
+
+export interface Vista360Content {
+  label: string;
+  title: string;
+  intro: string;
+  badge: string;
+  modelTitle: string;
+  loadLabel: string;
+  hint: string;
+  featureNote: string;
+  name: string;
+  colorway: string;
+  price: number;
+  description: string;
+  sizeLabel: string;
+  sizeUnit: string;
+  sizes: string[];
+  pickSize: string;
+  addToCart: string;
+  added: string;
+}
+
+/* --------------------------- Raffle ------------------------------- */
 
 export interface RaffleField {
   id: "name" | "email" | "city";
@@ -176,21 +225,22 @@ export interface FooterContent {
   credit: string;
 }
 
-export interface KynetikContent {
+export interface VielaContent {
   priceLocale: string;
   currency: string;
   header: HeaderContent;
   cart: CartContent;
   hero: HeroContent;
   latest: LatestContent;
-  grid: GridContent;
+  catalog: CatalogContent;
+  vista: Vista360Content;
   raffle: RaffleContent;
   marquee: MarqueeContent;
   about: AboutContent;
   footer: FooterContent;
 }
 
-/* Fixed images (Unsplash IDs, art-directed defensively). */
+/* Fixed images (Unsplash IDs, art-directed defensively — always in color). */
 const IMG = {
   hero: "photo-1542291026-7eec264c27ff",
   latestMain: "photo-1595950653106-6c9ebd614d3a",
@@ -203,33 +253,60 @@ const IMG = {
   street: "photo-1600185365483-26d7a4cc7519",
   pair: "photo-1595950653106-6c9ebd614d3a",
   box: "photo-1595341888016-a392ef81b7de",
+  /* apparel */
+  tee: "photo-1626806851009-c98659eb1af0",
+  hoodie: "photo-1601063476271-a159c71ab0b3",
+  windbreaker: "photo-1571867424485-369464ed33cc",
+  cargo: "photo-1511794322962-129ddbd0af38",
+  jersey: "photo-1552066379-e7bfd22155c5",
+  /* accessories */
+  cap: "photo-1513902501146-e2c7436cfe65",
+  socks: "photo-1582578598832-4b8d6cdbe9d8",
+  bag: "photo-1640101942866-e863d2ab9215",
+  chain: "photo-1625908733875-efa9c75c084d",
+};
+
+/** Sketchfab model powering the "Vista 360°" feature. */
+export const VISTA_MODEL = {
+  uid: "a4b434181fbb48008ad460722fd53725",
+  thumb:
+    "https://media.sketchfab.com/models/a4b434181fbb48008ad460722fd53725/thumbnails/577b3a9d947647dab36453f6bb421f8a/037293e320844915801713f0a797e030.jpeg",
+  credit: { model: "Air Jordan 1", author: "makoto" },
+};
+
+/* Sizes shared by every catalog sneaker (BR numbering). */
+const SNKR = {
+  full: ["38", "39", "40", "41", "42", "43", "44"],
+  most: ["38", "39", "41", "42", "43", "44"],
+  mid: ["39", "40", "41", "42", "44"],
+  last: ["40", "41", "42"],
 };
 
 /* ------------------------------------------------------------------ */
-/* Dictionary                                                          */
+/* Dictionary — prices are ALWAYS in R$ (BRL), in every locale.        */
 /* ------------------------------------------------------------------ */
 
-export const kynetikDict: DemoDictionary<KynetikContent> = {
+export const vielaDict: DemoDictionary<VielaContent> = {
   en: {
-    priceLocale: "en-US",
-    currency: "USD",
+    priceLocale: "pt-BR",
+    currency: "BRL",
     header: {
       nav: [
         { href: "#drop", label: "The Drop" },
-        { href: "#latest", label: "Latest" },
-        { href: "#vault", label: "Vault" },
+        { href: "#catalogo", label: "Catalog" },
+        { href: "#vista", label: "360° View" },
         { href: "#raffle", label: "Raffle" },
-        { href: "#studio", label: "Studio" },
+        { href: "#studio", label: "The Alley" },
       ],
-      cartLabel: "Cart",
+      cartLabel: "Bag",
       openMenu: "Open navigation",
       closeMenu: "Close navigation",
     },
     cart: {
       title: "Your bag",
       empty: "Nothing in the bag yet.",
-      emptyHint: "Lock a size from the latest drop to hold your pair.",
-      sizeWord: "US",
+      emptyHint: "Pick a piece from the catalog to lock in your fit.",
+      sizeWord: "Size",
       subtotal: "Subtotal",
       shippingNote: "Taxes and express shipping calculated at checkout.",
       checkout: "Checkout",
@@ -240,80 +317,133 @@ export const kynetikDict: DemoDictionary<KynetikContent> = {
     hero: {
       live: "Drop 07 · Live feed",
       dropTag: "Velocity OG — Infrared",
-      titleTop: "Run the",
-      titleMid: "midnight",
-      titleBottom: "grid.",
-      sub: "KYNETIK builds sneakers for the hours the city forgets. Drop 07 lands in limited pairs — no restocks, no encores. Set your alarm to the countdown.",
+      titleTop: "The street",
+      titleMid: "doesn't",
+      titleBottom: "sleep.",
+      sub: "VIELA is born where the street happens. Drop 07 lands in counted pairs and pieces — no restock, no second chances. Set your alarm to the countdown.",
       countdownLabel: "Drop goes live in",
       units: { days: "Days", hours: "Hrs", minutes: "Min", seconds: "Sec" },
       liveNow: "The drop is live — grab your pair.",
       ctaPrimary: "Notify me",
       ctaSecondary: "Preview the drop",
-      imageAlt: "KYNETIK Velocity OG in infrared and black, lit by pink neon",
+      imageAlt: "VIELA Velocity OG in infrared and black, lit by pink neon",
       stats: [
         { value: "300", label: "pairs worldwide" },
         { value: "07", label: "the drop number" },
         { value: "48h", label: "raffle window" },
       ],
-      marquee: "NEW DROP · KYNETIK VELOCITY OG · INFRARED · 300 PAIRS · NO RESTOCK · ",
+      marquee: "NEW DROP · VIELA VELOCITY OG · INFRARED · 300 PAIRS · NO RESTOCK · ",
     },
     latest: {
       label: "Latest drop",
       title: "Velocity OG",
-      intro: "A racing silhouette rebuilt for concrete. Carbon-plated, glow-lined and cut for speed you will mostly use to catch the train.",
+      intro: "A racing silhouette rebuilt for concrete. Carbon-plated, glow-lined and cut for speed you will mostly use to catch the bus.",
       colorway: "Infrared / Void Black",
-      name: "KYNETIK Velocity OG — Infrared",
-      price: 240,
-      description: "Knitted violet upper over a translucent infrared cage, riding a nitrogen-charged Kynetik foam plate. Reflective piping catches every streetlight; the heel counter is molded from recycled court panels.",
+      name: "VIELA Velocity OG — Infrared",
+      price: 1290,
+      description: "Knitted violet upper over a translucent infrared cage, riding a nitrogen-charged Viela foam plate. Reflective piping catches every streetlight; the heel counter is molded from recycled court panels.",
       specsLabel: "Spec sheet",
       specs: [
         { k: "Upper", v: "Recycled flow-knit" },
         { k: "Plate", v: "Carbon speed spine" },
-        { k: "Foam", v: "Kynetik nitro" },
+        { k: "Foam", v: "Viela nitro" },
         { k: "Weight", v: "268 g" },
       ],
       sizeLabel: "Select size",
-      sizeUnit: "US",
+      sizeUnit: "BR",
       soldOutSize: "Sold out",
       pickSize: "Pick a size to continue",
       addToCart: "Add to bag",
       added: "Added to bag",
       lowStock: "Only a few pairs left in this size",
       sizes: [
-        { us: "7", available: true },
-        { us: "7.5", available: true },
-        { us: "8", available: false },
-        { us: "8.5", available: true },
-        { us: "9", available: true },
-        { us: "9.5", available: true },
-        { us: "10", available: false },
-        { us: "10.5", available: true },
-        { us: "11", available: true },
-        { us: "12", available: true },
+        { us: "37", available: true },
+        { us: "38", available: true },
+        { us: "39", available: false },
+        { us: "40", available: true },
+        { us: "41", available: true },
+        { us: "42", available: true },
+        { us: "43", available: false },
+        { us: "44", available: true },
+        { us: "45", available: true },
+        { us: "46", available: true },
       ],
-      imageAlt: "KYNETIK Velocity OG sneakers photographed as a pair on violet",
+      imageAlt: "VIELA Velocity OG sneakers photographed as a pair on violet",
       thumbAlts: [
         "Side profile of the Velocity OG silhouette",
         "Street shot of the Velocity OG on foot",
       ],
       thumbs: [IMG.latestThumbA, IMG.latestThumbB],
     },
-    grid: {
-      label: "The vault",
-      title: "Still in rotation",
-      intro: "Past drops that refused to sit still. Limited stock, first-come — quick-add a pair before the size runs.",
+    catalog: {
+      label: "The catalog",
+      title: "Kicks to chains",
+      intro: "Drop sneakers, heavyweight garms and the hardware that closes the fit. Filter, pick your size and lock it before it's gone.",
+      filterLabel: "Category",
+      categories: [
+        { id: "all", label: "Everything" },
+        { id: "sneakers", label: "Sneakers" },
+        { id: "apparel", label: "Apparel" },
+        { id: "accessories", label: "Accessories" },
+      ],
+      sizeLabel: "Size",
+      sizeOptions: ["38", "39", "40", "41", "42", "43", "44", "S", "M", "L", "XL", "OS"],
+      sortLabel: "Sort by",
+      sortOptions: [
+        { id: "featured", label: "Featured" },
+        { id: "new", label: "New in" },
+        { id: "price-asc", label: "Price: low" },
+        { id: "price-desc", label: "Price: high" },
+      ],
+      resultsSingular: "product",
+      resultsPlural: "products",
+      emptyTitle: "Nothing here.",
+      emptyBody: "No piece matches these filters. Clear them and run it again.",
+      clearFilters: "Clear filters",
       quickAdd: "Quick add",
+      chooseSize: "Pick a size",
       added: "In bag",
       soldOut: "Sold out",
+      lastUnits: "Last units",
+      newBadge: "New",
       oneSize: "OS",
       items: [
-        { id: "phantom", name: "Phantom Flux", colorway: "Bone / Volt", price: 210, tag: "Restocked", image: IMG.white, alt: "Phantom Flux sneaker in bone white" },
-        { id: "solar", name: "Nova Trail", colorway: "Solar Flare", price: 195, tag: "Trail", image: IMG.yellow, alt: "Nova Trail sneaker in solar yellow" },
-        { id: "apex", name: "Apex Runner", colorway: "Ghost Grey", price: 180, image: IMG.runner, alt: "Apex Runner performance shoe in grey" },
-        { id: "cipher", name: "Cipher Low", colorway: "Ultraviolet", price: 225, tag: "Last pairs", image: IMG.angle, alt: "Cipher Low sneaker at a three-quarter angle" },
-        { id: "void", name: "Void Strike", colorway: "Mono Black", price: 260, soldOut: true, image: IMG.street, alt: "Void Strike sneakers on a city street" },
-        { id: "pulse", name: "Pulse Hi", colorway: "Neon Pair", price: 235, tag: "Hi-top", image: IMG.pair, alt: "Pulse Hi sneaker pair in neon tones" },
+        { id: "phantom", category: "sneakers", name: "Phantom Flux", colorway: "Bone / Volt", price: 1120, sizes: SNKR.full, image: IMG.white, alt: "Phantom Flux sneaker in bone white" },
+        { id: "solar", category: "sneakers", name: "Nova Trail", colorway: "Solar Flare", price: 1040, sizes: SNKR.mid, isNew: true, image: IMG.yellow, alt: "Nova Trail sneaker in solar yellow" },
+        { id: "apex", category: "sneakers", name: "Apex Runner", colorway: "Ghost Grey", price: 960, sizes: SNKR.most, image: IMG.runner, alt: "Apex Runner performance shoe in grey" },
+        { id: "cipher", category: "sneakers", name: "Cipher Low", colorway: "Ultraviolet", price: 1190, sizes: SNKR.last, lowStock: true, image: IMG.angle, alt: "Cipher Low sneaker at a three-quarter angle" },
+        { id: "void", category: "sneakers", name: "Void Strike", colorway: "Mono Black", price: 1380, sizes: [], soldOut: true, image: IMG.street, alt: "Void Strike sneakers on a city street" },
+        { id: "pulse", category: "sneakers", name: "Pulse Hi", colorway: "Neon Pair", price: 1250, sizes: SNKR.most, image: IMG.pair, alt: "Pulse Hi sneaker pair in neon tones" },
+        { id: "tee", category: "apparel", name: "VIELA Oversized Tee", colorway: "Grape Purple", price: 149, sizes: ["S", "M", "L", "XL"], isNew: true, image: IMG.tee, alt: "Model in an oversized purple VIELA tee and sunglasses" },
+        { id: "hoodie", category: "apparel", name: "'Beco' Hoodie", colorway: "Off-White", price: 329, sizes: ["S", "M", "L", "XL"], image: IMG.hoodie, alt: "Off-white 'Beco' hoodie worn on a red sofa" },
+        { id: "windbreaker", category: "apparel", name: "'Garoa' Windbreaker", colorway: "Purple / Orange", price: 399, sizes: ["M", "L", "XL"], isNew: true, image: IMG.windbreaker, alt: "Purple and orange 'Garoa' windbreaker jacket" },
+        { id: "cargo", category: "apparel", name: "'Paralela' Cargo Pants", colorway: "Khaki", price: 289, sizes: ["S", "M", "L"], image: IMG.cargo, alt: "Khaki 'Paralela' cargo pants in close-up" },
+        { id: "jersey", category: "apparel", name: "'Várzea' Match Jersey", colorway: "Yellow / Green", price: 229, sizes: ["M", "L"], lowStock: true, image: IMG.jersey, alt: "Yellow and green 'Várzea' football jersey hanging" },
+        { id: "cap", category: "accessories", name: "'Quebrada' 5-Panel Cap", colorway: "Street Mix", price: 129, sizes: ["OS"], image: IMG.cap, alt: "Model wearing the 'Quebrada' 5-panel cap outdoors" },
+        { id: "socks", category: "accessories", name: "'Listras' Crew Socks (3-pack)", colorway: "Multicolor", price: 79, sizes: ["OS"], image: IMG.socks, alt: "Colorful striped 'Listras' crew socks on feet" },
+        { id: "bag", category: "accessories", name: "'Trânsito' Shoulder Bag", colorway: "Black", price: 179, sizes: ["OS"], isNew: true, image: IMG.bag, alt: "Black 'Trânsito' shoulder bag worn crossbody" },
+        { id: "chain", category: "accessories", name: "'Fio 60' Chain", colorway: "Gold", price: 199, sizes: ["OS"], image: IMG.chain, alt: "Gold 'Fio 60' chain necklace on black fabric" },
       ],
+    },
+    vista: {
+      label: "Spin the sneaker",
+      title: "360° view",
+      intro: "A real 3D scan, live on the page. Drag the shoe, spin it, zoom into the stitching — then take it home.",
+      badge: "VISTA 360°",
+      modelTitle: "AJ1 High 'Panda' — interactive 3D model",
+      loadLabel: "Load in 3D",
+      hint: "Drag to spin · scroll to zoom",
+      featureNote: "Real-time 3D — model 'Air Jordan 1' by makoto, via Sketchfab.",
+      name: "AJ1 High 'Panda'",
+      colorway: "White / Black",
+      price: 1199,
+      description: "The alley classic in the sharpest black-and-white cut. Full-grain leather, vintage sole and the collar that shows up in every fit pic. Curated pairs, verified one by one by the VIELA crew.",
+      sizeLabel: "Select size",
+      sizeUnit: "BR",
+      sizes: ["38", "39", "40", "41", "42", "43", "44"],
+      pickSize: "Pick a size to continue",
+      addToCart: "Add to bag",
+      added: "Added to bag",
     },
     raffle: {
       label: "The raffle",
@@ -331,17 +461,17 @@ export const kynetikDict: DemoDictionary<KynetikContent> = {
       fields: [
         { id: "name", label: "Full name", placeholder: "Alex Moraes" },
         { id: "email", label: "Email", placeholder: "you@email.com" },
-        { id: "city", label: "City", placeholder: "New York, NY" },
+        { id: "city", label: "City", placeholder: "São Paulo, SP" },
       ],
       sizeLabel: "Preferred size",
-      sizeOptions: ["US 7", "US 8", "US 9", "US 10", "US 11", "US 12"],
+      sizeOptions: ["BR 38", "BR 39", "BR 40", "BR 41", "BR 42", "BR 44"],
       submit: "Submit entry",
       terms: "No purchase due unless selected. One entry per person, verified by email.",
       close: "Close",
       successTitle: "You are in the draw.",
       successBody: "Keep an eye on your inbox. If your entry is pulled, you get a 30-minute window to claim your pair at retail.",
       entryCodeLabel: "Your entry code",
-      entryCode: "KYN-07-4482",
+      entryCode: "VLA-07-4482",
       successClose: "Done",
     },
     marquee: {
@@ -349,60 +479,60 @@ export const kynetikDict: DemoDictionary<KynetikContent> = {
         "300 PAIRS",
         "NO RESTOCK",
         "DROP 07",
-        "MIDNIGHT GRID",
-        "INFRARED",
-        "KYNETIK NITRO",
+        "VIELA WEAR",
+        "STRAIGHT FROM THE STREET",
+        "SP · BR",
         "RAFFLE OPEN",
       ],
     },
     about: {
-      label: "The studio",
-      title: "Built after dark",
-      lead: "KYNETIK is a design studio disguised as a sneaker label.",
+      label: "The alley",
+      title: "Born in the backstreet",
+      lead: "VIELA is a design studio disguised as a streetwear label. The alley is where the street happens.",
       paragraphs: [
-        "We started in a Lisbon basement in 2019, cutting soles by hand and printing lookbooks at the corner copy shop. The rule was simple: make the pair we wanted to wear at 2 a.m. and could not find anywhere.",
-        "Every drop is engineered around one idea, produced in a single limited run, and never restocked. When it is gone, it becomes lore. We would rather sell out than water it down.",
+        "We started in a backstreet of Bixiga, São Paulo, in 2019 — screen-printing in the garage, sneakers drying on the clothesline, lookbooks printed at the corner copy shop. The rule was simple: make the piece we wanted to wear on the 2 a.m. run and could not find anywhere.",
+        "Every drop is born from a single idea, produced in a counted run, and never comes back. When it is gone, it becomes corner-store legend. We would rather sell out than water it down.",
       ],
       stats: [
-        { value: "2019", label: "cutting soles since" },
+        { value: "2019", label: "on the grind since" },
         { value: "07", label: "drops released" },
         { value: "42k", label: "on the drop list" },
       ],
-      addressLabel: "The lab",
-      addressLines: ["Rua do Grémio Lusitano 14", "1200-219 Lisboa, Portugal"],
-      hoursLabel: "Studio hours",
-      hours: ["Thu – Sat · 14:00 – 22:00", "Drop nights · until sold out"],
-      imageAlt: "KYNETIK shoe box and packaging under studio lighting",
-      quote: "They do not sell shoes. They sell the ten minutes before a drop.",
-      quoteAuthor: "Highsnob Weekly",
+      addressLabel: "The atelier",
+      addressLines: ["Rua Treze de Maio 825 — Bixiga", "01327-000 · São Paulo, SP"],
+      hoursLabel: "Atelier hours",
+      hours: ["Thu – Sat · 2pm – 10pm", "Drop nights · until sold out"],
+      imageAlt: "VIELA shoe box and packaging under studio lighting",
+      quote: "They do not sell clothes. They sell the ten minutes before a drop.",
+      quoteAuthor: "Correria Zine",
     },
     footer: {
-      tagline: "Sneakers for the hours the city forgets.",
+      tagline: "Garms and kicks for whoever makes the street their path.",
       groups: [
         {
           title: "Shop",
           links: [
             { href: "#drop", label: "The Drop" },
-            { href: "#latest", label: "Velocity OG" },
-            { href: "#vault", label: "The Vault" },
+            { href: "#catalogo", label: "Catalog" },
+            { href: "#vista", label: "360° View" },
             { href: "#raffle", label: "Raffle" },
           ],
         },
         {
-          title: "Studio",
+          title: "The alley",
           links: [
             { href: "#studio", label: "About" },
-            { href: "#studio", label: "Sustainability" },
+            { href: "#latest", label: "Velocity OG" },
             { href: "#studio", label: "Press" },
             { href: "#studio", label: "Careers" },
           ],
         },
       ],
       followLabel: "Follow the feed",
-      handle: "@kynetik",
-      email: "drop@kynetik.studio",
-      addressLines: ["Rua do Grémio Lusitano 14", "1200-219 Lisboa, Portugal"],
-      fine: "KYNETIK is a fictional brand imagined as a design concept. Products, prices and drops are illustrative.",
+      handle: "@viela.wear",
+      email: "fala@viela.wear",
+      addressLines: ["Rua Treze de Maio 825 — Bixiga", "01327-000 · São Paulo, SP"],
+      fine: "VIELA is a fictional brand imagined as a design concept. Products, prices and drops are illustrative.",
       credit: "Concept, design and build by VigApp.",
     },
   },
@@ -413,10 +543,10 @@ export const kynetikDict: DemoDictionary<KynetikContent> = {
     header: {
       nav: [
         { href: "#drop", label: "O Drop" },
-        { href: "#latest", label: "Lançamento" },
-        { href: "#vault", label: "Vault" },
+        { href: "#catalogo", label: "Catálogo" },
+        { href: "#vista", label: "Vista 360°" },
         { href: "#raffle", label: "Sorteio" },
-        { href: "#studio", label: "Estúdio" },
+        { href: "#studio", label: "A Viela" },
       ],
       cartLabel: "Sacola",
       openMenu: "Abrir navegação",
@@ -425,8 +555,8 @@ export const kynetikDict: DemoDictionary<KynetikContent> = {
     cart: {
       title: "Sua sacola",
       empty: "Sua sacola está vazia.",
-      emptyHint: "Garanta um número no último drop para segurar o seu par.",
-      sizeWord: "BR",
+      emptyHint: "Escolhe uma peça no catálogo pra fechar o fit.",
+      sizeWord: "Tam.",
       subtotal: "Subtotal",
       shippingNote: "Impostos e frete expresso calculados no checkout.",
       checkout: "Finalizar",
@@ -437,36 +567,36 @@ export const kynetikDict: DemoDictionary<KynetikContent> = {
     hero: {
       live: "Drop 07 · Ao vivo",
       dropTag: "Velocity OG — Infrared",
-      titleTop: "Corra pela",
-      titleMid: "grade da",
-      titleBottom: "meia-noite.",
-      sub: "A KYNETIK cria tênis para as horas que a cidade esquece. O Drop 07 chega em pares limitados — sem reposição, sem bis. Acerte o alarme pela contagem.",
+      titleTop: "A rua",
+      titleMid: "não",
+      titleBottom: "dorme.",
+      sub: "A VIELA nasce onde a rua acontece. O Drop 07 chega em pares e peças contadas — sem reposição, sem segunda chance. Deixa o alarme no horário da contagem.",
       countdownLabel: "O drop abre em",
       units: { days: "Dias", hours: "Hrs", minutes: "Min", seconds: "Seg" },
       liveNow: "O drop está no ar — garanta o seu par.",
-      ctaPrimary: "Avise-me",
+      ctaPrimary: "Avisa aí",
       ctaSecondary: "Ver o drop",
-      imageAlt: "KYNETIK Velocity OG em infrared e preto, sob neon rosa",
+      imageAlt: "VIELA Velocity OG em infrared e preto, sob neon rosa",
       stats: [
         { value: "300", label: "pares no mundo" },
         { value: "07", label: "o número do drop" },
         { value: "48h", label: "janela do sorteio" },
       ],
-      marquee: "NOVO DROP · KYNETIK VELOCITY OG · INFRARED · 300 PARES · SEM REPOSIÇÃO · ",
+      marquee: "NOVO DROP · VIELA VELOCITY OG · INFRARED · 300 PARES · SEM REPOSIÇÃO · ",
     },
     latest: {
       label: "Último drop",
       title: "Velocity OG",
-      intro: "Uma silhueta de corrida reconstruída para o concreto. Placa de carbono, linhas que brilham e um recorte de velocidade que você vai usar mesmo é para pegar o metrô.",
+      intro: "Uma silhueta de corrida reconstruída pro concreto. Placa de carbono, linhas que brilham e um recorte de velocidade que você vai usar mesmo é pra alcançar o busão.",
       colorway: "Infrared / Void Black",
-      name: "KYNETIK Velocity OG — Infrared",
+      name: "VIELA Velocity OG — Infrared",
       price: 1290,
-      description: "Cabedal de tricô violeta sobre uma gaiola infrared translúcida, com placa de espuma nitro Kynetik. As costuras refletivas capturam cada poste de luz; o contraforte é moldado de painéis de quadra reciclados.",
+      description: "Cabedal de tricô violeta sobre uma gaiola infrared translúcida, com placa de espuma nitro Viela. As costuras refletivas capturam cada poste de luz; o contraforte é moldado de painéis de quadra reciclados.",
       specsLabel: "Ficha técnica",
       specs: [
         { k: "Cabedal", v: "Flow-knit reciclado" },
         { k: "Placa", v: "Espinha de carbono" },
-        { k: "Espuma", v: "Kynetik nitro" },
+        { k: "Espuma", v: "Viela nitro" },
         { k: "Peso", v: "268 g" },
       ],
       sizeLabel: "Escolha o número",
@@ -488,34 +618,87 @@ export const kynetikDict: DemoDictionary<KynetikContent> = {
         { us: "45", available: true },
         { us: "46", available: true },
       ],
-      imageAlt: "Tênis KYNETIK Velocity OG fotografados em par sobre violeta",
+      imageAlt: "Tênis VIELA Velocity OG fotografados em par sobre violeta",
       thumbAlts: [
         "Perfil lateral da silhueta Velocity OG",
         "Foto de rua do Velocity OG nos pés",
       ],
       thumbs: [IMG.latestThumbA, IMG.latestThumbB],
     },
-    grid: {
-      label: "O vault",
-      title: "Ainda em rotação",
-      intro: "Drops passados que não sossegam. Estoque limitado, por ordem de chegada — adicione rápido antes que o número acabe.",
+    catalog: {
+      label: "O catálogo",
+      title: "Do tênis à corrente",
+      intro: "Tênis de drop, vestuário pesado e o acessório que fecha o fit. Filtra, escolhe o tamanho e garante antes que suma da prateleira.",
+      filterLabel: "Categoria",
+      categories: [
+        { id: "all", label: "Tudo" },
+        { id: "sneakers", label: "Tênis" },
+        { id: "apparel", label: "Vestuário" },
+        { id: "accessories", label: "Acessórios" },
+      ],
+      sizeLabel: "Tamanho",
+      sizeOptions: ["38", "39", "40", "41", "42", "43", "44", "P", "M", "G", "GG", "U"],
+      sortLabel: "Ordenar por",
+      sortOptions: [
+        { id: "featured", label: "Destaques" },
+        { id: "new", label: "Lançamento" },
+        { id: "price-asc", label: "Menor preço" },
+        { id: "price-desc", label: "Maior preço" },
+      ],
+      resultsSingular: "produto",
+      resultsPlural: "produtos",
+      emptyTitle: "Nada por aqui.",
+      emptyBody: "Nenhuma peça bate com esses filtros. Limpa e roda de novo.",
+      clearFilters: "Limpar filtros",
       quickAdd: "Adição rápida",
+      chooseSize: "Escolhe o tamanho",
       added: "Na sacola",
       soldOut: "Esgotado",
-      oneSize: "TU",
+      lastUnits: "Últimas unidades",
+      newBadge: "Novo",
+      oneSize: "U",
       items: [
-        { id: "phantom", name: "Phantom Flux", colorway: "Bone / Volt", price: 1120, tag: "Repôs", image: IMG.white, alt: "Tênis Phantom Flux em branco osso" },
-        { id: "solar", name: "Nova Trail", colorway: "Solar Flare", price: 1040, tag: "Trail", image: IMG.yellow, alt: "Tênis Nova Trail em amarelo solar" },
-        { id: "apex", name: "Apex Runner", colorway: "Ghost Grey", price: 960, image: IMG.runner, alt: "Tênis de corrida Apex Runner em cinza" },
-        { id: "cipher", name: "Cipher Low", colorway: "Ultraviolet", price: 1190, tag: "Últimos pares", image: IMG.angle, alt: "Tênis Cipher Low em ângulo de três quartos" },
-        { id: "void", name: "Void Strike", colorway: "Mono Black", price: 1380, soldOut: true, image: IMG.street, alt: "Tênis Void Strike numa rua da cidade" },
-        { id: "pulse", name: "Pulse Hi", colorway: "Neon Pair", price: 1250, tag: "Cano alto", image: IMG.pair, alt: "Par de tênis Pulse Hi em tons neon" },
+        { id: "phantom", category: "sneakers", name: "Phantom Flux", colorway: "Bone / Volt", price: 1120, sizes: SNKR.full, image: IMG.white, alt: "Tênis Phantom Flux em branco osso" },
+        { id: "solar", category: "sneakers", name: "Nova Trail", colorway: "Solar Flare", price: 1040, sizes: SNKR.mid, isNew: true, image: IMG.yellow, alt: "Tênis Nova Trail em amarelo solar" },
+        { id: "apex", category: "sneakers", name: "Apex Runner", colorway: "Ghost Grey", price: 960, sizes: SNKR.most, image: IMG.runner, alt: "Tênis de corrida Apex Runner em cinza" },
+        { id: "cipher", category: "sneakers", name: "Cipher Low", colorway: "Ultraviolet", price: 1190, sizes: SNKR.last, lowStock: true, image: IMG.angle, alt: "Tênis Cipher Low em ângulo de três quartos" },
+        { id: "void", category: "sneakers", name: "Void Strike", colorway: "Mono Black", price: 1380, sizes: [], soldOut: true, image: IMG.street, alt: "Tênis Void Strike numa rua da cidade" },
+        { id: "pulse", category: "sneakers", name: "Pulse Hi", colorway: "Neon Pair", price: 1250, sizes: SNKR.most, image: IMG.pair, alt: "Par de tênis Pulse Hi em tons neon" },
+        { id: "tee", category: "apparel", name: "Camiseta Oversized VIELA", colorway: "Roxo Uva", price: 149, sizes: ["P", "M", "G", "GG"], isNew: true, image: IMG.tee, alt: "Modelo de camiseta oversized roxa VIELA com óculos escuros" },
+        { id: "hoodie", category: "apparel", name: "Moletom Capuz 'Beco'", colorway: "Off-White", price: 329, sizes: ["P", "M", "G", "GG"], image: IMG.hoodie, alt: "Moletom 'Beco' off-white vestido num sofá vermelho" },
+        { id: "windbreaker", category: "apparel", name: "Corta-Vento 'Garoa'", colorway: "Roxo / Laranja", price: 399, sizes: ["M", "G", "GG"], isNew: true, image: IMG.windbreaker, alt: "Corta-vento 'Garoa' roxo e laranja" },
+        { id: "cargo", category: "apparel", name: "Calça Cargo 'Paralela'", colorway: "Caqui", price: 289, sizes: ["P", "M", "G"], image: IMG.cargo, alt: "Calça cargo 'Paralela' caqui em close" },
+        { id: "jersey", category: "apparel", name: "Camisa de Jogo 'Várzea'", colorway: "Amarelo / Verde", price: 229, sizes: ["M", "G"], lowStock: true, image: IMG.jersey, alt: "Camisa de futebol 'Várzea' amarela e verde pendurada" },
+        { id: "cap", category: "accessories", name: "Boné 5-Panel 'Quebrada'", colorway: "Mix de Rua", price: 129, sizes: ["U"], image: IMG.cap, alt: "Modelo usando o boné 5-panel 'Quebrada' ao ar livre" },
+        { id: "socks", category: "accessories", name: "Meia Crew 'Listras' (kit 3)", colorway: "Multicor", price: 79, sizes: ["U"], image: IMG.socks, alt: "Meias crew 'Listras' coloridas nos pés" },
+        { id: "bag", category: "accessories", name: "Shoulder Bag 'Trânsito'", colorway: "Preto", price: 179, sizes: ["U"], isNew: true, image: IMG.bag, alt: "Shoulder bag 'Trânsito' preta usada transversal" },
+        { id: "chain", category: "accessories", name: "Corrente 'Fio 60'", colorway: "Dourado", price: 199, sizes: ["U"], image: IMG.chain, alt: "Corrente 'Fio 60' dourada sobre tecido preto" },
       ],
+    },
+    vista: {
+      label: "Gira o tênis",
+      title: "Vista 360°",
+      intro: "Um scan 3D de verdade, rodando na página. Arrasta o tênis, gira, dá zoom na costura — e depois leva pra casa.",
+      badge: "VISTA 360°",
+      modelTitle: "AJ1 High 'Panda' — modelo 3D interativo",
+      loadLabel: "Carregar em 3D",
+      hint: "Arraste para girar · role para zoom",
+      featureNote: "3D em tempo real — modelo 'Air Jordan 1' por makoto, via Sketchfab.",
+      name: "AJ1 High 'Panda'",
+      colorway: "Branco / Preto",
+      price: 1199,
+      description: "O clássico da viela no recorte preto e branco mais afiado. Couro de flor integral, sola vintage e o colarinho que aparece em toda foto de fit. Pares selecionados, conferidos um a um pela equipe VIELA.",
+      sizeLabel: "Escolha o número",
+      sizeUnit: "BR",
+      sizes: ["38", "39", "40", "41", "42", "43", "44"],
+      pickSize: "Escolha um número para continuar",
+      addToCart: "Adicionar à sacola",
+      added: "Na sacola",
     },
     raffle: {
       label: "O sorteio",
       title: "Concorra ao Velocity OG",
-      intro: "Trezentos pares, milhares de pés. O sorteio é a única entrada. Inscreva-se uma vez, ganhe no aleatório e pague só se o seu nome sair.",
+      intro: "Trezentos pares, milhares de pés. O sorteio é a única entrada. Inscreve uma vez, ganha no aleatório e paga só se o seu nome sair.",
       prizeName: "Velocity OG — Infrared",
       prizeColor: "Infrared / Void Black",
       entriesLabel: "Inscrições até agora",
@@ -531,14 +714,14 @@ export const kynetikDict: DemoDictionary<KynetikContent> = {
         { id: "city", label: "Cidade", placeholder: "São Paulo, SP" },
       ],
       sizeLabel: "Número preferido",
-      sizeOptions: ["BR 37", "BR 39", "BR 41", "BR 42", "BR 44", "BR 46"],
+      sizeOptions: ["BR 38", "BR 39", "BR 40", "BR 41", "BR 42", "BR 44"],
       submit: "Enviar inscrição",
       terms: "Sem compra obrigatória, exceto se selecionado. Uma inscrição por pessoa, verificada por e-mail.",
       close: "Fechar",
       successTitle: "Você está no sorteio.",
-      successBody: "Fique de olho no seu e-mail. Se a sua inscrição for sorteada, você tem 30 minutos para garantir o par pelo preço de tabela.",
+      successBody: "Fica de olho no seu e-mail. Se a sua inscrição for sorteada, você tem 30 minutos pra garantir o par pelo preço de tabela.",
       entryCodeLabel: "Seu código de inscrição",
-      entryCode: "KYN-07-4482",
+      entryCode: "VLA-07-4482",
       successClose: "Concluir",
     },
     marquee: {
@@ -546,74 +729,74 @@ export const kynetikDict: DemoDictionary<KynetikContent> = {
         "300 PARES",
         "SEM REPOSIÇÃO",
         "DROP 07",
-        "GRADE DA MEIA-NOITE",
-        "INFRARED",
-        "KYNETIK NITRO",
+        "VIELA WEAR",
+        "DIRETO DA RUA",
+        "SP · BR",
         "SORTEIO ABERTO",
       ],
     },
     about: {
-      label: "O estúdio",
-      title: "Feito de madrugada",
-      lead: "A KYNETIK é um estúdio de design disfarçado de marca de tênis.",
+      label: "A viela",
+      title: "Nascida no beco",
+      lead: "A VIELA é um estúdio de design disfarçado de marca de rua. A viela é onde a rua acontece.",
       paragraphs: [
-        "Começamos num porão de Lisboa em 2019, cortando solas à mão e imprimindo lookbooks na gráfica da esquina. A regra era simples: fazer o par que a gente queria usar às 2 da manhã e não achava em lugar nenhum.",
-        "Cada drop nasce de uma única ideia, sai em uma tiragem limitada e nunca é reposto. Quando acaba, vira lenda. Preferimos esgotar a diluir.",
+        "Começamos numa viela do Bixiga, em São Paulo, em 2019 — serigrafia na garagem, tênis secando no varal e lookbook impresso na gráfica da esquina. A regra era simples: fazer a peça que a gente queria vestir no corre das 2 da manhã e não achava em canto nenhum.",
+        "Cada drop nasce de uma ideia só, sai em tiragem contada e nunca volta. Quando acaba, vira lenda de esquina. A gente prefere esgotar a diluir.",
       ],
       stats: [
-        { value: "2019", label: "cortando solas desde" },
+        { value: "2019", label: "no corre desde" },
         { value: "07", label: "drops lançados" },
-        { value: "42k", label: "na lista de drops" },
+        { value: "42k", label: "na lista do drop" },
       ],
-      addressLabel: "O laboratório",
-      addressLines: ["Rua do Grémio Lusitano 14", "1200-219 Lisboa, Portugal"],
-      hoursLabel: "Horário do estúdio",
-      hours: ["Qui – Sáb · 14:00 – 22:00", "Noites de drop · até esgotar"],
-      imageAlt: "Caixa e embalagem KYNETIK sob a luz do estúdio",
-      quote: "Eles não vendem tênis. Vendem os dez minutos antes do drop.",
-      quoteAuthor: "Highsnob Weekly",
+      addressLabel: "O ateliê",
+      addressLines: ["Rua Treze de Maio 825 — Bixiga", "01327-000 · São Paulo, SP"],
+      hoursLabel: "Horário do ateliê",
+      hours: ["Qui – Sáb · 14h – 22h", "Noite de drop · até esgotar"],
+      imageAlt: "Caixa e embalagem VIELA sob a luz do estúdio",
+      quote: "Eles não vendem roupa. Vendem os dez minutos antes do drop.",
+      quoteAuthor: "Zine Correria",
     },
     footer: {
-      tagline: "Tênis para as horas que a cidade esquece.",
+      tagline: "Roupa e tênis pra quem faz da rua o caminho.",
       groups: [
         {
           title: "Loja",
           links: [
             { href: "#drop", label: "O Drop" },
-            { href: "#latest", label: "Velocity OG" },
-            { href: "#vault", label: "O Vault" },
+            { href: "#catalogo", label: "Catálogo" },
+            { href: "#vista", label: "Vista 360°" },
             { href: "#raffle", label: "Sorteio" },
           ],
         },
         {
-          title: "Estúdio",
+          title: "A viela",
           links: [
             { href: "#studio", label: "Sobre" },
-            { href: "#studio", label: "Sustentabilidade" },
+            { href: "#latest", label: "Velocity OG" },
             { href: "#studio", label: "Imprensa" },
-            { href: "#studio", label: "Trabalhe conosco" },
+            { href: "#studio", label: "Trampa com a gente" },
           ],
         },
       ],
-      followLabel: "Siga o feed",
-      handle: "@kynetik",
-      email: "drop@kynetik.studio",
-      addressLines: ["Rua do Grémio Lusitano 14", "1200-219 Lisboa, Portugal"],
-      fine: "KYNETIK é uma marca fictícia criada como conceito de design. Produtos, preços e drops são ilustrativos.",
+      followLabel: "Segue o feed",
+      handle: "@viela.wear",
+      email: "fala@viela.wear",
+      addressLines: ["Rua Treze de Maio 825 — Bixiga", "01327-000 · São Paulo, SP"],
+      fine: "VIELA é uma marca fictícia criada como conceito de design. Produtos, preços e drops são ilustrativos.",
       credit: "Conceito, design e código por VigApp.",
     },
   },
 
   es: {
-    priceLocale: "es-ES",
-    currency: "EUR",
+    priceLocale: "pt-BR",
+    currency: "BRL",
     header: {
       nav: [
         { href: "#drop", label: "El Drop" },
-        { href: "#latest", label: "Lanzamiento" },
-        { href: "#vault", label: "Vault" },
+        { href: "#catalogo", label: "Catálogo" },
+        { href: "#vista", label: "Vista 360°" },
         { href: "#raffle", label: "Sorteo" },
-        { href: "#studio", label: "Estudio" },
+        { href: "#studio", label: "El Callejón" },
       ],
       cartLabel: "Bolsa",
       openMenu: "Abrir navegación",
@@ -622,8 +805,8 @@ export const kynetikDict: DemoDictionary<KynetikContent> = {
     cart: {
       title: "Tu bolsa",
       empty: "Tu bolsa está vacía.",
-      emptyHint: "Fija una talla del último drop para reservar tu par.",
-      sizeWord: "EU",
+      emptyHint: "Elige una pieza del catálogo para cerrar el fit.",
+      sizeWord: "Talla",
       subtotal: "Subtotal",
       shippingNote: "Impuestos y envío exprés calculados en el pago.",
       checkout: "Pagar",
@@ -634,80 +817,133 @@ export const kynetikDict: DemoDictionary<KynetikContent> = {
     hero: {
       live: "Drop 07 · En directo",
       dropTag: "Velocity OG — Infrared",
-      titleTop: "Corre por la",
-      titleMid: "rejilla de",
-      titleBottom: "medianoche.",
-      sub: "KYNETIK crea zapatillas para las horas que la ciudad olvida. El Drop 07 llega en pares limitados — sin reposición, sin bises. Pon la alarma en la cuenta atrás.",
+      titleTop: "La calle",
+      titleMid: "no",
+      titleBottom: "duerme.",
+      sub: "VIELA nace donde pasa la calle. El Drop 07 llega en pares y piezas contadas — sin reposición, sin segunda oportunidad. Pon la alarma en la cuenta atrás.",
       countdownLabel: "El drop se abre en",
       units: { days: "Días", hours: "Hrs", minutes: "Min", seconds: "Seg" },
       liveNow: "El drop está en directo — llévate tu par.",
       ctaPrimary: "Avísame",
       ctaSecondary: "Ver el drop",
-      imageAlt: "KYNETIK Velocity OG en infrared y negro, bajo neón rosa",
+      imageAlt: "VIELA Velocity OG en infrared y negro, bajo neón rosa",
       stats: [
         { value: "300", label: "pares en el mundo" },
         { value: "07", label: "el número del drop" },
         { value: "48h", label: "ventana del sorteo" },
       ],
-      marquee: "NUEVO DROP · KYNETIK VELOCITY OG · INFRARED · 300 PARES · SIN REPOSICIÓN · ",
+      marquee: "NUEVO DROP · VIELA VELOCITY OG · INFRARED · 300 PARES · SIN REPOSICIÓN · ",
     },
     latest: {
       label: "Último drop",
       title: "Velocity OG",
-      intro: "Una silueta de carreras reconstruida para el asfalto. Placa de carbono, líneas que brillan y un corte de velocidad que usarás sobre todo para pillar el metro.",
+      intro: "Una silueta de carreras reconstruida para el asfalto. Placa de carbono, líneas que brillan y un corte de velocidad que usarás sobre todo para alcanzar el bus.",
       colorway: "Infrared / Void Black",
-      name: "KYNETIK Velocity OG — Infrared",
-      price: 230,
-      description: "Corte de punto violeta sobre una jaula infrared translúcida, montado sobre una placa de espuma nitro Kynetik. Los ribetes reflectantes atrapan cada farola; el talón está moldeado con paneles de pista reciclados.",
+      name: "VIELA Velocity OG — Infrared",
+      price: 1290,
+      description: "Corte de punto violeta sobre una jaula infrared translúcida, montado sobre una placa de espuma nitro Viela. Los ribetes reflectantes atrapan cada farola; el talón está moldeado con paneles de pista reciclados.",
       specsLabel: "Ficha técnica",
       specs: [
         { k: "Corte", v: "Flow-knit reciclado" },
         { k: "Placa", v: "Columna de carbono" },
-        { k: "Espuma", v: "Kynetik nitro" },
+        { k: "Espuma", v: "Viela nitro" },
         { k: "Peso", v: "268 g" },
       ],
       sizeLabel: "Elige tu talla",
-      sizeUnit: "EU",
+      sizeUnit: "BR",
       soldOutSize: "Agotado",
       pickSize: "Elige una talla para continuar",
       addToCart: "Añadir a la bolsa",
       added: "En la bolsa",
       lowStock: "Quedan pocos pares en esta talla",
       sizes: [
+        { us: "37", available: true },
         { us: "38", available: true },
-        { us: "39", available: true },
-        { us: "40", available: false },
+        { us: "39", available: false },
+        { us: "40", available: true },
         { us: "41", available: true },
         { us: "42", available: true },
-        { us: "43", available: true },
-        { us: "44", available: false },
+        { us: "43", available: false },
+        { us: "44", available: true },
         { us: "45", available: true },
         { us: "46", available: true },
-        { us: "47", available: true },
       ],
-      imageAlt: "Zapatillas KYNETIK Velocity OG fotografiadas en par sobre violeta",
+      imageAlt: "Zapatillas VIELA Velocity OG fotografiadas en par sobre violeta",
       thumbAlts: [
         "Perfil lateral de la silueta Velocity OG",
         "Foto callejera del Velocity OG puesto",
       ],
       thumbs: [IMG.latestThumbA, IMG.latestThumbB],
     },
-    grid: {
-      label: "El vault",
-      title: "Aún en rotación",
-      intro: "Drops pasados que no se quedan quietos. Stock limitado, por orden de llegada — añade rápido antes de que se agote la talla.",
+    catalog: {
+      label: "El catálogo",
+      title: "De zapas a cadenas",
+      intro: "Zapatillas de drop, ropa pesada y el accesorio que cierra el fit. Filtra, elige tu talla y asegúralo antes de que vuele.",
+      filterLabel: "Categoría",
+      categories: [
+        { id: "all", label: "Todo" },
+        { id: "sneakers", label: "Zapatillas" },
+        { id: "apparel", label: "Ropa" },
+        { id: "accessories", label: "Accesorios" },
+      ],
+      sizeLabel: "Talla",
+      sizeOptions: ["38", "39", "40", "41", "42", "43", "44", "P", "M", "G", "GG", "U"],
+      sortLabel: "Ordenar por",
+      sortOptions: [
+        { id: "featured", label: "Destacados" },
+        { id: "new", label: "Novedades" },
+        { id: "price-asc", label: "Menor precio" },
+        { id: "price-desc", label: "Mayor precio" },
+      ],
+      resultsSingular: "producto",
+      resultsPlural: "productos",
+      emptyTitle: "Nada por aquí.",
+      emptyBody: "Ninguna pieza coincide con esos filtros. Límpialos e inténtalo de nuevo.",
+      clearFilters: "Limpiar filtros",
       quickAdd: "Añadir rápido",
+      chooseSize: "Elige la talla",
       added: "En la bolsa",
       soldOut: "Agotado",
-      oneSize: "TU",
+      lastUnits: "Últimas unidades",
+      newBadge: "Nuevo",
+      oneSize: "U",
       items: [
-        { id: "phantom", name: "Phantom Flux", colorway: "Bone / Volt", price: 200, tag: "Repuesto", image: IMG.white, alt: "Zapatilla Phantom Flux en blanco hueso" },
-        { id: "solar", name: "Nova Trail", colorway: "Solar Flare", price: 185, tag: "Trail", image: IMG.yellow, alt: "Zapatilla Nova Trail en amarillo solar" },
-        { id: "apex", name: "Apex Runner", colorway: "Ghost Grey", price: 170, image: IMG.runner, alt: "Zapatilla de running Apex Runner en gris" },
-        { id: "cipher", name: "Cipher Low", colorway: "Ultraviolet", price: 215, tag: "Últimos pares", image: IMG.angle, alt: "Zapatilla Cipher Low en ángulo de tres cuartos" },
-        { id: "void", name: "Void Strike", colorway: "Mono Black", price: 250, soldOut: true, image: IMG.street, alt: "Zapatillas Void Strike en una calle" },
-        { id: "pulse", name: "Pulse Hi", colorway: "Neon Pair", price: 225, tag: "Caña alta", image: IMG.pair, alt: "Par de zapatillas Pulse Hi en tonos neón" },
+        { id: "phantom", category: "sneakers", name: "Phantom Flux", colorway: "Bone / Volt", price: 1120, sizes: SNKR.full, image: IMG.white, alt: "Zapatilla Phantom Flux en blanco hueso" },
+        { id: "solar", category: "sneakers", name: "Nova Trail", colorway: "Solar Flare", price: 1040, sizes: SNKR.mid, isNew: true, image: IMG.yellow, alt: "Zapatilla Nova Trail en amarillo solar" },
+        { id: "apex", category: "sneakers", name: "Apex Runner", colorway: "Ghost Grey", price: 960, sizes: SNKR.most, image: IMG.runner, alt: "Zapatilla de running Apex Runner en gris" },
+        { id: "cipher", category: "sneakers", name: "Cipher Low", colorway: "Ultraviolet", price: 1190, sizes: SNKR.last, lowStock: true, image: IMG.angle, alt: "Zapatilla Cipher Low en ángulo de tres cuartos" },
+        { id: "void", category: "sneakers", name: "Void Strike", colorway: "Mono Black", price: 1380, sizes: [], soldOut: true, image: IMG.street, alt: "Zapatillas Void Strike en una calle" },
+        { id: "pulse", category: "sneakers", name: "Pulse Hi", colorway: "Neon Pair", price: 1250, sizes: SNKR.most, image: IMG.pair, alt: "Par de zapatillas Pulse Hi en tonos neón" },
+        { id: "tee", category: "apparel", name: "Camiseta Oversized VIELA", colorway: "Morado Uva", price: 149, sizes: ["P", "M", "G", "GG"], isNew: true, image: IMG.tee, alt: "Modelo con camiseta oversized morada VIELA y gafas de sol" },
+        { id: "hoodie", category: "apparel", name: "Hoodie 'Beco'", colorway: "Off-White", price: 329, sizes: ["P", "M", "G", "GG"], image: IMG.hoodie, alt: "Hoodie 'Beco' off-white sobre un sofá rojo" },
+        { id: "windbreaker", category: "apparel", name: "Cortavientos 'Garoa'", colorway: "Morado / Naranja", price: 399, sizes: ["M", "G", "GG"], isNew: true, image: IMG.windbreaker, alt: "Cortavientos 'Garoa' morado y naranja" },
+        { id: "cargo", category: "apparel", name: "Pantalón Cargo 'Paralela'", colorway: "Caqui", price: 289, sizes: ["P", "M", "G"], image: IMG.cargo, alt: "Pantalón cargo 'Paralela' caqui en primer plano" },
+        { id: "jersey", category: "apparel", name: "Camiseta de Fútbol 'Várzea'", colorway: "Amarillo / Verde", price: 229, sizes: ["M", "G"], lowStock: true, image: IMG.jersey, alt: "Camiseta de fútbol 'Várzea' amarilla y verde colgada" },
+        { id: "cap", category: "accessories", name: "Gorra 5-Panel 'Quebrada'", colorway: "Mix de Calle", price: 129, sizes: ["U"], image: IMG.cap, alt: "Modelo con la gorra 5-panel 'Quebrada' al aire libre" },
+        { id: "socks", category: "accessories", name: "Calcetines Crew 'Listras' (pack 3)", colorway: "Multicolor", price: 79, sizes: ["U"], image: IMG.socks, alt: "Calcetines crew 'Listras' de colores puestos" },
+        { id: "bag", category: "accessories", name: "Bandolera 'Trânsito'", colorway: "Negro", price: 179, sizes: ["U"], isNew: true, image: IMG.bag, alt: "Bandolera 'Trânsito' negra llevada en bandolera" },
+        { id: "chain", category: "accessories", name: "Cadena 'Fio 60'", colorway: "Dorado", price: 199, sizes: ["U"], image: IMG.chain, alt: "Cadena 'Fio 60' dorada sobre tela negra" },
       ],
+    },
+    vista: {
+      label: "Gira la zapatilla",
+      title: "Vista 360°",
+      intro: "Un escaneo 3D real, en vivo en la página. Arrastra la zapatilla, gírala, haz zoom a la costura — y luego llévatela.",
+      badge: "VISTA 360°",
+      modelTitle: "AJ1 High 'Panda' — modelo 3D interactivo",
+      loadLabel: "Cargar en 3D",
+      hint: "Arrastra para girar · rueda para zoom",
+      featureNote: "3D en tiempo real — modelo 'Air Jordan 1' por makoto, vía Sketchfab.",
+      name: "AJ1 High 'Panda'",
+      colorway: "Blanco / Negro",
+      price: 1199,
+      description: "El clásico del callejón en el corte blanco y negro más afilado. Cuero plena flor, suela vintage y el cuello que aparece en cada foto de fit. Pares seleccionados, verificados uno a uno por el equipo VIELA.",
+      sizeLabel: "Elige tu talla",
+      sizeUnit: "BR",
+      sizes: ["38", "39", "40", "41", "42", "43", "44"],
+      pickSize: "Elige una talla para continuar",
+      addToCart: "Añadir a la bolsa",
+      added: "En la bolsa",
     },
     raffle: {
       label: "El sorteo",
@@ -725,17 +961,17 @@ export const kynetikDict: DemoDictionary<KynetikContent> = {
       fields: [
         { id: "name", label: "Nombre completo", placeholder: "Alex Moraes" },
         { id: "email", label: "Correo", placeholder: "tu@correo.com" },
-        { id: "city", label: "Ciudad", placeholder: "Madrid, España" },
+        { id: "city", label: "Ciudad", placeholder: "São Paulo, Brasil" },
       ],
       sizeLabel: "Talla preferida",
-      sizeOptions: ["EU 38", "EU 40", "EU 42", "EU 43", "EU 45", "EU 47"],
+      sizeOptions: ["BR 38", "BR 39", "BR 40", "BR 41", "BR 42", "BR 44"],
       submit: "Enviar participación",
       terms: "Sin compra obligatoria salvo que resultes seleccionado. Una participación por persona, verificada por correo.",
       close: "Cerrar",
       successTitle: "Ya estás en el sorteo.",
       successBody: "Vigila tu bandeja de entrada. Si sale tu participación, tendrás 30 minutos para reclamar tu par a precio de tienda.",
       entryCodeLabel: "Tu código de participación",
-      entryCode: "KYN-07-4482",
+      entryCode: "VLA-07-4482",
       successClose: "Listo",
     },
     marquee: {
@@ -743,60 +979,60 @@ export const kynetikDict: DemoDictionary<KynetikContent> = {
         "300 PARES",
         "SIN REPOSICIÓN",
         "DROP 07",
-        "REJILLA DE MEDIANOCHE",
-        "INFRARED",
-        "KYNETIK NITRO",
+        "VIELA WEAR",
+        "DIRECTO DE LA CALLE",
+        "SP · BR",
         "SORTEO ABIERTO",
       ],
     },
     about: {
-      label: "El estudio",
-      title: "Hecho de noche",
-      lead: "KYNETIK es un estudio de diseño disfrazado de marca de zapatillas.",
+      label: "El callejón",
+      title: "Nacida en el callejón",
+      lead: "VIELA es un estudio de diseño disfrazado de marca de calle. El callejón es donde pasa la calle.",
       paragraphs: [
-        "Empezamos en un sótano de Lisboa en 2019, cortando suelas a mano e imprimiendo lookbooks en la copistería de la esquina. La regla era simple: hacer el par que queríamos llevar a las 2 de la madrugada y no encontrábamos en ningún sitio.",
-        "Cada drop nace de una sola idea, se produce en una tirada limitada y nunca se repone. Cuando se acaba, se vuelve leyenda. Preferimos agotar antes que diluir.",
+        "Empezamos en un callejón del Bixiga, en São Paulo, en 2019 — serigrafía en el garaje, zapatillas secándose en el tendedero y lookbooks impresos en la copistería de la esquina. La regla era simple: hacer la pieza que queríamos llevar en la vuelta de las 2 de la madrugada y no encontrábamos en ningún sitio.",
+        "Cada drop nace de una sola idea, sale en una tirada contada y nunca vuelve. Cuando se acaba, se vuelve leyenda de esquina. Preferimos agotar antes que diluir.",
       ],
       stats: [
-        { value: "2019", label: "cortando suelas desde" },
+        { value: "2019", label: "en la calle desde" },
         { value: "07", label: "drops lanzados" },
-        { value: "42k", label: "en la lista de drops" },
+        { value: "42k", label: "en la lista del drop" },
       ],
-      addressLabel: "El laboratorio",
-      addressLines: ["Rua do Grémio Lusitano 14", "1200-219 Lisboa, Portugal"],
-      hoursLabel: "Horario del estudio",
+      addressLabel: "El taller",
+      addressLines: ["Rua Treze de Maio 825 — Bixiga", "01327-000 · São Paulo, SP"],
+      hoursLabel: "Horario del taller",
       hours: ["Jue – Sáb · 14:00 – 22:00", "Noches de drop · hasta agotar"],
-      imageAlt: "Caja y embalaje KYNETIK bajo la luz del estudio",
-      quote: "No venden zapatillas. Venden los diez minutos antes de un drop.",
-      quoteAuthor: "Highsnob Weekly",
+      imageAlt: "Caja y embalaje VIELA bajo la luz del estudio",
+      quote: "No venden ropa. Venden los diez minutos antes de un drop.",
+      quoteAuthor: "Correria Zine",
     },
     footer: {
-      tagline: "Zapatillas para las horas que la ciudad olvida.",
+      tagline: "Ropa y zapatillas para quien hace de la calle su camino.",
       groups: [
         {
           title: "Tienda",
           links: [
             { href: "#drop", label: "El Drop" },
-            { href: "#latest", label: "Velocity OG" },
-            { href: "#vault", label: "El Vault" },
+            { href: "#catalogo", label: "Catálogo" },
+            { href: "#vista", label: "Vista 360°" },
             { href: "#raffle", label: "Sorteo" },
           ],
         },
         {
-          title: "Estudio",
+          title: "El callejón",
           links: [
             { href: "#studio", label: "Sobre nosotros" },
-            { href: "#studio", label: "Sostenibilidad" },
+            { href: "#latest", label: "Velocity OG" },
             { href: "#studio", label: "Prensa" },
             { href: "#studio", label: "Empleo" },
           ],
         },
       ],
       followLabel: "Sigue el feed",
-      handle: "@kynetik",
-      email: "drop@kynetik.studio",
-      addressLines: ["Rua do Grémio Lusitano 14", "1200-219 Lisboa, Portugal"],
-      fine: "KYNETIK es una marca ficticia creada como concepto de diseño. Productos, precios y drops son ilustrativos.",
+      handle: "@viela.wear",
+      email: "fala@viela.wear",
+      addressLines: ["Rua Treze de Maio 825 — Bixiga", "01327-000 · São Paulo, SP"],
+      fine: "VIELA es una marca ficticia creada como concepto de diseño. Productos, precios y drops son ilustrativos.",
       credit: "Concepto, diseño y desarrollo de VigApp.",
     },
   },

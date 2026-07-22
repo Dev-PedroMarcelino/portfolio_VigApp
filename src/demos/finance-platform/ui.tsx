@@ -1,46 +1,38 @@
 "use client";
 
-/* Shared primitives for the Nuvex finance-platform demo. */
+import { useEffect, useRef, useState } from "react";
+import { animate } from "framer-motion";
+import { cn } from "@/lib/utils";
 
-/** Fine scan-line texture; layered over the obsidian surface for CRT-grade depth. */
-export function ScanLines() {
-  return (
-    <div
-      aria-hidden
-      className="pointer-events-none fixed inset-0 z-[70] opacity-[0.06] mix-blend-soft-light"
-      style={{
-        backgroundImage:
-          "repeating-linear-gradient(to bottom, rgba(255,255,255,0.9) 0px, rgba(255,255,255,0.9) 1px, transparent 1px, transparent 3px)",
-      }}
-    />
-  );
+/* Shared primitives for the Zela finance-platform demo. */
+
+/** Signature easing used across the demo's micro-interactions. */
+export const EASE = [0.22, 1, 0.36, 1] as const;
+
+/**
+ * Every figure in Zela is Brazilian reais, formatted with pt-BR in all
+ * interface languages — the product is Brazilian; only the UI translates.
+ */
+const BRL = new Intl.NumberFormat("pt-BR", {
+  style: "currency",
+  currency: "BRL",
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+
+const BRL_WHOLE = new Intl.NumberFormat("pt-BR", {
+  style: "currency",
+  currency: "BRL",
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 0,
+});
+
+export function fmtBRL(value: number): string {
+  return BRL.format(value);
 }
 
-/** Faint fractal grain so large emerald gradients never band. */
-const NOISE =
-  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E";
-
-export function Grain() {
-  return (
-    <div
-      aria-hidden
-      className="pointer-events-none absolute inset-0 z-[1] opacity-[0.05] mix-blend-overlay"
-      style={{ backgroundImage: `url("${NOISE}")` }}
-    />
-  );
-}
-
-/** Mono eyebrow with a leading emerald tick, used above every section title. */
-export function SectionLabel({ text }: { text: string }) {
-  return (
-    <p className="flex items-center gap-3 text-[0.66rem] font-medium uppercase tracking-[0.34em] text-[var(--d-accent)] [font-family:var(--demo-mono)]">
-      <span className="inline-flex items-center gap-1" aria-hidden>
-        <span className="h-1 w-1 rounded-full bg-[var(--d-accent)] shadow-[0_0_8px_var(--d-accent)]" />
-        <span className="h-px w-7 bg-gradient-to-r from-[var(--d-accent)] to-transparent" />
-      </span>
-      {text}
-    </p>
-  );
+export function fmtBRLWhole(value: number): string {
+  return BRL_WHOLE.format(Math.round(value));
 }
 
 /** Smooth anchor scrolling used by the header and in-page CTAs. */
@@ -49,21 +41,78 @@ export function scrollToId(id: string) {
   if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-/** Locale-aware whole-unit currency (no cents) for large headline figures. */
-export function fmtWhole(value: number, localeTag: string, currency: string): string {
-  return new Intl.NumberFormat(localeTag, {
-    style: "currency",
-    currency,
-    maximumFractionDigits: 0,
-  }).format(Math.round(value));
+/**
+ * Warm eyebrow above section titles: a little amber seed and mono small
+ * caps. `tone="cream"` flips the ink for the dark forest sections.
+ */
+export function SectionLabel({ text, tone = "green" }: { text: string; tone?: "green" | "cream" }) {
+  return (
+    <p
+      className={cn(
+        "flex items-center gap-2.5 text-[0.66rem] font-medium uppercase tracking-[0.3em] [font-family:var(--demo-mono)]",
+        tone === "green" ? "text-[var(--d-green)]" : "text-[var(--d-lime)]",
+      )}
+    >
+      <span
+        aria-hidden
+        className={cn(
+          "h-2 w-2 rounded-full rounded-tl-none",
+          tone === "green" ? "bg-[var(--d-amber)]" : "bg-[var(--d-lime)]",
+        )}
+      />
+      {text}
+    </p>
+  );
 }
 
-/** Locale-aware currency with cents for ledger rows and amounts. */
-export function fmtMoney(value: number, localeTag: string, currency: string): string {
-  return new Intl.NumberFormat(localeTag, {
-    style: "currency",
-    currency,
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(value);
+/** Soft organic blob used as background warmth. Purely decorative. */
+export function Blob({ className, color }: { className?: string; color: string }) {
+  return (
+    <div
+      aria-hidden
+      className={cn("pointer-events-none absolute blur-3xl", className)}
+      style={{
+        background: color,
+        borderRadius: "58% 42% 55% 45% / 48% 56% 44% 52%",
+      }}
+    />
+  );
+}
+
+/**
+ * Currency figure that eases from its previous value to the next one.
+ * Falls back to a hard swap when the visitor prefers reduced motion.
+ */
+export function AnimatedMoney({
+  value,
+  reduced,
+  whole = true,
+  className,
+}: {
+  value: number;
+  reduced: boolean;
+  whole?: boolean;
+  className?: string;
+}) {
+  const [shown, setShown] = useState(value);
+  const prev = useRef(value);
+
+  useEffect(() => {
+    if (reduced) {
+      prev.current = value;
+      setShown(value);
+      return;
+    }
+    const controls = animate(prev.current, value, {
+      duration: 0.7,
+      ease: EASE,
+      onUpdate: setShown,
+    });
+    prev.current = value;
+    return () => controls.stop();
+  }, [value, reduced]);
+
+  return (
+    <span className={className}>{whole ? fmtBRLWhole(shown) : fmtBRL(shown)}</span>
+  );
 }

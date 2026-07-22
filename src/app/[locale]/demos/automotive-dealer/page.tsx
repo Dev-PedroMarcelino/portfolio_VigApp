@@ -1,24 +1,29 @@
 import type { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
-import { Michroma, Archivo } from "next/font/google";
+import { Space_Grotesk, Inter, IBM_Plex_Mono } from "next/font/google";
 import { DemoShell } from "@/components/demos/demo-shell";
-import { ApexMotors } from "@/demos/automotive-dealer/apex-motors";
+import { Barcellos } from "@/demos/automotive-dealer/barcellos";
 
-const display = Michroma({
+const display = Space_Grotesk({
   subsets: ["latin"],
-  weight: ["400"],
   variable: "--demo-display",
 });
 
-const body = Archivo({
+const body = Inter({
   subsets: ["latin"],
   variable: "--demo-body",
 });
 
+const mono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--demo-mono",
+});
+
 export const metadata: Metadata = {
-  title: "Apex Motors — concept by VigApp",
+  title: "Barcellos Veículos — concept by VigApp",
   description:
-    "Performance-car dealer concept with a cinematic hero, live build-and-price configurator, model lineup selector and financing calculator.",
+    "Premium Brazilian dealership concept: a real Sketchfab 3D showroom stage, filterable stock of pre-owned and armored cars, a live financing simulator and trade-in appraisal — graphite and champagne identity.",
 };
 
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
@@ -26,9 +31,9 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
   setRequestLocale(locale);
 
   return (
-    <DemoShell demoName="Apex Motors">
-      <div className={`${display.variable} ${body.variable}`}>
-        <ApexMotors locale={locale} />
+    <DemoShell demoName="Barcellos Veículos">
+      <div className={`${display.variable} ${body.variable} ${mono.variable}`}>
+        <Barcellos locale={locale} />
       </div>
     </DemoShell>
   );

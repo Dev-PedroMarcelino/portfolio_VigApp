@@ -2,7 +2,8 @@
 
 import { useEffect } from "react";
 import Image from "next/image";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useReducedMotionSafe as useReducedMotion } from "@/components/demos/use-reduced-motion-safe";
 import { X, Trash2, ShoppingBag, ArrowRight } from "lucide-react";
 import type { CartContent, CartLine } from "./content";
 import { money, shot } from "./ui";

@@ -1,30 +1,41 @@
 import type { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
-import { Archivo, Cormorant_Garamond } from "next/font/google";
+import { Archivo, IBM_Plex_Mono, Instrument_Serif } from "next/font/google";
 import { DemoShell } from "@/components/demos/demo-shell";
-import { AtelierMeridianRoot } from "@/demos/architecture-studio/atelier-meridian";
+import { Prumo } from "@/demos/architecture-studio/prumo";
 
-const display = Archivo({ subsets: ["latin"], variable: "--demo-display" });
-const body = Cormorant_Garamond({
+const display = Instrument_Serif({
   subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: "400",
   style: ["normal", "italic"],
+  variable: "--demo-display",
+});
+
+const body = Archivo({
+  subsets: ["latin"],
   variable: "--demo-body",
 });
 
+const mono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--demo-mono",
+});
+
 export const metadata: Metadata = {
-  title: "Atelier Meridian — concept by VigApp",
+  title: "Prumo Arquitetura — concept by VigApp",
   description:
-    "An award-winning architecture practice concept: a scroll-tracking manifesto, an expanding project index and a museum-grade portfolio, designed by VigApp.",
+    "A Brazilian high-end residential architecture studio concept: full-bleed house film, an editorial project index, interactive Sketchfab room tours and a conversion-first quote flow, designed by VigApp.",
 };
 
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
+
   return (
-    <DemoShell demoName="Atelier Meridian">
-      <div className={`${display.variable} ${body.variable}`}>
-        <AtelierMeridianRoot locale={locale} />
+    <DemoShell demoName="Prumo Arquitetura">
+      <div className={`${display.variable} ${body.variable} ${mono.variable}`}>
+        <Prumo locale={locale} />
       </div>
     </DemoShell>
   );

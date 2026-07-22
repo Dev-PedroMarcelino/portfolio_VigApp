@@ -1,24 +1,30 @@
 import type { Metadata } from "next";
-import type { CSSProperties } from "react";
 import { setRequestLocale } from "next-intl/server";
-import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import { Bricolage_Grotesque, IBM_Plex_Mono, Inter } from "next/font/google";
 import { DemoShell } from "@/components/demos/demo-shell";
-import { Cortexa } from "@/demos/ai-platform/cortexa";
+import { Iara } from "@/demos/ai-platform/iara";
 
-const display = Space_Grotesk({
+const display = Bricolage_Grotesque({
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
   variable: "--demo-display",
 });
 
-const mono = JetBrains_Mono({
+const body = Inter({
   subsets: ["latin"],
+  variable: "--demo-body",
+});
+
+const mono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
   variable: "--demo-mono",
 });
 
 export const metadata: Metadata = {
-  title: "Cortexa — concept by VigApp",
+  title: "IARA — concept by VigApp",
   description:
-    "AI reasoning-platform concept with a canvas neural orb, live streaming playground, use-case gallery, model tiers, security band and a token pricing calculator.",
+    "Brazilian AI platform concept: a live Portuguese-first playground, generic-AI-vs-IARA editorial comparison, sector cases, LGPD depth layers and BRL token pricing with a cost calculator.",
 };
 
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
@@ -26,12 +32,9 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
   setRequestLocale(locale);
 
   return (
-    <DemoShell demoName="Cortexa">
-      <div
-        className={`${display.variable} ${mono.variable}`}
-        style={{ "--demo-body": "var(--demo-display)" } as CSSProperties}
-      >
-        <Cortexa locale={locale} />
+    <DemoShell demoName="IARA">
+      <div className={`${display.variable} ${body.variable} ${mono.variable}`}>
+        <Iara locale={locale} />
       </div>
     </DemoShell>
   );

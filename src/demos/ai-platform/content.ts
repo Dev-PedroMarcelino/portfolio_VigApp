@@ -1,1104 +1,1098 @@
 import type { DemoDictionary } from "@/demos/content";
 
 /* ------------------------------------------------------------------ */
-/* Types                                                               */
+/* Locale-independent seeds (ids, numerals, latency figures)           */
 /* ------------------------------------------------------------------ */
 
-export type ModelTierId = "flux" | "core" | "atlas";
-export type UseCaseId = "support" | "code" | "research" | "content";
-export type ScenarioId = "support" | "code" | "research";
-export type SecurityIconId = "shield" | "lock" | "key" | "fingerprint" | "server" | "eye";
+export type ScenarioId = "atendimento" | "juridico" | "ecommerce" | "financeiro";
+export type ModelId = "nascente" | "correnteza" | "profunda";
 
-export interface NavContent {
-  links: { href: string; label: string }[];
-  login: string;
-  cta: string;
-  openMenu: string;
-  closeMenu: string;
-}
+/** R$ per 1M tokens — input / output. Prices are in BRL in every locale. */
+export const MODEL_PRICES: Record<ModelId, { input: number; output: number }> = {
+  nascente: { input: 2.5, output: 10 },
+  correnteza: { input: 12, output: 48 },
+  profunda: { input: 45, output: 180 },
+};
 
-export interface HeroContent {
-  badge: string;
-  titlePre: string;
-  titleAccent: string;
-  titlePost: string;
-  promise: string;
-  ctaPrimary: string;
-  ctaSecondary: string;
-  terminalLines: string[];
-  stats: { value: string; label: string }[];
+/** Fake-but-plausible playground telemetry per scenario. */
+export const SCENARIO_META: Record<ScenarioId, { firstTokenMs: number; tokPerSec: number }> = {
+  atendimento: { firstTokenMs: 402, tokPerSec: 96 },
+  juridico: { firstTokenMs: 517, tokPerSec: 88 },
+  ecommerce: { firstTokenMs: 388, tokPerSec: 102 },
+  financeiro: { firstTokenMs: 421, tokPerSec: 94 },
+};
+
+/** Blend assumed by the cost calculator: 70% input / 30% output tokens. */
+export const CALC_INPUT_SHARE = 0.7;
+
+/* ------------------------------------------------------------------ */
+/* Content shape                                                        */
+/* ------------------------------------------------------------------ */
+
+export interface NavLink {
+  href: string;
+  label: string;
 }
 
 export interface PlaygroundScenario {
   id: ScenarioId;
-  label: string;
+  tab: string;
   prompt: string;
   response: string;
 }
 
-export interface PlaygroundModel {
-  id: ModelTierId;
+export interface WhyItem {
+  id: string;
+  kicker: string;
+  input: string;
+  generic: string;
+  iara: string;
+}
+
+export interface CaseMetric {
+  value: string;
+  label: string;
+}
+
+export interface CaseItem {
+  id: string;
+  number: string;
+  sector: string;
+  company: string;
+  summary: string;
+  body: string;
+  metrics: CaseMetric[];
+}
+
+export interface ApiBullet {
+  title: string;
+  body: string;
+}
+
+export interface SecurityLayer {
+  depth: string;
+  title: string;
+  body: string;
+}
+
+export interface PricingModel {
+  id: ModelId;
   name: string;
   tag: string;
-  latencyMs: number;
-}
-
-export interface PlaygroundContent {
-  label: string;
-  title: string;
-  intro: string;
-  modelLabel: string;
-  presetLabel: string;
-  promptLabel: string;
-  placeholder: string;
-  run: string;
-  running: string;
-  reset: string;
-  outputLabel: string;
-  idleHint: string;
-  latencyLabel: string;
-  tokensLabel: string;
-  streamingLabel: string;
-  doneLabel: string;
-  models: PlaygroundModel[];
-  scenarios: PlaygroundScenario[];
-}
-
-export interface UseCaseTab {
-  id: UseCaseId;
-  label: string;
-  title: string;
-  body: string;
-  bullets: string[];
-  metricValue: string;
-  metricLabel: string;
-  image: string;
-  alt: string;
-}
-
-export interface UseCasesContent {
-  label: string;
-  title: string;
-  intro: string;
-  tabs: UseCaseTab[];
-}
-
-export interface ModelRow {
-  id: ModelTierId;
-  name: string;
-  desc: string;
+  bestFor: string;
   context: string;
-  throughput: string;
-  price: string;
-  best: string;
-  featured: boolean;
+  latency: string;
+  reasoning: boolean;
 }
 
-export interface ModelsContent {
-  label: string;
-  title: string;
-  intro: string;
-  headers: { model: string; context: string; throughput: string; price: string; best: string };
-  rows: ModelRow[];
-  note: string;
-  popular: string;
-}
-
-export interface SecurityContent {
-  label: string;
-  title: string;
-  intro: string;
-  items: { icon: SecurityIconId; title: string; body: string }[];
-  certs: string[];
-}
-
-export interface CalcTier {
-  id: ModelTierId;
-  name: string;
-  ratePerMillion: number;
-}
-
-export interface PricingCalcContent {
-  title: string;
-  sliderLabel: string;
-  requestsUnit: string;
-  tierLabel: string;
-  tokensLabel: string;
-  estLabel: string;
-  perMonth: string;
-  avgTokensNote: string;
-  currency: string;
-  numberLocale: string;
-  avgTokensPerRequest: number;
-  sliderMin: number;
-  sliderMax: number;
-  sliderStep: number;
-  tiers: CalcTier[];
-}
-
-export interface PricingPlan {
-  id: string;
-  name: string;
-  price: string;
-  period: string;
-  desc: string;
-  features: string[];
-  cta: string;
-  featured: boolean;
-}
-
-export interface PricingContent {
-  label: string;
-  title: string;
-  intro: string;
-  calc: PricingCalcContent;
-  plans: PricingPlan[];
-}
-
-export interface CtaContent {
-  label: string;
-  title: string;
-  body: string;
-  ctaPrimary: string;
-  ctaSecondary: string;
-  note: string;
-}
-
-export interface FooterContent {
-  tagline: string;
-  columns: { title: string; links: string[] }[];
-  socials: { label: string; icon: "at" | "share" | "globe" | "message" }[];
-  legal: string;
-  status: string;
-}
-
-export interface CortexaContent {
-  nav: NavContent;
-  hero: HeroContent;
-  playground: PlaygroundContent;
-  useCases: UseCasesContent;
-  models: ModelsContent;
-  security: SecurityContent;
-  pricing: PricingContent;
-  cta: CtaContent;
-  footer: FooterContent;
+export interface IaraContent {
+  localeTag: string;
+  header: {
+    nav: NavLink[];
+    cta: string;
+  };
+  hero: {
+    eyebrow: string;
+    titleA: string;
+    titleB: string;
+    manifesto: string;
+    sub: string;
+    proofNote: string;
+  };
+  playground: {
+    windowTitle: string;
+    region: string;
+    modelChip: string;
+    tabsLabel: string;
+    userLabel: string;
+    assistantLabel: string;
+    runAgain: string;
+    streamingLabel: string;
+    doneLabel: string;
+    firstTokenLabel: string;
+    tokensLabel: string;
+    tokPerSecLabel: string;
+    scenarios: PlaygroundScenario[];
+  };
+  why: {
+    label: string;
+    title: string;
+    intro: string;
+    inputLabel: string;
+    genericLabel: string;
+    iaraLabel: string;
+    items: WhyItem[];
+  };
+  cases: {
+    label: string;
+    title: string;
+    intro: string;
+    fictionNote: string;
+    items: CaseItem[];
+  };
+  api: {
+    label: string;
+    title: string;
+    intro: string;
+    requestLabel: string;
+    responseLabel: string;
+    bullets: ApiBullet[];
+    sseLines: string[];
+  };
+  security: {
+    label: string;
+    title: string;
+    intro: string;
+    surfaceLabel: string;
+    layers: SecurityLayer[];
+  };
+  pricing: {
+    label: string;
+    title: string;
+    intro: string;
+    flagshipTag: string;
+    perMillion: string;
+    attrInput: string;
+    attrOutput: string;
+    attrContext: string;
+    attrLatency: string;
+    attrBestFor: string;
+    attrReasoning: string;
+    yes: string;
+    no: string;
+    models: PricingModel[];
+    calc: {
+      title: string;
+      sub: string;
+      volumeLabel: string;
+      volumeUnit: string;
+      modelLabel: string;
+      totalLabel: string;
+      perMonth: string;
+      note: string;
+    };
+  };
+  cta: {
+    title: string;
+    sub: string;
+    primary: string;
+    secondary: string;
+    bullets: string[];
+  };
+  footer: {
+    tagline: string;
+    nav: NavLink[];
+    disclaimer: string;
+  };
 }
 
 /* ------------------------------------------------------------------ */
-/* Photography                                                         */
+/* pt — canonical voice                                                 */
 /* ------------------------------------------------------------------ */
 
-const IMG = (id: string, w = 1200) =>
-  `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=80`;
-
-const IMAGES = {
-  support: IMG("photo-1655720828018-edd2daec9349"),
-  code: IMG("photo-1526374965328-7f61d4dc18c5"),
-  research: IMG("photo-1620712943543-bcc4688e7485"),
-  content: IMG("photo-1677442136019-21780ecad995"),
+const pt: IaraContent = {
+  localeTag: "pt-BR",
+  header: {
+    nav: [
+      { href: "#playground", label: "Playground" },
+      { href: "#por-que", label: "Por quê" },
+      { href: "#casos", label: "Casos" },
+      { href: "#api", label: "API" },
+      { href: "#seguranca", label: "Segurança" },
+      { href: "#precos", label: "Preços" },
+    ],
+    cta: "Criar conta",
+  },
+  hero: {
+    eyebrow: "IARA · inteligência artificial nascida no Brasil",
+    titleA: "A IA que entende",
+    titleB: "o Brasil.",
+    manifesto: "Treinada em português de verdade — não traduzido.",
+    sub: "Boleto vencido, NF-e, cláusula da Lei do Inquilinato, cliente prometendo pagar segunda. A IARA entende porque nasceu aqui: dados daqui, servidores daqui, português daqui.",
+    proofNote: "Sem cadastro, sem cartão — o playground abaixo é a prova.",
+  },
+  playground: {
+    windowTitle: "playground.iara.com.br",
+    region: "gru · saopaulo-1",
+    modelChip: "iara-2-correnteza",
+    tabsLabel: "Cenários do playground",
+    userLabel: "Você",
+    assistantLabel: "IARA",
+    runAgain: "Rodar de novo",
+    streamingLabel: "gerando",
+    doneLabel: "concluído",
+    firstTokenLabel: "1º token",
+    tokensLabel: "tokens",
+    tokPerSecLabel: "tok/s",
+    scenarios: [
+      {
+        id: "atendimento",
+        tab: "Atendimento",
+        prompt:
+          "Classifica estes 4 tickets de SAC por urgência: (1) “meu cartão foi clonado, tem compra que não fiz”; (2) “como troco a foto do perfil?”; (3) “o app não abre desde ontem e tenho um boleto que vence hoje”; (4) “vocês têm plano anual?”",
+        response:
+          "P0 · CRÍTICO — Ticket 1 (cartão clonado)\nSuspeita de fraude com prejuízo financeiro em andamento. Bloquear o cartão de imediato, abrir contestação e responder em até 15 minutos. Agilidade aqui evita chargeback — e reclamação no Procon.\n\nP1 · ALTO — Ticket 3 (app fora do ar + boleto vence hoje)\nFalha técnica com prazo real: boleto vencido gera multa de 2% e juros por dia. Enviar a linha digitável por e-mail ou WhatsApp agora e orientar o pagamento pelo internet banking.\n\nP2 · MÉDIO — Ticket 4 (plano anual)\nOportunidade comercial, não incidente. Encaminhar ao time de vendas com resposta em até 4 horas úteis — interesse esfria rápido.\n\nP3 · BAIXO — Ticket 2 (foto do perfil)\nDúvida de autoatendimento. Responder com o passo a passo da central de ajuda e marcar como resolvido.",
+      },
+      {
+        id: "juridico",
+        tab: "Jurídico",
+        prompt: "Resume este contrato de aluguel em 5 pontos. [contrato_residencial_v3.pdf]",
+        response:
+          "1. Partes e imóvel — Locação residencial do apto. 72 da Rua Harmonia, 442, São Paulo/SP, entre Imobiliária Andrade (locadora) e Camila Ferreira (locatária).\n\n2. Prazo e valor — 30 meses, padrão da Lei do Inquilinato. Aluguel de R$ 3.200 com vencimento todo dia 5 e reajuste anual pelo IGP-M.\n\n3. Garantia — Caução de 3 aluguéis (R$ 9.600) em poupança vinculada, devolvida corrigida no fim do contrato.\n\n4. Ponto de atenção — A cláusula 8ª repassa ao inquilino despesas extraordinárias de condomínio (obras estruturais). Isso contraria o art. 22 da Lei 8.245/91 e pode ser contestado.\n\n5. Rescisão — Multa de 3 aluguéis, proporcional aos meses restantes. Após 12 meses, saída com aviso prévio de 30 dias reduz a multa pela metade.",
+      },
+      {
+        id: "ecommerce",
+        tab: "E-commerce",
+        prompt:
+          "Escreve a descrição deste tênis para o Mercado Livre: Tênis Corrida Vento K2, amortecimento em gel, malha respirável, 38 ao 44, preto com verde-água.",
+        response:
+          "Tênis Vento K2 — Corrida e Treino | Amortecimento em Gel\n\nDo treino de segunda ao longão de domingo: o Vento K2 acompanha o seu ritmo.\n\n• Amortecimento em gel que absorve o impacto da passada e poupa o joelho\n• Malha respirável — pé seco mesmo no calor brasileiro\n• Solado antiderrapante para asfalto, esteira e paralelepípedo\n• Numeração 38 ao 44 · Preto com detalhes verde-água\n\nENVIO PARA TODO O BRASIL\nDespachamos em até 24h úteis via Mercado Envios Full.\n\nCOMPRA GARANTIDA\nDevolução grátis em até 30 dias e nota fiscal em todas as compras.\n\nFicou com dúvida? Chama no “Perguntar ao vendedor” — a gente responde rapidinho.",
+      },
+      {
+        id: "financeiro",
+        tab: "Financeiro",
+        prompt:
+          "Cliente perguntou: “meu boleto venceu ontem, consigo pagar via Pix?” — responde como atendente do banco.",
+        response:
+          "Consegue sim! Boleto vencido há 1 dia continua pagável — e pelo Pix a baixa é quase imediata:\n\n1. Abra o app e toque em Pagamentos → Pagar boleto;\n2. Escaneie o código de barras ou cole a linha digitável;\n3. O valor já aparece atualizado com o acréscimo do atraso (multa de 2% + juros pro rata, conforme o contrato);\n4. Escolha Pix como forma de pagamento e confirme. A compensação cai em minutos, mesmo fora do horário bancário.\n\nImportante: boletos com mais de 59 dias de atraso podem ser bloqueados pelo emissor. Nesse caso, é só pedir a segunda via atualizada.\n\nPosso ajudar em mais alguma coisa?",
+      },
+    ],
+  },
+  why: {
+    label: "Por quê",
+    title: "Por que uma IA brasileira?",
+    intro:
+      "Modelos treinados em inglês leem português como turista: traduzem palavras, perdem o país inteiro. A diferença aparece nos detalhes — e no Brasil, o detalhe é o negócio.",
+    inputLabel: "Entrada",
+    genericLabel: "IA genérica",
+    iaraLabel: "IARA",
+    items: [
+      {
+        id: "giria",
+        kicker: "Gíria e contexto",
+        input: "“segunda eu te pago, juro”",
+        generic:
+          "Trata como agendamento qualquer: “Ok! Evento criado para segunda-feira.” A promessa de pagamento passa batida.",
+        iara:
+          "Reconhece promessa informal de pagamento em régua de cobrança: registra o compromisso, agenda follow-up para segunda às 9h e responde firme — sem ser grosseira.",
+      },
+      {
+        id: "docs",
+        kicker: "Documento brasileiro",
+        input: "“extrai os dados desta NF-e”",
+        generic:
+          "Confunde CNPJ com CPF, ignora a chave de acesso e lê “1.234,56” como um decimal americano quebrado.",
+        iara:
+          "Valida a chave de 44 dígitos, separa ICMS de IPI, confere o CNPJ do emitente e sabe que R$ 1.234,56 é mil duzentos e trinta e quatro reais e cinquenta e seis centavos.",
+      },
+      {
+        id: "datas",
+        kicker: "Datas e moeda",
+        input: "“a reunião é 06/07, orçamento de R$ 10 mil”",
+        generic:
+          "Lê June 7th, converte para dólar e devolve “$10,000.00” — dois erros em uma linha.",
+        iara:
+          "06/07 é 6 de julho — dd/mm, sempre. E “R$ 10 mil” vira R$ 10.000,00, formatado como se escreve no Brasil.",
+      },
+    ],
+  },
+  cases: {
+    label: "Casos",
+    title: "Quem já fala com a IARA",
+    intro: "Quatro setores, quatro operações brasileiras — do chão de loja ao contencioso.",
+    fictionNote: "Empresas e números fictícios, criados para este conceito.",
+    items: [
+      {
+        id: "varejo",
+        number: "01",
+        sector: "Varejo",
+        company: "Lojas Maré · moda, 84 lojas",
+        summary: "Descrições de produto e SAC unificados em uma operação só.",
+        body:
+          "A Maré ligou a IARA ao catálogo: cada produto novo ganha descrição para site, Mercado Livre e Shopee em segundos, no tom da marca. No SAC, a IARA resolve troca, rastreio e cupom sem fila — e escala para humano quando o assunto é sensível.",
+        metrics: [
+          { value: "+22%", label: "conversão nas descrições geradas" },
+          { value: "-38%", label: "tempo médio de resposta no SAC" },
+          { value: "R$ 1,4 mi", label: "economizados por ano" },
+        ],
+      },
+      {
+        id: "atendimento",
+        number: "02",
+        sector: "Atendimento",
+        company: "ConectaCel · operadora regional",
+        summary: "Segunda via, plano, cobertura: resolvido antes de tocar no humano.",
+        body:
+          "A central da ConectaCel recebia 40 mil chamados por mês — metade era segunda via de boleto e dúvida de franquia. A IARA assumiu o WhatsApp oficial: entende a pergunta do jeito que o cliente escreve, resolve na hora e registra tudo no CRM.",
+        metrics: [
+          { value: "71%", label: "dos tickets resolvidos sem humano" },
+          { value: "4,6/5", label: "CSAT médio pós-atendimento" },
+          { value: "40 s", label: "tempo médio de resolução" },
+        ],
+      },
+      {
+        id: "juridico",
+        number: "03",
+        sector: "Jurídico",
+        company: "Bastos & Nogueira Advogados",
+        summary: "Revisão de contrato em minutos, com o CC e a Lei 8.245 na memória.",
+        body:
+          "O escritório revisa 2.400 contratos por mês. A IARA Profunda lê cada minuta, aponta cláusulas em conflito com a legislação brasileira, sugere redação alternativa e monta o resumo executivo que o sócio lê em 2 minutos.",
+        metrics: [
+          { value: "3h → 12min", label: "análise média por contrato" },
+          { value: "96%", label: "precisão na revisão de cláusulas" },
+          { value: "2.400", label: "contratos processados por mês" },
+        ],
+      },
+      {
+        id: "saude",
+        number: "04",
+        sector: "Saúde",
+        company: "Rede Vida Clínicas · 31 unidades",
+        summary: "Agendamento por WhatsApp e lembrete que o paciente responde.",
+        body:
+          "Paciente marca, remarca e confirma consulta conversando com a IARA no WhatsApp — em linguagem natural, não em menu numérico. Dados clínicos ficam na região saopaulo-1, com trilha de auditoria completa para a LGPD.",
+        metrics: [
+          { value: "-52%", label: "de faltas com lembrete conversacional" },
+          { value: "83%", label: "dos agendamentos sem telefone" },
+          { value: "100%", label: "dos dados hospedados no Brasil" },
+        ],
+      },
+    ],
+  },
+  api: {
+    label: "API",
+    title: "Uma chamada. Português fluente.",
+    intro:
+      "REST simples, streaming nativo e SDKs idiomáticos. Do curl à produção no mesmo dia.",
+    requestLabel: "requisição",
+    responseLabel: "stream · SSE",
+    bullets: [
+      {
+        title: "SDKs TypeScript e Python",
+        body: "Tipados, com retry e streaming embutidos. npm install @iara/sdk e pronto.",
+      },
+      {
+        title: "Streaming SSE token a token",
+        body: "Resposta começa em milissegundos — a UX de chat que o usuário espera.",
+      },
+      {
+        title: "99,9% de uptime, 38 ms de São Paulo",
+        body: "Inferência em datacenter paulista: latência mediana de 38 ms para quem está no Brasil.",
+      },
+    ],
+    sseLines: [
+      'data: {"delta":"Nota fiscal 4.520 da"}',
+      'data: {"delta":" Andrade Ltda, R$ 12.480,00,"}',
+      'data: {"delta":" ICMS destacado de R$ 1.497,60…"}',
+      "data: [DONE]",
+    ],
+  },
+  security: {
+    label: "Segurança",
+    title: "Seus dados, em águas brasileiras.",
+    intro:
+      "Profundidade é proteção. Cada camada da IARA foi desenhada para a LGPD — não adaptada depois.",
+    surfaceLabel: "superfície",
+    layers: [
+      {
+        depth: "0 m",
+        title: "Dados hospedados no Brasil",
+        body: "Inferência e armazenamento na região saopaulo-1. Nada atravessa fronteira — nem em backup.",
+      },
+      {
+        depth: "−200 m",
+        title: "LGPD por padrão",
+        body: "DPO dedicado, relatório de impacto por projeto, base legal documentada e DPA assinado no onboarding.",
+      },
+      {
+        depth: "−1.000 m",
+        title: "Seus dados não treinam a IARA",
+        body: "Opt-out de treinamento é o padrão, não a exceção. Retenção zero disponível para dados sensíveis.",
+      },
+      {
+        depth: "−4.000 m",
+        title: "Certificado de ponta a ponta",
+        body: "ISO 27001 e SOC 2 Tipo II. AES-256 em repouso, TLS 1.3 em trânsito, chaves gerenciadas por HSM.",
+      },
+    ],
+  },
+  pricing: {
+    label: "Preços",
+    title: "Preço em real, por milhão de tokens.",
+    intro: "Sem dólar, sem IOF, sem surpresa no câmbio. Três correntes, um contrato em reais.",
+    flagshipTag: "carro-chefe",
+    perMillion: "por 1M de tokens",
+    attrInput: "Entrada (1M tokens)",
+    attrOutput: "Saída (1M tokens)",
+    attrContext: "Janela de contexto",
+    attrLatency: "Latência · 1º token",
+    attrBestFor: "Feita para",
+    attrReasoning: "Raciocínio estendido",
+    yes: "Incluído",
+    no: "—",
+    models: [
+      {
+        id: "nascente",
+        name: "Iara Nascente",
+        tag: "veloz",
+        bestFor: "SAC em tempo real, classificação e triagem em altíssimo volume",
+        context: "128k tokens",
+        latency: "~180 ms",
+        reasoning: false,
+      },
+      {
+        id: "correnteza",
+        name: "Iara Correnteza",
+        tag: "equilíbrio",
+        bestFor: "O modelo para 90% dos casos: atendimento, conteúdo, extração de dados",
+        context: "256k tokens",
+        latency: "~420 ms",
+        reasoning: false,
+      },
+      {
+        id: "profunda",
+        name: "Iara Profunda",
+        tag: "raciocínio",
+        bestFor: "Análise jurídica, documentos longos e decisões que exigem cadeia de raciocínio",
+        context: "256k tokens",
+        latency: "~1,8 s",
+        reasoning: true,
+      },
+    ],
+    calc: {
+      title: "Quanto custa no seu volume?",
+      sub: "Arraste e veja. Estimativa com 70% de tokens de entrada e 30% de saída.",
+      volumeLabel: "Volume mensal",
+      volumeUnit: "mi de tokens/mês",
+      modelLabel: "Modelo",
+      totalLabel: "Custo estimado",
+      perMonth: "/mês",
+      note: "Valores em reais. Volume acima de 500 mi/mês tem desconto por contrato.",
+    },
+  },
+  cta: {
+    title: "Fale com a IARA em português.",
+    sub: "Crie a conta, ganhe R$ 20 em créditos e faça a primeira chamada em cinco minutos.",
+    primary: "Começar grátis",
+    secondary: "Falar com vendas",
+    bullets: ["R$ 20 em créditos iniciais", "Sem cartão de crédito", "Suporte em português, claro"],
+  },
+  footer: {
+    tagline: "A senhora das águas, agora fluente em produção.",
+    nav: [
+      { href: "#playground", label: "Playground" },
+      { href: "#api", label: "API" },
+      { href: "#seguranca", label: "Segurança" },
+      { href: "#precos", label: "Preços" },
+    ],
+    disclaimer: "IARA é um conceito fictício criado pela VigApp.",
+  },
 };
 
 /* ------------------------------------------------------------------ */
-/* English (structural fallback)                                       */
+/* en — full translation, Brazilian universe kept intact                */
 /* ------------------------------------------------------------------ */
 
-const en: CortexaContent = {
-  nav: {
-    links: [
+const en: IaraContent = {
+  localeTag: "en-US",
+  header: {
+    nav: [
       { href: "#playground", label: "Playground" },
-      { href: "#usecases", label: "Use cases" },
-      { href: "#models", label: "Models" },
-      { href: "#security", label: "Security" },
-      { href: "#pricing", label: "Pricing" },
+      { href: "#por-que", label: "Why" },
+      { href: "#casos", label: "Cases" },
+      { href: "#api", label: "API" },
+      { href: "#seguranca", label: "Security" },
+      { href: "#precos", label: "Pricing" },
     ],
-    login: "Sign in",
-    cta: "Start building",
-    openMenu: "Open menu",
-    closeMenu: "Close menu",
+    cta: "Create account",
   },
   hero: {
-    badge: "Cortexa Neural API v4",
-    titlePre: "The reasoning layer",
-    titleAccent: "your product",
-    titlePost: "has been waiting for.",
-    promise:
-      "One endpoint. Three frontier models. Sub-second inference that reads, reasons and writes so your team ships intelligence instead of maintaining it.",
-    ctaPrimary: "Open the playground",
-    ctaSecondary: "Read the docs",
-    terminalLines: [
-      "$ cortexa infer --model atlas",
-      "> analyzing 12,480 tokens of context",
-      "> streaming response · 41ms first token",
-      "> confidence 0.97 · grounded · complete",
-    ],
-    stats: [
-      { value: "41ms", label: "Median first token" },
-      { value: "99.98%", label: "Monthly uptime" },
-      { value: "200K", label: "Context window" },
-    ],
+    eyebrow: "IARA · artificial intelligence born in Brazil",
+    titleA: "The AI that understands",
+    titleB: "Brazil.",
+    manifesto: "Trained on real Portuguese — not translated Portuguese.",
+    sub: "Overdue boletos, NF-e invoices, tenancy-law clauses, a customer promising to pay on Monday. IARA gets it because it was born here: Brazilian data, Brazilian servers, Brazilian Portuguese.",
+    proofNote: "No sign-up, no card — the playground below is the proof.",
   },
   playground: {
-    label: "Live playground",
-    title: "Type a prompt. Watch it think.",
-    intro:
-      "This is the real streaming interface, wired to three canned scenarios so you can feel the latency without an API key.",
-    modelLabel: "Model",
-    presetLabel: "Try a scenario",
-    promptLabel: "Your prompt",
-    placeholder: "Ask Cortexa anything, or pick a scenario above",
-    run: "Run inference",
-    running: "Generating",
-    reset: "Clear",
-    outputLabel: "Response",
-    idleHint: "Pick a scenario or write a prompt, then run inference to stream a response.",
-    latencyLabel: "First token",
-    tokensLabel: "Tokens",
-    streamingLabel: "Streaming",
-    doneLabel: "Complete",
-    models: [
-      { id: "flux", name: "Cortexa Flux", tag: "Fast", latencyMs: 22 },
-      { id: "core", name: "Cortexa Core", tag: "Balanced", latencyMs: 41 },
-      { id: "atlas", name: "Cortexa Atlas", tag: "Frontier", latencyMs: 63 },
-    ],
+    windowTitle: "playground.iara.com.br",
+    region: "gru · saopaulo-1",
+    modelChip: "iara-2-correnteza",
+    tabsLabel: "Playground scenarios",
+    userLabel: "You",
+    assistantLabel: "IARA",
+    runAgain: "Run again",
+    streamingLabel: "generating",
+    doneLabel: "done",
+    firstTokenLabel: "1st token",
+    tokensLabel: "tokens",
+    tokPerSecLabel: "tok/s",
     scenarios: [
       {
-        id: "support",
-        label: "Support reply",
-        prompt: "A customer says their invoice was charged twice this month. Draft a calm, empathetic reply.",
+        id: "atendimento",
+        tab: "Support",
+        prompt:
+          "Rank these 4 support tickets by urgency: (1) “my card was cloned, there's a purchase I never made”; (2) “how do I change my profile photo?”; (3) “the app hasn't opened since yesterday and my boleto is due today”; (4) “do you offer an annual plan?”",
         response:
-          "Hi Maria,\n\nThank you for flagging this, and I'm sorry for the worry a double charge causes. I've reviewed your account and confirmed a duplicate charge of $49.00 on July 18. I've already issued a full refund, which will land on your card within 3 to 5 business days.\n\nTo make sure it doesn't recur, I've merged the duplicate payment method on file. If anything looks off in the meantime, just reply here and I'll jump straight back in.\n\nWarm regards,\nThe Cortexa Care team",
+          "P0 · CRITICAL — Ticket 1 (cloned card)\nSuspected fraud with financial loss in progress. Block the card immediately, open a dispute and reply within 15 minutes. Speed here prevents a chargeback — and a Procon complaint.\n\nP1 · HIGH — Ticket 3 (app down + boleto due today)\nTechnical failure with a real deadline: an overdue boleto accrues a 2% fine plus daily interest. Send the boleto's digit line by e-mail or WhatsApp now and point the customer to internet banking.\n\nP2 · MEDIUM — Ticket 4 (annual plan)\nSales opportunity, not an incident. Route to the sales team with a reply within 4 business hours — interest cools off fast.\n\nP3 · LOW — Ticket 2 (profile photo)\nSelf-service question. Reply with the help-center walkthrough and mark it resolved.",
       },
       {
-        id: "code",
-        label: "Debounce helper",
-        prompt: "Write a small TypeScript debounce helper with a cancel method and proper typing.",
+        id: "juridico",
+        tab: "Legal",
+        prompt: "Summarize this rental agreement in 5 points. [contrato_residencial_v3.pdf]",
         response:
-          "function debounce<A extends unknown[]>(\n  fn: (...args: A) => void,\n  wait = 200,\n) {\n  let timer: ReturnType<typeof setTimeout> | null = null;\n\n  const debounced = (...args: A) => {\n    if (timer) clearTimeout(timer);\n    timer = setTimeout(() => fn(...args), wait);\n  };\n\n  debounced.cancel = () => {\n    if (timer) clearTimeout(timer);\n    timer = null;\n  };\n\n  return debounced;\n}\n\n// Trailing-edge by default; call .cancel() to drop a pending run.",
+          "1. Parties and property — Residential lease of apt. 72, Rua Harmonia 442, São Paulo/SP, between Imobiliária Andrade (landlord) and Camila Ferreira (tenant).\n\n2. Term and rent — 30 months, the Brazilian Tenancy Law standard. Rent of R$ 3,200 due on the 5th, adjusted yearly by the IGP-M index.\n\n3. Deposit — Security deposit of 3 months' rent (R$ 9,600) in a linked savings account, returned with interest at the end of the lease.\n\n4. Red flag — Clause 8 shifts extraordinary condo expenses (structural works) to the tenant. That conflicts with art. 22 of Law 8,245/91 and can be challenged.\n\n5. Termination — Penalty of 3 months' rent, prorated by the months remaining. After month 12, leaving with 30 days' notice halves the penalty.",
       },
       {
-        id: "research",
-        label: "Search tradeoffs",
-        prompt: "Summarize the tradeoffs between vector search and keyword search for a docs product.",
+        id: "ecommerce",
+        tab: "E-commerce",
+        prompt:
+          "Write the Mercado Livre listing for this sneaker: Vento K2 running shoe, gel cushioning, breathable mesh, sizes 38–44, black with teal accents.",
         response:
-          "Vector search wins on meaning. It matches intent even when the wording differs, which is ideal for support questions phrased a hundred ways. The cost is index maintenance, embedding drift, and results that can feel fuzzy on exact strings.\n\nKeyword search wins on precision. Error codes, API names and version numbers resolve exactly, cheaply, and predictably, but it misses paraphrase entirely.\n\nFor a docs product the pragmatic answer is hybrid: run both, then re-rank. Keyword guarantees the exact-match hits surface; vectors recover the long tail of natural-language questions. Cortexa ships this fusion by default.",
+          "Vento K2 Sneaker — Running & Training | Gel Cushioning\n\nFrom Monday's workout to Sunday's long run: the Vento K2 keeps your pace.\n\n• Gel cushioning that absorbs each stride and spares your knees\n• Breathable mesh — dry feet even in Brazilian heat\n• Grip sole for asphalt, treadmill and cobblestones\n• Sizes 38 to 44 · Black with teal accents\n\nSHIPS ALL OVER BRAZIL\nDispatched within 24 business hours via Mercado Envios Full.\n\nGUARANTEED PURCHASE\nFree returns within 30 days and a nota fiscal with every order.\n\nQuestions? Hit “Ask the seller” — we answer fast.",
+      },
+      {
+        id: "financeiro",
+        tab: "Banking",
+        prompt:
+          "A customer asked: “my boleto expired yesterday, can I still pay it with Pix?” — answer as the bank's support agent.",
+        response:
+          "You can! A boleto that expired 1 day ago is still payable — and through Pix it clears almost instantly:\n\n1. Open the app and tap Payments → Pay boleto;\n2. Scan the barcode or paste the digit line;\n3. The amount shows up already updated with the late charges (2% fine + pro-rata interest, per your agreement);\n4. Pick Pix as the payment method and confirm. It clears in minutes, even outside banking hours.\n\nHeads-up: boletos more than 59 days overdue may be blocked by the issuer. If so, just request an updated copy.\n\nAnything else I can help with?",
       },
     ],
   },
-  useCases: {
-    label: "Built for real work",
-    title: "One platform, wherever intelligence pays off.",
+  why: {
+    label: "Why",
+    title: "Why a Brazilian AI?",
     intro:
-      "Teams route support, engineering, research and content through a single Cortexa endpoint, then specialize with tools and retrieval.",
-    tabs: [
+      "Models trained in English read Portuguese like a tourist: they translate the words and miss the entire country. The difference lives in the details — and in Brazil, the detail is the business.",
+    inputLabel: "Input",
+    genericLabel: "Generic AI",
+    iaraLabel: "IARA",
+    items: [
       {
-        id: "support",
-        label: "Customer support",
-        title: "Resolve tickets before a human reads them.",
-        body: "Cortexa drafts grounded, on-brand replies from your help center and past conversations, then hands off cleanly the moment a case needs a person.",
-        bullets: [
-          "Retrieval grounded in your own knowledge base",
-          "Sentiment-aware escalation to live agents",
-          "Every reply cites the source it drew from",
-        ],
-        metricValue: "68%",
-        metricLabel: "Tickets auto-resolved",
-        image: IMAGES.support,
-        alt: "Abstract violet gradient representing conversational AI",
+        id: "giria",
+        kicker: "Slang and context",
+        input: "“segunda eu te pago, juro” (I'll pay you Monday, I swear)",
+        generic:
+          "Treats it as a generic appointment: “Ok! Event created for Monday.” The payment promise slips right through.",
+        iara:
+          "Recognizes an informal payment promise inside a collections flow: logs the commitment, schedules a follow-up for Monday 9am and replies firmly — without being rude.",
       },
       {
-        id: "code",
-        label: "Engineering",
-        title: "A reviewer that never sleeps.",
-        body: "Explain a stack trace, generate a migration, or scaffold tests in the editor. Cortexa reasons over the whole repository, not a single file.",
-        bullets: [
-          "Repository-wide context, not snippets",
-          "Inline patches you can apply or reject",
-          "Guardrails that block leaking secrets",
-        ],
-        metricValue: "3.4x",
-        metricLabel: "Faster pull requests",
-        image: IMAGES.code,
-        alt: "Cascading green code reminiscent of a matrix display",
+        id: "docs",
+        kicker: "Brazilian documents",
+        input: "“extract the data from this NF-e”",
+        generic:
+          "Mixes up CNPJ and CPF, ignores the access key and reads “1.234,56” as a broken American decimal.",
+        iara:
+          "Validates the 44-digit access key, splits ICMS from IPI, checks the issuer's CNPJ and knows R$ 1.234,56 is one thousand two hundred thirty-four reais and fifty-six cents.",
       },
       {
-        id: "research",
-        label: "Research",
-        title: "Read a thousand pages by lunch.",
-        body: "Point Cortexa at contracts, papers or filings and get grounded synthesis with citations, so analysts spend their hours on judgment, not skimming.",
-        bullets: [
-          "Cross-document synthesis with page-level citations",
-          "Structured extraction into your schema",
-          "Confidence scoring on every claim",
-        ],
-        metricValue: "12h",
-        metricLabel: "Saved per analyst weekly",
-        image: IMAGES.research,
-        alt: "Abstract flowing shapes suggesting machine reasoning",
-      },
-      {
-        id: "content",
-        label: "Content",
-        title: "A brand voice that scales.",
-        body: "Generate launch copy, localize a campaign into nine markets, and keep every word inside your tone guide with a single prompt template.",
-        bullets: [
-          "Tone guardrails enforced per generation",
-          "One-pass localization across markets",
-          "Draft, critique and revise in a single call",
-        ],
-        metricValue: "9",
-        metricLabel: "Markets from one brief",
-        image: IMAGES.content,
-        alt: "Luminous abstract render evoking generative creativity",
+        id: "datas",
+        kicker: "Dates and currency",
+        input: "“the meeting is 06/07, budget of R$ 10 mil”",
+        generic:
+          "Reads June 7th, converts to dollars and returns “$10,000.00” — two mistakes in one line.",
+        iara:
+          "06/07 is July 6th — dd/mm, always. And “R$ 10 mil” becomes R$ 10.000,00, formatted the way Brazil writes it.",
       },
     ],
   },
-  models: {
-    label: "Model tiers",
-    title: "Pick the intelligence the moment demands.",
-    intro:
-      "Route the easy calls to Flux, the workhorse traffic to Core, and the hard reasoning to Atlas. Same API, one line to switch.",
-    headers: {
-      model: "Model",
-      context: "Context",
-      throughput: "Throughput",
-      price: "Price / 1M tokens",
-      best: "Best for",
-    },
-    rows: [
+  cases: {
+    label: "Cases",
+    title: "Who already talks to IARA",
+    intro: "Four sectors, four Brazilian operations — from the shop floor to the courtroom.",
+    fictionNote: "Fictional companies and figures, created for this concept.",
+    items: [
       {
-        id: "flux",
-        name: "Cortexa Flux",
-        desc: "Instant classification and routing",
-        context: "32K",
-        throughput: "480 tok/s",
-        price: "$0.15",
-        best: "Tagging, routing, guardrails",
-        featured: false,
+        id: "varejo",
+        number: "01",
+        sector: "Retail",
+        company: "Lojas Maré · fashion, 84 stores",
+        summary: "Product copy and customer support unified into one operation.",
+        body:
+          "Maré wired IARA into its catalog: every new product gets copy for the site, Mercado Livre and Shopee in seconds, in the brand's voice. On support, IARA handles exchanges, tracking and coupons with no queue — and hands off to a human when it gets sensitive.",
+        metrics: [
+          { value: "+22%", label: "conversion on generated listings" },
+          { value: "-38%", label: "average support response time" },
+          { value: "R$ 1.4M", label: "saved per year" },
+        ],
       },
       {
-        id: "core",
-        name: "Cortexa Core",
-        desc: "The everyday reasoning engine",
-        context: "128K",
-        throughput: "210 tok/s",
-        price: "$2.50",
-        best: "Support, chat, retrieval",
-        featured: true,
+        id: "atendimento",
+        number: "02",
+        sector: "Support",
+        company: "ConectaCel · regional carrier",
+        summary: "Duplicate boletos, plans, coverage: solved before a human picks up.",
+        body:
+          "ConectaCel's call center took 40,000 calls a month — half were boleto copies and data-plan questions. IARA took over the official WhatsApp: it understands questions the way customers actually write them, solves on the spot and logs everything in the CRM.",
+        metrics: [
+          { value: "71%", label: "of tickets resolved with no human" },
+          { value: "4.6/5", label: "average post-service CSAT" },
+          { value: "40 s", label: "average time to resolution" },
+        ],
       },
       {
-        id: "atlas",
-        name: "Cortexa Atlas",
-        desc: "Frontier reasoning and analysis",
-        context: "200K",
-        throughput: "96 tok/s",
-        price: "$12.00",
-        best: "Research, code, planning",
-        featured: false,
+        id: "juridico",
+        number: "03",
+        sector: "Legal",
+        company: "Bastos & Nogueira Advogados",
+        summary: "Contract review in minutes, with Brazilian statutes on tap.",
+        body:
+          "The firm reviews 2,400 contracts a month. IARA Profunda reads every draft, flags clauses that conflict with Brazilian law, proposes alternative wording and builds the executive summary a partner reads in 2 minutes.",
+        metrics: [
+          { value: "3h → 12min", label: "average review per contract" },
+          { value: "96%", label: "accuracy on clause review" },
+          { value: "2,400", label: "contracts processed monthly" },
+        ],
+      },
+      {
+        id: "saude",
+        number: "04",
+        sector: "Healthcare",
+        company: "Rede Vida Clínicas · 31 units",
+        summary: "WhatsApp scheduling and reminders patients actually answer.",
+        body:
+          "Patients book, reschedule and confirm visits by chatting with IARA on WhatsApp — natural language, not a numbered menu. Clinical data stays in the saopaulo-1 region with a full audit trail for LGPD, Brazil's data-protection law.",
+        metrics: [
+          { value: "-52%", label: "no-shows with conversational reminders" },
+          { value: "83%", label: "of bookings without a phone call" },
+          { value: "100%", label: "of data hosted in Brazil" },
+        ],
       },
     ],
-    note: "All tiers share the same endpoint, streaming protocol and safety layer. Switch models by changing one parameter.",
-    popular: "Most used",
+  },
+  api: {
+    label: "API",
+    title: "One call. Fluent Portuguese.",
+    intro: "Plain REST, native streaming and idiomatic SDKs. From curl to production the same day.",
+    requestLabel: "request",
+    responseLabel: "stream · SSE",
+    bullets: [
+      {
+        title: "TypeScript and Python SDKs",
+        body: "Typed, with retries and streaming built in. npm install @iara/sdk and go.",
+      },
+      {
+        title: "SSE streaming, token by token",
+        body: "First bytes in milliseconds — the chat UX your users expect.",
+      },
+      {
+        title: "99.9% uptime, 38 ms from São Paulo",
+        body: "Inference in a São Paulo datacenter: 38 ms median latency for anyone in Brazil.",
+      },
+    ],
+    sseLines: [
+      'data: {"delta":"Invoice 4,520 from"}',
+      'data: {"delta":" Andrade Ltda, R$ 12,480.00,"}',
+      'data: {"delta":" ICMS tax of R$ 1,497.60…"}',
+      "data: [DONE]",
+    ],
   },
   security: {
-    label: "Trust by design",
-    title: "Enterprise-grade from the first request.",
-    intro:
-      "Your prompts and completions are yours. Cortexa is engineered so security is the default, not a paid add-on.",
-    items: [
-      { icon: "lock", title: "Encrypted end to end", body: "TLS 1.3 in transit and AES-256 at rest across every region and replica." },
-      { icon: "eye", title: "Zero data retention", body: "Opt into a no-log mode where prompts are discarded the instant a response completes." },
-      { icon: "shield", title: "Never trained on your data", body: "Your inputs and outputs are never used to train foundation models. Contractually." },
-      { icon: "key", title: "Granular access keys", body: "Scoped, rotatable keys with per-key rate limits and full audit trails." },
-      { icon: "server", title: "Regional isolation", body: "Pin inference to US, EU or APAC so data never leaves the boundary you choose." },
-      { icon: "fingerprint", title: "SSO and SCIM", body: "SAML single sign-on and automated provisioning for teams of every size." },
+    label: "Security",
+    title: "Your data, in Brazilian waters.",
+    intro: "Depth is protection. Every layer of IARA was designed for LGPD — not retrofitted to it.",
+    surfaceLabel: "surface",
+    layers: [
+      {
+        depth: "0 m",
+        title: "Data hosted in Brazil",
+        body: "Inference and storage in the saopaulo-1 region. Nothing crosses the border — not even backups.",
+      },
+      {
+        depth: "−200 m",
+        title: "LGPD by default",
+        body: "Dedicated DPO, impact reports per project, documented legal basis and a DPA signed at onboarding.",
+      },
+      {
+        depth: "−1,000 m",
+        title: "Your data never trains IARA",
+        body: "Training opt-out is the default, not the exception. Zero-retention mode available for sensitive data.",
+      },
+      {
+        depth: "−4,000 m",
+        title: "Certified end to end",
+        body: "ISO 27001 and SOC 2 Type II. AES-256 at rest, TLS 1.3 in transit, HSM-managed keys.",
+      },
     ],
-    certs: ["SOC 2 Type II", "ISO 27001", "GDPR", "HIPAA ready"],
   },
   pricing: {
     label: "Pricing",
-    title: "Pay for tokens, not seats.",
-    intro:
-      "Usage-based to the token, with volume discounts that kick in automatically. Estimate your bill below.",
-    calc: {
-      title: "Estimate your monthly spend",
-      sliderLabel: "Requests per month",
-      requestsUnit: "requests",
-      tierLabel: "Model tier",
-      tokensLabel: "Estimated tokens",
-      estLabel: "Estimated monthly cost",
-      perMonth: "/ month",
-      avgTokensNote: "Assumes an average of 1,800 tokens per request across prompt and completion.",
-      currency: "USD",
-      numberLocale: "en-US",
-      avgTokensPerRequest: 1800,
-      sliderMin: 10000,
-      sliderMax: 5000000,
-      sliderStep: 10000,
-      tiers: [
-        { id: "flux", name: "Flux", ratePerMillion: 0.15 },
-        { id: "core", name: "Core", ratePerMillion: 2.5 },
-        { id: "atlas", name: "Atlas", ratePerMillion: 12 },
-      ],
-    },
-    plans: [
+    title: "Priced in reais, per million tokens.",
+    intro: "No dollars, no IOF tax, no exchange-rate surprises. Three currents, one contract in BRL.",
+    flagshipTag: "flagship",
+    perMillion: "per 1M tokens",
+    attrInput: "Input (1M tokens)",
+    attrOutput: "Output (1M tokens)",
+    attrContext: "Context window",
+    attrLatency: "Latency · 1st token",
+    attrBestFor: "Built for",
+    attrReasoning: "Extended reasoning",
+    yes: "Included",
+    no: "—",
+    models: [
       {
-        id: "starter",
-        name: "Starter",
-        price: "$0",
-        period: "to begin",
-        desc: "Everything a prototype needs to reach its first users.",
-        features: ["1M free tokens monthly", "Flux and Core models", "Community support", "Shared rate limits"],
-        cta: "Start free",
-        featured: false,
+        id: "nascente",
+        name: "Iara Nascente",
+        tag: "fast",
+        bestFor: "Real-time support, classification and triage at very high volume",
+        context: "128k tokens",
+        latency: "~180 ms",
+        reasoning: false,
       },
       {
-        id: "scale",
-        name: "Scale",
-        price: "$499",
-        period: "/ month + usage",
-        desc: "For products in production with real traffic and real SLAs.",
-        features: ["All three model tiers", "99.9% uptime SLA", "Zero-retention mode", "Priority routing", "Email and chat support"],
-        cta: "Choose Scale",
-        featured: true,
+        id: "correnteza",
+        name: "Iara Correnteza",
+        tag: "balanced",
+        bestFor: "The model for 90% of cases: support, content, data extraction",
+        context: "256k tokens",
+        latency: "~420 ms",
+        reasoning: false,
       },
       {
-        id: "enterprise",
-        name: "Enterprise",
-        price: "Custom",
-        period: "annual",
-        desc: "Regional isolation, dedicated capacity and a named engineer.",
-        features: ["Dedicated inference capacity", "Regional data residency", "SSO, SCIM and audit logs", "Solutions engineer", "Custom fine-tuning"],
-        cta: "Talk to sales",
-        featured: false,
+        id: "profunda",
+        name: "Iara Profunda",
+        tag: "reasoning",
+        bestFor: "Legal analysis, long documents and decisions that need a chain of thought",
+        context: "256k tokens",
+        latency: "~1.8 s",
+        reasoning: true,
       },
     ],
+    calc: {
+      title: "What does your volume cost?",
+      sub: "Drag and see. Estimate assumes 70% input tokens, 30% output.",
+      volumeLabel: "Monthly volume",
+      volumeUnit: "M tokens/month",
+      modelLabel: "Model",
+      totalLabel: "Estimated cost",
+      perMonth: "/month",
+      note: "Prices in Brazilian reais. Volumes above 500M/month get contract discounts.",
+    },
   },
   cta: {
-    label: "Ship intelligence",
-    title: "Your first inference is ninety seconds away.",
-    body: "Create a key, paste four lines, and stream your first grounded completion before your coffee cools.",
-    ctaPrimary: "Create an API key",
-    ctaSecondary: "Book a walkthrough",
-    note: "No credit card. 1M tokens on the house.",
+    title: "Talk to IARA in Portuguese.",
+    sub: "Create an account, get R$ 20 in credits and make your first call in five minutes.",
+    primary: "Start for free",
+    secondary: "Talk to sales",
+    bullets: ["R$ 20 in starting credits", "No credit card required", "Support in Portuguese, naturally"],
   },
   footer: {
-    tagline: "The reasoning layer for products that think.",
-    columns: [
-      { title: "Product", links: ["Playground", "Models", "Pricing", "Changelog", "Status"] },
-      { title: "Developers", links: ["Documentation", "API reference", "SDKs", "Cookbook", "Rate limits"] },
-      { title: "Company", links: ["About", "Careers", "Research", "Security", "Contact"] },
+    tagline: "The lady of the waters, now fluent in production.",
+    nav: [
+      { href: "#playground", label: "Playground" },
+      { href: "#api", label: "API" },
+      { href: "#seguranca", label: "Security" },
+      { href: "#precos", label: "Pricing" },
     ],
-    socials: [
-      { label: "Email", icon: "at" },
-      { label: "Community", icon: "message" },
-      { label: "Share", icon: "share" },
-      { label: "Website", icon: "globe" },
-    ],
-    legal: "Cortexa Labs, Inc. A fictional concept crafted by VigApp.",
-    status: "All systems operational",
+    disclaimer: "IARA is a fictional concept created by VigApp.",
   },
 };
 
 /* ------------------------------------------------------------------ */
-/* Portuguese                                                          */
+/* es — full translation, Brazilian universe kept intact                */
 /* ------------------------------------------------------------------ */
 
-const pt: CortexaContent = {
-  nav: {
-    links: [
+const es: IaraContent = {
+  localeTag: "es-ES",
+  header: {
+    nav: [
       { href: "#playground", label: "Playground" },
-      { href: "#usecases", label: "Casos de uso" },
-      { href: "#models", label: "Modelos" },
-      { href: "#security", label: "Seguranca" },
-      { href: "#pricing", label: "Precos" },
+      { href: "#por-que", label: "Por qué" },
+      { href: "#casos", label: "Casos" },
+      { href: "#api", label: "API" },
+      { href: "#seguranca", label: "Seguridad" },
+      { href: "#precos", label: "Precios" },
     ],
-    login: "Entrar",
-    cta: "Comecar a construir",
-    openMenu: "Abrir menu",
-    closeMenu: "Fechar menu",
+    cta: "Crear cuenta",
   },
   hero: {
-    badge: "Cortexa Neural API v4",
-    titlePre: "A camada de raciocinio",
-    titleAccent: "que seu produto",
-    titlePost: "esperava para nascer.",
-    promise:
-      "Um endpoint. Tres modelos de fronteira. Inferencia em menos de um segundo que le, raciocina e escreve, para seu time entregar inteligencia em vez de manter infraestrutura.",
-    ctaPrimary: "Abrir o playground",
-    ctaSecondary: "Ler a documentacao",
-    terminalLines: [
-      "$ cortexa infer --model atlas",
-      "> analisando 12.480 tokens de contexto",
-      "> transmitindo resposta · 41ms ate o primeiro token",
-      "> confianca 0,97 · fundamentado · completo",
-    ],
-    stats: [
-      { value: "41ms", label: "Mediana ate o 1o token" },
-      { value: "99,98%", label: "Disponibilidade mensal" },
-      { value: "200K", label: "Janela de contexto" },
-    ],
+    eyebrow: "IARA · inteligencia artificial nacida en Brasil",
+    titleA: "La IA que entiende",
+    titleB: "a Brasil.",
+    manifesto: "Entrenada en portugués de verdad — no traducido.",
+    sub: "Boletos vencidos, facturas NF-e, cláusulas de la ley de alquileres, un cliente que promete pagar el lunes. IARA lo entiende porque nació allí: datos de Brasil, servidores en Brasil, portugués de Brasil.",
+    proofNote: "Sin registro y sin tarjeta — el playground de abajo es la prueba.",
   },
   playground: {
-    label: "Playground ao vivo",
-    title: "Digite um prompt. Veja a maquina pensar.",
-    intro:
-      "Esta e a interface de streaming real, ligada a tres cenarios prontos para voce sentir a latencia sem precisar de chave.",
-    modelLabel: "Modelo",
-    presetLabel: "Escolha um cenario",
-    promptLabel: "Seu prompt",
-    placeholder: "Pergunte qualquer coisa a Cortexa ou escolha um cenario acima",
-    run: "Executar inferencia",
-    running: "Gerando",
-    reset: "Limpar",
-    outputLabel: "Resposta",
-    idleHint: "Escolha um cenario ou escreva um prompt e execute a inferencia para transmitir a resposta.",
-    latencyLabel: "Primeiro token",
-    tokensLabel: "Tokens",
-    streamingLabel: "Transmitindo",
-    doneLabel: "Completo",
-    models: [
-      { id: "flux", name: "Cortexa Flux", tag: "Rapido", latencyMs: 22 },
-      { id: "core", name: "Cortexa Core", tag: "Equilibrado", latencyMs: 41 },
-      { id: "atlas", name: "Cortexa Atlas", tag: "Fronteira", latencyMs: 63 },
-    ],
+    windowTitle: "playground.iara.com.br",
+    region: "gru · saopaulo-1",
+    modelChip: "iara-2-correnteza",
+    tabsLabel: "Escenarios del playground",
+    userLabel: "Tú",
+    assistantLabel: "IARA",
+    runAgain: "Ejecutar de nuevo",
+    streamingLabel: "generando",
+    doneLabel: "listo",
+    firstTokenLabel: "1er token",
+    tokensLabel: "tokens",
+    tokPerSecLabel: "tok/s",
     scenarios: [
       {
-        id: "support",
-        label: "Resposta de suporte",
-        prompt: "Um cliente diz que a fatura foi cobrada duas vezes neste mes. Escreva uma resposta calma e empatica.",
+        id: "atendimento",
+        tab: "Atención",
+        prompt:
+          "Clasifica estos 4 tickets de soporte por urgencia: (1) “clonaron mi tarjeta, hay una compra que no hice”; (2) “¿cómo cambio la foto de perfil?”; (3) “la app no abre desde ayer y tengo un boleto que vence hoy”; (4) “¿tienen plan anual?”",
         response:
-          "Ola, Maria,\n\nObrigado por avisar, e sinto muito pela preocupacao que uma cobranca duplicada causa. Revisei sua conta e confirmei uma cobranca duplicada de R$ 49,00 em 18 de julho. Ja emiti o estorno integral, que aparecera no seu cartao em 3 a 5 dias uteis.\n\nPara garantir que nao se repita, unifiquei o metodo de pagamento duplicado no cadastro. Se algo parecer estranho nesse meio tempo, e so responder aqui que eu retomo na hora.\n\nUm abraco,\nEquipe Cortexa Care",
+          "P0 · CRÍTICO — Ticket 1 (tarjeta clonada)\nSospecha de fraude con pérdida financiera en curso. Bloquear la tarjeta de inmediato, abrir la disputa y responder en menos de 15 minutos. La rapidez evita el contracargo — y la queja ante Procon.\n\nP1 · ALTO — Ticket 3 (app caída + boleto vence hoy)\nFalla técnica con plazo real: un boleto vencido genera multa del 2% más intereses diarios. Enviar la línea digitable por correo o WhatsApp ahora y guiar el pago por la banca en línea.\n\nP2 · MEDIO — Ticket 4 (plan anual)\nOportunidad comercial, no incidente. Derivar a ventas con respuesta en menos de 4 horas hábiles — el interés se enfría rápido.\n\nP3 · BAJO — Ticket 2 (foto de perfil)\nDuda de autoservicio. Responder con la guía del centro de ayuda y marcar como resuelto.",
       },
       {
-        id: "code",
-        label: "Funcao debounce",
-        prompt: "Escreva uma pequena funcao debounce em TypeScript com metodo de cancelamento e tipagem correta.",
+        id: "juridico",
+        tab: "Legal",
+        prompt: "Resume este contrato de alquiler en 5 puntos. [contrato_residencial_v3.pdf]",
         response:
-          "function debounce<A extends unknown[]>(\n  fn: (...args: A) => void,\n  wait = 200,\n) {\n  let timer: ReturnType<typeof setTimeout> | null = null;\n\n  const debounced = (...args: A) => {\n    if (timer) clearTimeout(timer);\n    timer = setTimeout(() => fn(...args), wait);\n  };\n\n  debounced.cancel = () => {\n    if (timer) clearTimeout(timer);\n    timer = null;\n  };\n\n  return debounced;\n}\n\n// Borda de saida por padrao; chame .cancel() para descartar uma execucao pendente.",
+          "1. Partes e inmueble — Alquiler residencial del apto. 72 de Rua Harmonia 442, São Paulo/SP, entre Imobiliária Andrade (arrendadora) y Camila Ferreira (arrendataria).\n\n2. Plazo y renta — 30 meses, el estándar de la ley brasileña de alquileres. Renta de R$ 3.200 con vencimiento el día 5 y ajuste anual por el índice IGP-M.\n\n3. Garantía — Depósito de 3 meses (R$ 9.600) en cuenta de ahorro vinculada, devuelto con intereses al final del contrato.\n\n4. Punto de atención — La cláusula 8ª traslada al inquilino gastos extraordinarios del condominio (obras estructurales). Eso contradice el art. 22 de la Ley 8.245/91 y puede impugnarse.\n\n5. Rescisión — Multa de 3 rentas, proporcional a los meses restantes. Después del mes 12, salir con preaviso de 30 días reduce la multa a la mitad.",
       },
       {
-        id: "research",
-        label: "Busca vetorial",
-        prompt: "Resuma os tradeoffs entre busca vetorial e busca por palavra-chave para um produto de documentacao.",
+        id: "ecommerce",
+        tab: "E-commerce",
+        prompt:
+          "Escribe la descripción de estas zapatillas para Mercado Livre: Vento K2 running, amortiguación en gel, malla transpirable, tallas 38 a 44, negro con verde agua.",
         response:
-          "A busca vetorial ganha em significado. Ela encontra a intencao mesmo quando as palavras mudam, ideal para duvidas de suporte feitas de cem maneiras. O custo e a manutencao do indice, o desvio dos embeddings e resultados que parecem imprecisos em termos exatos.\n\nA busca por palavra-chave ganha em precisao. Codigos de erro, nomes de API e numeros de versao aparecem de forma exata e barata, mas ela ignora completamente a parafrase.\n\nPara um produto de documentacao a resposta pragmatica e o hibrido: rode os dois e reordene. A palavra-chave garante os acertos exatos; os vetores recuperam a cauda longa das perguntas em linguagem natural. A Cortexa entrega essa fusao por padrao.",
+          "Zapatillas Vento K2 — Running y Entrenamiento | Amortiguación en Gel\n\nDel entrenamiento del lunes a la tirada larga del domingo: las Vento K2 siguen tu ritmo.\n\n• Amortiguación en gel que absorbe cada pisada y cuida tus rodillas\n• Malla transpirable — pies secos incluso con el calor brasileño\n• Suela antideslizante para asfalto, cinta y adoquines\n• Tallas 38 a 44 · Negro con detalles verde agua\n\nENVÍO A TODO BRASIL\nDespachamos en menos de 24 h hábiles vía Mercado Envios Full.\n\nCOMPRA GARANTIZADA\nDevolución gratis hasta 30 días y nota fiscal en todas las compras.\n\n¿Dudas? Escríbenos en “Preguntar al vendedor” — respondemos rapidito.",
+      },
+      {
+        id: "financeiro",
+        tab: "Financiero",
+        prompt:
+          "Un cliente preguntó: “mi boleto venció ayer, ¿puedo pagarlo con Pix?” — responde como agente del banco.",
+        response:
+          "¡Claro que sí! Un boleto vencido hace 1 día sigue siendo pagable — y con Pix se acredita casi al instante:\n\n1. Abre la app y toca Pagos → Pagar boleto;\n2. Escanea el código de barras o pega la línea digitable;\n3. El monto ya aparece actualizado con el recargo por atraso (multa del 2% + intereses pro rata, según tu contrato);\n4. Elige Pix como medio de pago y confirma. Se acredita en minutos, incluso fuera del horario bancario.\n\nImportante: los boletos con más de 59 días de atraso pueden estar bloqueados por el emisor. En ese caso, solo pide una copia actualizada.\n\n¿Puedo ayudarte con algo más?",
       },
     ],
   },
-  useCases: {
-    label: "Feita para trabalho real",
-    title: "Uma plataforma, onde a inteligencia der retorno.",
+  why: {
+    label: "Por qué",
+    title: "¿Por qué una IA brasileña?",
     intro:
-      "Times roteiam suporte, engenharia, pesquisa e conteudo por um unico endpoint Cortexa e especializam com ferramentas e recuperacao.",
-    tabs: [
+      "Los modelos entrenados en inglés leen portugués como turistas: traducen las palabras y pierden el país entero. La diferencia vive en los detalles — y en Brasil, el detalle es el negocio.",
+    inputLabel: "Entrada",
+    genericLabel: "IA genérica",
+    iaraLabel: "IARA",
+    items: [
       {
-        id: "support",
-        label: "Suporte ao cliente",
-        title: "Resolva chamados antes de um humano ler.",
-        body: "A Cortexa redige respostas fundamentadas e no tom da marca a partir da sua central de ajuda e conversas passadas, e faz a passagem limpa no instante em que o caso precisa de uma pessoa.",
-        bullets: [
-          "Recuperacao fundamentada na sua base de conhecimento",
-          "Escalonamento por sentimento para agentes humanos",
-          "Cada resposta cita a fonte que utilizou",
-        ],
-        metricValue: "68%",
-        metricLabel: "Chamados resolvidos sozinhos",
-        image: IMAGES.support,
-        alt: "Gradiente violeta abstrato representando IA conversacional",
+        id: "giria",
+        kicker: "Jerga y contexto",
+        input: "“segunda eu te pago, juro” (el lunes te pago, lo juro)",
+        generic:
+          "Lo trata como una cita cualquiera: “¡Ok! Evento creado para el lunes.” La promesa de pago pasa de largo.",
+        iara:
+          "Reconoce una promesa informal de pago dentro de un flujo de cobranza: registra el compromiso, agenda seguimiento para el lunes a las 9h y responde con firmeza — sin ser grosera.",
       },
       {
-        id: "code",
-        label: "Engenharia",
-        title: "Um revisor que nunca dorme.",
-        body: "Explique um stack trace, gere uma migracao ou monte testes no editor. A Cortexa raciocina sobre o repositorio inteiro, nao um unico arquivo.",
-        bullets: [
-          "Contexto do repositorio inteiro, nao trechos",
-          "Correcoes em linha que voce aceita ou rejeita",
-          "Barreiras que bloqueiam vazamento de segredos",
-        ],
-        metricValue: "3,4x",
-        metricLabel: "Pull requests mais rapidos",
-        image: IMAGES.code,
-        alt: "Codigo verde em cascata lembrando um display matrix",
+        id: "docs",
+        kicker: "Documentos brasileños",
+        input: "“extrae los datos de esta NF-e”",
+        generic:
+          "Confunde CNPJ con CPF, ignora la clave de acceso y lee “1.234,56” como un decimal americano roto.",
+        iara:
+          "Valida la clave de 44 dígitos, separa ICMS de IPI, verifica el CNPJ del emisor y sabe que R$ 1.234,56 son mil doscientos treinta y cuatro reales con cincuenta y seis centavos.",
       },
       {
-        id: "research",
-        label: "Pesquisa",
-        title: "Leia mil paginas ate o almoco.",
-        body: "Aponte a Cortexa para contratos, artigos ou balancos e receba sintese fundamentada com citacoes, para analistas gastarem horas com julgamento, nao leitura.",
-        bullets: [
-          "Sintese entre documentos com citacoes por pagina",
-          "Extracao estruturada no seu esquema",
-          "Pontuacao de confianca em cada afirmacao",
-        ],
-        metricValue: "12h",
-        metricLabel: "Economizadas por analista/semana",
-        image: IMAGES.research,
-        alt: "Formas fluidas abstratas sugerindo raciocinio de maquina",
-      },
-      {
-        id: "content",
-        label: "Conteudo",
-        title: "Uma voz de marca que escala.",
-        body: "Gere textos de lancamento, localize uma campanha em nove mercados e mantenha cada palavra dentro do seu guia de tom com um unico template de prompt.",
-        bullets: [
-          "Barreiras de tom aplicadas a cada geracao",
-          "Localizacao em uma passada entre mercados",
-          "Rascunho, critica e revisao numa so chamada",
-        ],
-        metricValue: "9",
-        metricLabel: "Mercados a partir de um briefing",
-        image: IMAGES.content,
-        alt: "Render abstrato luminoso evocando criatividade generativa",
+        id: "datas",
+        kicker: "Fechas y moneda",
+        input: "“la reunión es el 06/07, presupuesto de R$ 10 mil”",
+        generic:
+          "Lee June 7th, convierte a dólares y devuelve “$10,000.00” — dos errores en una línea.",
+        iara:
+          "06/07 es 6 de julio — dd/mm, siempre. Y “R$ 10 mil” se convierte en R$ 10.000,00, formateado como se escribe en Brasil.",
       },
     ],
   },
-  models: {
-    label: "Camadas de modelo",
-    title: "Escolha a inteligencia que o momento pede.",
-    intro:
-      "Mande as chamadas faceis para o Flux, o trafego de rotina para o Core e o raciocinio dificil para o Atlas. Mesma API, uma linha para trocar.",
-    headers: {
-      model: "Modelo",
-      context: "Contexto",
-      throughput: "Vazao",
-      price: "Preco / 1M tokens",
-      best: "Melhor para",
-    },
-    rows: [
+  cases: {
+    label: "Casos",
+    title: "Quiénes ya hablan con IARA",
+    intro: "Cuatro sectores, cuatro operaciones brasileñas — del piso de tienda al contencioso.",
+    fictionNote: "Empresas y cifras ficticias, creadas para este concepto.",
+    items: [
       {
-        id: "flux",
-        name: "Cortexa Flux",
-        desc: "Classificacao e roteamento instantaneos",
-        context: "32K",
-        throughput: "480 tok/s",
-        price: "R$ 0,80",
-        best: "Marcacao, roteamento, barreiras",
-        featured: false,
+        id: "varejo",
+        number: "01",
+        sector: "Retail",
+        company: "Lojas Maré · moda, 84 tiendas",
+        summary: "Descripciones de producto y atención unificadas en una sola operación.",
+        body:
+          "Maré conectó IARA a su catálogo: cada producto nuevo recibe descripción para el sitio, Mercado Livre y Shopee en segundos, con la voz de la marca. En soporte, IARA resuelve cambios, rastreo y cupones sin fila — y escala a un humano cuando el tema es delicado.",
+        metrics: [
+          { value: "+22%", label: "conversión en las descripciones generadas" },
+          { value: "-38%", label: "tiempo medio de respuesta en soporte" },
+          { value: "R$ 1,4 M", label: "ahorrados por año" },
+        ],
       },
       {
-        id: "core",
-        name: "Cortexa Core",
-        desc: "O motor de raciocinio do dia a dia",
-        context: "128K",
-        throughput: "210 tok/s",
-        price: "R$ 13,00",
-        best: "Suporte, chat, recuperacao",
-        featured: true,
+        id: "atendimento",
+        number: "02",
+        sector: "Atención",
+        company: "ConectaCel · operadora regional",
+        summary: "Copias de boleto, planes, cobertura: resuelto antes de llegar a un humano.",
+        body:
+          "El call center de ConectaCel recibía 40.000 llamadas al mes — la mitad eran copias de boleto y dudas de datos. IARA asumió el WhatsApp oficial: entiende la pregunta tal como la escribe el cliente, la resuelve al momento y registra todo en el CRM.",
+        metrics: [
+          { value: "71%", label: "de tickets resueltos sin humano" },
+          { value: "4,6/5", label: "CSAT medio posatención" },
+          { value: "40 s", label: "tiempo medio de resolución" },
+        ],
       },
       {
-        id: "atlas",
-        name: "Cortexa Atlas",
-        desc: "Raciocinio e analise de fronteira",
-        context: "200K",
-        throughput: "96 tok/s",
-        price: "R$ 62,00",
-        best: "Pesquisa, codigo, planejamento",
-        featured: false,
+        id: "juridico",
+        number: "03",
+        sector: "Legal",
+        company: "Bastos & Nogueira Advogados",
+        summary: "Revisión de contratos en minutos, con la legislación brasileña en memoria.",
+        body:
+          "El despacho revisa 2.400 contratos al mes. IARA Profunda lee cada borrador, señala cláusulas en conflicto con la ley brasileña, sugiere redacción alternativa y arma el resumen ejecutivo que el socio lee en 2 minutos.",
+        metrics: [
+          { value: "3h → 12min", label: "análisis medio por contrato" },
+          { value: "96%", label: "precisión en la revisión de cláusulas" },
+          { value: "2.400", label: "contratos procesados al mes" },
+        ],
+      },
+      {
+        id: "saude",
+        number: "04",
+        sector: "Salud",
+        company: "Rede Vida Clínicas · 31 unidades",
+        summary: "Agendamiento por WhatsApp y recordatorios que el paciente sí responde.",
+        body:
+          "El paciente agenda, reagenda y confirma su cita conversando con IARA por WhatsApp — en lenguaje natural, no con menús numéricos. Los datos clínicos permanecen en la región saopaulo-1, con trazabilidad completa para la LGPD, la ley brasileña de protección de datos.",
+        metrics: [
+          { value: "-52%", label: "de ausencias con recordatorio conversacional" },
+          { value: "83%", label: "de las citas sin llamada telefónica" },
+          { value: "100%", label: "de los datos alojados en Brasil" },
+        ],
       },
     ],
-    note: "Todas as camadas compartilham o mesmo endpoint, protocolo de streaming e camada de seguranca. Troque de modelo mudando um parametro.",
-    popular: "Mais usado",
+  },
+  api: {
+    label: "API",
+    title: "Una llamada. Portugués fluido.",
+    intro: "REST simple, streaming nativo y SDKs idiomáticos. De curl a producción el mismo día.",
+    requestLabel: "petición",
+    responseLabel: "stream · SSE",
+    bullets: [
+      {
+        title: "SDKs de TypeScript y Python",
+        body: "Tipados, con reintentos y streaming incluidos. npm install @iara/sdk y listo.",
+      },
+      {
+        title: "Streaming SSE token a token",
+        body: "Primeros bytes en milisegundos — la UX de chat que tus usuarios esperan.",
+      },
+      {
+        title: "99,9% de uptime, 38 ms desde São Paulo",
+        body: "Inferencia en un datacenter paulista: latencia mediana de 38 ms para quien está en Brasil.",
+      },
+    ],
+    sseLines: [
+      'data: {"delta":"Factura 4.520 de"}',
+      'data: {"delta":" Andrade Ltda, R$ 12.480,00,"}',
+      'data: {"delta":" ICMS destacado de R$ 1.497,60…"}',
+      "data: [DONE]",
+    ],
   },
   security: {
-    label: "Confianca por design",
-    title: "Padrao corporativo desde a primeira chamada.",
+    label: "Seguridad",
+    title: "Tus datos, en aguas brasileñas.",
     intro:
-      "Seus prompts e respostas sao seus. A Cortexa foi projetada para que seguranca seja o padrao, nao um extra pago.",
-    items: [
-      { icon: "lock", title: "Criptografia ponta a ponta", body: "TLS 1.3 em transito e AES-256 em repouso em cada regiao e replica." },
-      { icon: "eye", title: "Retencao zero de dados", body: "Ative um modo sem log em que os prompts sao descartados assim que a resposta termina." },
-      { icon: "shield", title: "Nunca treinamos com seus dados", body: "Suas entradas e saidas nunca treinam modelos base. Por contrato." },
-      { icon: "key", title: "Chaves de acesso granulares", body: "Chaves com escopo e rotacao, limite por chave e trilha de auditoria completa." },
-      { icon: "server", title: "Isolamento regional", body: "Fixe a inferencia em US, UE ou APAC para os dados nunca saírem do limite escolhido." },
-      { icon: "fingerprint", title: "SSO e SCIM", body: "Login unico SAML e provisionamento automatico para times de qualquer tamanho." },
-    ],
-    certs: ["SOC 2 Tipo II", "ISO 27001", "LGPD", "Pronto para HIPAA"],
-  },
-  pricing: {
-    label: "Precos",
-    title: "Pague por tokens, nao por assentos.",
-    intro:
-      "Baseado em uso ate o token, com descontos por volume que entram automaticamente. Estime sua conta abaixo.",
-    calc: {
-      title: "Estime seu gasto mensal",
-      sliderLabel: "Requisicoes por mes",
-      requestsUnit: "requisicoes",
-      tierLabel: "Camada de modelo",
-      tokensLabel: "Tokens estimados",
-      estLabel: "Custo mensal estimado",
-      perMonth: "/ mes",
-      avgTokensNote: "Assume uma media de 1.800 tokens por requisicao entre prompt e resposta.",
-      currency: "BRL",
-      numberLocale: "pt-BR",
-      avgTokensPerRequest: 1800,
-      sliderMin: 10000,
-      sliderMax: 5000000,
-      sliderStep: 10000,
-      tiers: [
-        { id: "flux", name: "Flux", ratePerMillion: 0.8 },
-        { id: "core", name: "Core", ratePerMillion: 13 },
-        { id: "atlas", name: "Atlas", ratePerMillion: 62 },
-      ],
-    },
-    plans: [
+      "La profundidad es protección. Cada capa de IARA fue diseñada para la LGPD — no adaptada después.",
+    surfaceLabel: "superficie",
+    layers: [
       {
-        id: "starter",
-        name: "Starter",
-        price: "R$ 0",
-        period: "para comecar",
-        desc: "Tudo que um prototipo precisa para chegar aos primeiros usuarios.",
-        features: ["1M de tokens gratis por mes", "Modelos Flux e Core", "Suporte da comunidade", "Limites compartilhados"],
-        cta: "Comecar gratis",
-        featured: false,
+        depth: "0 m",
+        title: "Datos alojados en Brasil",
+        body: "Inferencia y almacenamiento en la región saopaulo-1. Nada cruza la frontera — ni siquiera los backups.",
       },
       {
-        id: "scale",
-        name: "Scale",
-        price: "R$ 2.490",
-        period: "/ mes + uso",
-        desc: "Para produtos em producao com trafego real e SLAs reais.",
-        features: ["Todas as tres camadas", "SLA de 99,9% de disponibilidade", "Modo de retencao zero", "Roteamento prioritario", "Suporte por email e chat"],
-        cta: "Escolher Scale",
-        featured: true,
+        depth: "−200 m",
+        title: "LGPD por defecto",
+        body: "DPO dedicado, informes de impacto por proyecto, base legal documentada y DPA firmado en el onboarding.",
       },
       {
-        id: "enterprise",
-        name: "Enterprise",
-        price: "Sob medida",
-        period: "anual",
-        desc: "Isolamento regional, capacidade dedicada e um engenheiro nomeado.",
-        features: ["Capacidade de inferencia dedicada", "Residencia regional de dados", "SSO, SCIM e logs de auditoria", "Engenheiro de solucoes", "Fine-tuning personalizado"],
-        cta: "Falar com vendas",
-        featured: false,
+        depth: "−1.000 m",
+        title: "Tus datos no entrenan a IARA",
+        body: "El opt-out de entrenamiento es el estándar, no la excepción. Retención cero disponible para datos sensibles.",
+      },
+      {
+        depth: "−4.000 m",
+        title: "Certificada de punta a punta",
+        body: "ISO 27001 y SOC 2 Tipo II. AES-256 en reposo, TLS 1.3 en tránsito, claves gestionadas por HSM.",
       },
     ],
-  },
-  cta: {
-    label: "Entregue inteligencia",
-    title: "Sua primeira inferencia esta a noventa segundos.",
-    body: "Crie uma chave, cole quatro linhas e transmita sua primeira resposta fundamentada antes do cafe esfriar.",
-    ctaPrimary: "Criar chave de API",
-    ctaSecondary: "Agendar uma demonstracao",
-    note: "Sem cartao de credito. 1M de tokens por nossa conta.",
-  },
-  footer: {
-    tagline: "A camada de raciocinio para produtos que pensam.",
-    columns: [
-      { title: "Produto", links: ["Playground", "Modelos", "Precos", "Changelog", "Status"] },
-      { title: "Desenvolvedores", links: ["Documentacao", "Referencia da API", "SDKs", "Cookbook", "Limites de taxa"] },
-      { title: "Empresa", links: ["Sobre", "Carreiras", "Pesquisa", "Seguranca", "Contato"] },
-    ],
-    socials: [
-      { label: "Email", icon: "at" },
-      { label: "Comunidade", icon: "message" },
-      { label: "Compartilhar", icon: "share" },
-      { label: "Site", icon: "globe" },
-    ],
-    legal: "Cortexa Labs, Inc. Um conceito ficticio criado pela VigApp.",
-    status: "Todos os sistemas operacionais",
-  },
-};
-
-/* ------------------------------------------------------------------ */
-/* Spanish                                                             */
-/* ------------------------------------------------------------------ */
-
-const es: CortexaContent = {
-  nav: {
-    links: [
-      { href: "#playground", label: "Playground" },
-      { href: "#usecases", label: "Casos de uso" },
-      { href: "#models", label: "Modelos" },
-      { href: "#security", label: "Seguridad" },
-      { href: "#pricing", label: "Precios" },
-    ],
-    login: "Entrar",
-    cta: "Empezar a construir",
-    openMenu: "Abrir menu",
-    closeMenu: "Cerrar menu",
-  },
-  hero: {
-    badge: "Cortexa Neural API v4",
-    titlePre: "La capa de razonamiento",
-    titleAccent: "que tu producto",
-    titlePost: "estaba esperando.",
-    promise:
-      "Un solo endpoint. Tres modelos de frontera. Inferencia en menos de un segundo que lee, razona y escribe, para que tu equipo entregue inteligencia en lugar de mantenerla.",
-    ctaPrimary: "Abrir el playground",
-    ctaSecondary: "Leer la documentacion",
-    terminalLines: [
-      "$ cortexa infer --model atlas",
-      "> analizando 12.480 tokens de contexto",
-      "> transmitiendo respuesta · 41ms al primer token",
-      "> confianza 0,97 · fundamentado · completo",
-    ],
-    stats: [
-      { value: "41ms", label: "Mediana al 1er token" },
-      { value: "99,98%", label: "Disponibilidad mensual" },
-      { value: "200K", label: "Ventana de contexto" },
-    ],
-  },
-  playground: {
-    label: "Playground en vivo",
-    title: "Escribe un prompt. Mira como piensa.",
-    intro:
-      "Esta es la interfaz de streaming real, conectada a tres escenarios listos para que sientas la latencia sin una clave de API.",
-    modelLabel: "Modelo",
-    presetLabel: "Prueba un escenario",
-    promptLabel: "Tu prompt",
-    placeholder: "Preguntale lo que sea a Cortexa o elige un escenario arriba",
-    run: "Ejecutar inferencia",
-    running: "Generando",
-    reset: "Limpiar",
-    outputLabel: "Respuesta",
-    idleHint: "Elige un escenario o escribe un prompt y ejecuta la inferencia para transmitir una respuesta.",
-    latencyLabel: "Primer token",
-    tokensLabel: "Tokens",
-    streamingLabel: "Transmitiendo",
-    doneLabel: "Completo",
-    models: [
-      { id: "flux", name: "Cortexa Flux", tag: "Rapido", latencyMs: 22 },
-      { id: "core", name: "Cortexa Core", tag: "Equilibrado", latencyMs: 41 },
-      { id: "atlas", name: "Cortexa Atlas", tag: "Frontera", latencyMs: 63 },
-    ],
-    scenarios: [
-      {
-        id: "support",
-        label: "Respuesta de soporte",
-        prompt: "Un cliente dice que su factura se cobro dos veces este mes. Redacta una respuesta calmada y empatica.",
-        response:
-          "Hola, Maria,\n\nGracias por avisarnos, y lamento la preocupacion que causa un cobro duplicado. Revise tu cuenta y confirme un cargo duplicado de 49,00 EUR el 18 de julio. Ya emiti el reembolso completo, que llegara a tu tarjeta en 3 a 5 dias habiles.\n\nPara asegurarnos de que no se repita, unifique el metodo de pago duplicado en el registro. Si algo se ve raro mientras tanto, solo responde aqui y vuelvo enseguida.\n\nUn saludo,\nEquipo Cortexa Care",
-      },
-      {
-        id: "code",
-        label: "Funcion debounce",
-        prompt: "Escribe una pequena funcion debounce en TypeScript con metodo de cancelacion y tipado correcto.",
-        response:
-          "function debounce<A extends unknown[]>(\n  fn: (...args: A) => void,\n  wait = 200,\n) {\n  let timer: ReturnType<typeof setTimeout> | null = null;\n\n  const debounced = (...args: A) => {\n    if (timer) clearTimeout(timer);\n    timer = setTimeout(() => fn(...args), wait);\n  };\n\n  debounced.cancel = () => {\n    if (timer) clearTimeout(timer);\n    timer = null;\n  };\n\n  return debounced;\n}\n\n// Borde de salida por defecto; llama a .cancel() para descartar una ejecucion pendiente.",
-      },
-      {
-        id: "research",
-        label: "Busqueda vectorial",
-        prompt: "Resume las ventajas y desventajas entre busqueda vectorial y busqueda por palabra clave para un producto de documentacion.",
-        response:
-          "La busqueda vectorial gana en significado. Encuentra la intencion aunque cambien las palabras, ideal para dudas de soporte planteadas de cien formas. El costo es el mantenimiento del indice, la deriva de los embeddings y resultados que parecen difusos en cadenas exactas.\n\nLa busqueda por palabra clave gana en precision. Codigos de error, nombres de API y numeros de version se resuelven de forma exacta y barata, pero ignora por completo la parafrasis.\n\nPara un producto de documentacion la respuesta pragmatica es el hibrido: ejecuta ambas y reordena. La palabra clave garantiza las coincidencias exactas; los vectores recuperan la cola larga de preguntas en lenguaje natural. Cortexa entrega esta fusion por defecto.",
-      },
-    ],
-  },
-  useCases: {
-    label: "Hecha para trabajo real",
-    title: "Una plataforma, donde la inteligencia rinde.",
-    intro:
-      "Los equipos enrutan soporte, ingenieria, investigacion y contenido por un solo endpoint Cortexa y lo especializan con herramientas y recuperacion.",
-    tabs: [
-      {
-        id: "support",
-        label: "Atencion al cliente",
-        title: "Resuelve tickets antes de que los lea un humano.",
-        body: "Cortexa redacta respuestas fundamentadas y con la voz de tu marca desde tu centro de ayuda y conversaciones previas, y hace el traspaso limpio en cuanto un caso necesita a una persona.",
-        bullets: [
-          "Recuperacion fundamentada en tu base de conocimiento",
-          "Escalado por sentimiento a agentes en vivo",
-          "Cada respuesta cita la fuente que utilizo",
-        ],
-        metricValue: "68%",
-        metricLabel: "Tickets resueltos solos",
-        image: IMAGES.support,
-        alt: "Degradado violeta abstracto que representa IA conversacional",
-      },
-      {
-        id: "code",
-        label: "Ingenieria",
-        title: "Un revisor que nunca duerme.",
-        body: "Explica un stack trace, genera una migracion o crea pruebas en el editor. Cortexa razona sobre todo el repositorio, no un solo archivo.",
-        bullets: [
-          "Contexto de todo el repositorio, no fragmentos",
-          "Parches en linea que aceptas o rechazas",
-          "Barreras que bloquean fugas de secretos",
-        ],
-        metricValue: "3,4x",
-        metricLabel: "Pull requests mas rapidos",
-        image: IMAGES.code,
-        alt: "Codigo verde en cascada que recuerda a una pantalla matrix",
-      },
-      {
-        id: "research",
-        label: "Investigacion",
-        title: "Lee mil paginas antes del almuerzo.",
-        body: "Apunta Cortexa a contratos, articulos o informes y obten sintesis fundamentada con citas, para que los analistas dediquen sus horas al criterio, no a hojear.",
-        bullets: [
-          "Sintesis entre documentos con citas por pagina",
-          "Extraccion estructurada en tu esquema",
-          "Puntuacion de confianza en cada afirmacion",
-        ],
-        metricValue: "12h",
-        metricLabel: "Ahorradas por analista/semana",
-        image: IMAGES.research,
-        alt: "Formas fluidas abstractas que sugieren razonamiento de maquina",
-      },
-      {
-        id: "content",
-        label: "Contenido",
-        title: "Una voz de marca que escala.",
-        body: "Genera textos de lanzamiento, localiza una campana en nueve mercados y manten cada palabra dentro de tu guia de tono con una sola plantilla de prompt.",
-        bullets: [
-          "Barreras de tono aplicadas en cada generacion",
-          "Localizacion en una pasada entre mercados",
-          "Borrador, critica y revision en una sola llamada",
-        ],
-        metricValue: "9",
-        metricLabel: "Mercados desde un brief",
-        image: IMAGES.content,
-        alt: "Render abstracto luminoso que evoca creatividad generativa",
-      },
-    ],
-  },
-  models: {
-    label: "Niveles de modelo",
-    title: "Elige la inteligencia que el momento exige.",
-    intro:
-      "Envia las llamadas faciles a Flux, el trafico de rutina a Core y el razonamiento dificil a Atlas. Misma API, una linea para cambiar.",
-    headers: {
-      model: "Modelo",
-      context: "Contexto",
-      throughput: "Rendimiento",
-      price: "Precio / 1M tokens",
-      best: "Ideal para",
-    },
-    rows: [
-      {
-        id: "flux",
-        name: "Cortexa Flux",
-        desc: "Clasificacion y enrutamiento instantaneos",
-        context: "32K",
-        throughput: "480 tok/s",
-        price: "0,14 EUR",
-        best: "Etiquetado, enrutamiento, barreras",
-        featured: false,
-      },
-      {
-        id: "core",
-        name: "Cortexa Core",
-        desc: "El motor de razonamiento del dia a dia",
-        context: "128K",
-        throughput: "210 tok/s",
-        price: "2,30 EUR",
-        best: "Soporte, chat, recuperacion",
-        featured: true,
-      },
-      {
-        id: "atlas",
-        name: "Cortexa Atlas",
-        desc: "Razonamiento y analisis de frontera",
-        context: "200K",
-        throughput: "96 tok/s",
-        price: "11,00 EUR",
-        best: "Investigacion, codigo, planificacion",
-        featured: false,
-      },
-    ],
-    note: "Todos los niveles comparten el mismo endpoint, protocolo de streaming y capa de seguridad. Cambia de modelo modificando un parametro.",
-    popular: "El mas usado",
-  },
-  security: {
-    label: "Confianza por diseno",
-    title: "Nivel empresarial desde la primera llamada.",
-    intro:
-      "Tus prompts y respuestas son tuyos. Cortexa esta disenada para que la seguridad sea lo predeterminado, no un extra de pago.",
-    items: [
-      { icon: "lock", title: "Cifrado de extremo a extremo", body: "TLS 1.3 en transito y AES-256 en reposo en cada region y replica." },
-      { icon: "eye", title: "Retencion cero de datos", body: "Activa un modo sin registro donde los prompts se descartan en cuanto termina la respuesta." },
-      { icon: "shield", title: "Nunca entrenamos con tus datos", body: "Tus entradas y salidas nunca entrenan modelos base. Por contrato." },
-      { icon: "key", title: "Claves de acceso granulares", body: "Claves con alcance y rotacion, limites por clave y auditoria completa." },
-      { icon: "server", title: "Aislamiento regional", body: "Fija la inferencia en US, UE o APAC para que los datos no salgan del limite que elijas." },
-      { icon: "fingerprint", title: "SSO y SCIM", body: "Inicio de sesion unico SAML y aprovisionamiento automatico para equipos de cualquier tamano." },
-    ],
-    certs: ["SOC 2 Tipo II", "ISO 27001", "RGPD", "Listo para HIPAA"],
   },
   pricing: {
     label: "Precios",
-    title: "Paga por tokens, no por asientos.",
-    intro:
-      "Basado en uso hasta el token, con descuentos por volumen que se aplican solos. Estima tu factura abajo.",
-    calc: {
-      title: "Estima tu gasto mensual",
-      sliderLabel: "Solicitudes por mes",
-      requestsUnit: "solicitudes",
-      tierLabel: "Nivel de modelo",
-      tokensLabel: "Tokens estimados",
-      estLabel: "Costo mensual estimado",
-      perMonth: "/ mes",
-      avgTokensNote: "Asume un promedio de 1.800 tokens por solicitud entre prompt y respuesta.",
-      currency: "EUR",
-      numberLocale: "es-ES",
-      avgTokensPerRequest: 1800,
-      sliderMin: 10000,
-      sliderMax: 5000000,
-      sliderStep: 10000,
-      tiers: [
-        { id: "flux", name: "Flux", ratePerMillion: 0.14 },
-        { id: "core", name: "Core", ratePerMillion: 2.3 },
-        { id: "atlas", name: "Atlas", ratePerMillion: 11 },
-      ],
-    },
-    plans: [
+    title: "Precios en reales, por millón de tokens.",
+    intro: "Sin dólares, sin impuesto IOF, sin sorpresas cambiarias. Tres corrientes, un contrato en BRL.",
+    flagshipTag: "insignia",
+    perMillion: "por 1M de tokens",
+    attrInput: "Entrada (1M tokens)",
+    attrOutput: "Salida (1M tokens)",
+    attrContext: "Ventana de contexto",
+    attrLatency: "Latencia · 1er token",
+    attrBestFor: "Hecha para",
+    attrReasoning: "Razonamiento extendido",
+    yes: "Incluido",
+    no: "—",
+    models: [
       {
-        id: "starter",
-        name: "Starter",
-        price: "0 EUR",
-        period: "para empezar",
-        desc: "Todo lo que un prototipo necesita para llegar a sus primeros usuarios.",
-        features: ["1M de tokens gratis al mes", "Modelos Flux y Core", "Soporte de la comunidad", "Limites compartidos"],
-        cta: "Empezar gratis",
-        featured: false,
+        id: "nascente",
+        name: "Iara Nascente",
+        tag: "veloz",
+        bestFor: "Soporte en tiempo real, clasificación y triaje en volúmenes altísimos",
+        context: "128k tokens",
+        latency: "~180 ms",
+        reasoning: false,
       },
       {
-        id: "scale",
-        name: "Scale",
-        price: "459 EUR",
-        period: "/ mes + uso",
-        desc: "Para productos en produccion con trafico real y SLAs reales.",
-        features: ["Los tres niveles de modelo", "SLA de 99,9% de disponibilidad", "Modo de retencion cero", "Enrutamiento prioritario", "Soporte por email y chat"],
-        cta: "Elegir Scale",
-        featured: true,
+        id: "correnteza",
+        name: "Iara Correnteza",
+        tag: "equilibrio",
+        bestFor: "El modelo para el 90% de los casos: atención, contenido, extracción de datos",
+        context: "256k tokens",
+        latency: "~420 ms",
+        reasoning: false,
       },
       {
-        id: "enterprise",
-        name: "Enterprise",
-        price: "A medida",
-        period: "anual",
-        desc: "Aislamiento regional, capacidad dedicada y un ingeniero asignado.",
-        features: ["Capacidad de inferencia dedicada", "Residencia regional de datos", "SSO, SCIM y registros de auditoria", "Ingeniero de soluciones", "Fine-tuning personalizado"],
-        cta: "Hablar con ventas",
-        featured: false,
+        id: "profunda",
+        name: "Iara Profunda",
+        tag: "razonamiento",
+        bestFor: "Análisis legal, documentos largos y decisiones que exigen cadena de razonamiento",
+        context: "256k tokens",
+        latency: "~1,8 s",
+        reasoning: true,
       },
     ],
+    calc: {
+      title: "¿Cuánto cuesta con tu volumen?",
+      sub: "Arrastra y mira. Estimación con 70% de tokens de entrada y 30% de salida.",
+      volumeLabel: "Volumen mensual",
+      volumeUnit: "M de tokens/mes",
+      modelLabel: "Modelo",
+      totalLabel: "Costo estimado",
+      perMonth: "/mes",
+      note: "Valores en reales brasileños. Volúmenes sobre 500 M/mes tienen descuento por contrato.",
+    },
   },
   cta: {
-    label: "Entrega inteligencia",
-    title: "Tu primera inferencia esta a noventa segundos.",
-    body: "Crea una clave, pega cuatro lineas y transmite tu primera respuesta fundamentada antes de que se enfrie el cafe.",
-    ctaPrimary: "Crear una clave de API",
-    ctaSecondary: "Reservar una demo",
-    note: "Sin tarjeta de credito. 1M de tokens de regalo.",
+    title: "Habla con IARA en portugués.",
+    sub: "Crea tu cuenta, recibe R$ 20 en créditos y haz tu primera llamada en cinco minutos.",
+    primary: "Empezar gratis",
+    secondary: "Hablar con ventas",
+    bullets: ["R$ 20 en créditos iniciales", "Sin tarjeta de crédito", "Soporte en portugués, claro"],
   },
   footer: {
-    tagline: "La capa de razonamiento para productos que piensan.",
-    columns: [
-      { title: "Producto", links: ["Playground", "Modelos", "Precios", "Changelog", "Estado"] },
-      { title: "Desarrolladores", links: ["Documentacion", "Referencia de API", "SDKs", "Cookbook", "Limites de tasa"] },
-      { title: "Empresa", links: ["Nosotros", "Empleo", "Investigacion", "Seguridad", "Contacto"] },
+    tagline: "La señora de las aguas, ahora fluida en producción.",
+    nav: [
+      { href: "#playground", label: "Playground" },
+      { href: "#api", label: "API" },
+      { href: "#seguranca", label: "Seguridad" },
+      { href: "#precos", label: "Precios" },
     ],
-    socials: [
-      { label: "Email", icon: "at" },
-      { label: "Comunidad", icon: "message" },
-      { label: "Compartir", icon: "share" },
-      { label: "Sitio web", icon: "globe" },
-    ],
-    legal: "Cortexa Labs, Inc. Un concepto ficticio creado por VigApp.",
-    status: "Todos los sistemas operativos",
+    disclaimer: "IARA es un concepto ficticio creado por VigApp.",
   },
 };
 
-export const cortexaDict: DemoDictionary<CortexaContent> = { en, pt, es };
+export const iaraDict: DemoDictionary<IaraContent> = { en, pt, es };

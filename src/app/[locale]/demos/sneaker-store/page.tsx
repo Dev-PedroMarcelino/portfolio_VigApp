@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
 import { Archivo_Black, Space_Mono } from "next/font/google";
 import { DemoShell } from "@/components/demos/demo-shell";
-import { KynetikStore } from "@/demos/sneaker-store/kynetik-store";
+import { VielaStore } from "@/demos/sneaker-store/viela-store";
 
 const display = Archivo_Black({
   subsets: ["latin"],
@@ -17,9 +17,9 @@ const body = Space_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "KYNETIK — concept by VigApp",
+  title: "VIELA — concept by VigApp",
   description:
-    "Hype sneaker-drop concept with a live countdown, size-select add-to-cart, a limited raffle and kinetic tilt-on-hover product cards.",
+    "Brazilian streetwear store concept: a filterable catalog of sneakers, apparel and accessories, an interactive 360° Sketchfab product view, live drop countdown and a limited raffle.",
 };
 
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
@@ -27,9 +27,9 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
   setRequestLocale(locale);
 
   return (
-    <DemoShell demoName="KYNETIK">
+    <DemoShell demoName="VIELA">
       <div className={`${display.variable} ${body.variable}`}>
-        <KynetikStore locale={locale} />
+        <VielaStore locale={locale} />
       </div>
     </DemoShell>
   );

@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useReducedMotionSafe as useReducedMotion } from "@/components/demos/use-reduced-motion-safe";
 import { useTranslations } from "next-intl";
 import { demoCategories, demos, type DemoCategory } from "@/lib/demos";
 import { DemoCard } from "./demo-card";

@@ -1,10 +1,17 @@
 "use client";
 
 import { useRef, useState, type ReactNode } from "react";
-import { useReducedMotion } from "framer-motion";
+import { useReducedMotionSafe as useReducedMotion } from "@/components/demos/use-reduced-motion-safe";
 
-/** Builds a defensive Unsplash URL at the requested render width. */
+/** Hot-pink VIELA accent, shared with the Sketchfab facade. */
+export const VISTA_ACCENT = "#FF3D81";
+
+/**
+ * Builds a defensive Unsplash URL at the requested render width. Absolute
+ * URLs (e.g. Sketchfab thumbnails reaching the mini-cart) pass through as-is.
+ */
 export function shot(id: string, w = 1600) {
+  if (id.startsWith("http")) return id;
   return `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=80`;
 }
 

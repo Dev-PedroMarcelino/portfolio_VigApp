@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useReducedMotionSafe as useReducedMotion } from "@/components/demos/use-reduced-motion-safe";
 import { Bell, ArrowDownRight } from "lucide-react";
 import type { HeroContent } from "./content";
 import { Kicker, Chip, scrollToId, shot } from "./ui";
