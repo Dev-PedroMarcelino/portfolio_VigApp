@@ -3,9 +3,9 @@
 import { motion } from "framer-motion";
 import { useReducedMotionSafe as useReducedMotion } from "@/components/demos/use-reduced-motion-safe";
 import { ChevronDown, Volume2 } from "lucide-react";
-import { SketchfabEmbed } from "@/components/demos/sketchfab-embed";
+import Image from "next/image";
 import type { GaragemContent } from "./content";
-import { GUITAR_CREDIT, GUITAR_THUMB, GUITAR_UID } from "./content";
+import { HOUSE_BURGER_SHOT } from "./content";
 import { FOCUS_RING, Halftone, Stamp, scrollToId } from "./ui";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -82,7 +82,7 @@ export function HeroPoster({ content }: { content: GaragemContent["hero"] }) {
   return (
     <section id="topo" className="relative overflow-hidden pb-16 pt-28 sm:pt-32">
       <Halftone />
-      {/* Red stage-light bleed behind the guitar */}
+      {/* Red stage-light bleed behind the centerpiece */}
       <div
         aria-hidden
         className="absolute -top-24 right-[-10%] h-[540px] w-[540px] rounded-full opacity-50 blur-[130px]"
@@ -146,7 +146,7 @@ export function HeroPoster({ content }: { content: GaragemContent["hero"] }) {
           </motion.div>
         </div>
 
-        {/* Guitar on the amp — Sketchfab centerpiece */}
+        {/* The house smash inside the amp cabinet — hero centerpiece */}
         <motion.div
           initial={reduced ? false : { opacity: 0, y: 28, rotate: 1.5 }}
           animate={{ opacity: 1, y: 0, rotate: 0 }}
@@ -184,17 +184,21 @@ export function HeroPoster({ content }: { content: GaragemContent["hero"] }) {
               </span>
             </div>
 
-            <SketchfabEmbed
-              uid={GUITAR_UID}
-              title={content.guitarTitle}
-              thumb={GUITAR_THUMB}
-              credit={GUITAR_CREDIT}
-              loadLabel={content.loadLabel}
-              hint={content.hint}
-              accent="#F43F2E"
-              autospin
-              className="aspect-[4/3] sm:aspect-[16/10]"
-            />
+            <div className="relative aspect-[4/3] overflow-hidden sm:aspect-[16/10]">
+              <Image
+                src={HOUSE_BURGER_SHOT}
+                alt={content.stageTitle}
+                fill
+                priority
+                sizes="(min-width: 1024px) 48vw, 100vw"
+                className="object-cover"
+              />
+              {/* Warm bleed so the shot sits inside the cabinet instead of on it. */}
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_90%_at_50%_0%,transparent_40%,rgba(14,10,8,0.55)_100%)]"
+              />
+            </div>
 
             {/* Speaker grill foot */}
             <div
@@ -208,9 +212,9 @@ export function HeroPoster({ content }: { content: GaragemContent["hero"] }) {
           </div>
 
           <div className="mt-4 flex items-start gap-3 px-1">
-            <Stamp rotate={-2}>3D</Stamp>
+            <Stamp rotate={-2}>Smash</Stamp>
             <p className="max-w-sm text-[0.8rem] leading-relaxed text-[var(--d-ink-soft)]">
-              {content.guitarCaption}
+              {content.stageCaption}
             </p>
           </div>
         </motion.div>

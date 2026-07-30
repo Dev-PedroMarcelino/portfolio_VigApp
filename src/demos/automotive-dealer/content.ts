@@ -14,6 +14,9 @@ export function waLink(message: string): string {
 /** Real Sketchfab model shown on the hero showroom stage (CC BY-SA). */
 export const SKETCHFAB_911 = {
   uid: "d01b254483794de3819786d93e0e1ebf",
+  /* Rendered by our own three.js stage; falls back to the embedded viewer if
+     the asset is missing. See public/models/README.md. */
+  file: "/models/free_porsche_911_carrera_4s.glb",
   thumb:
     "https://media.sketchfab.com/models/d01b254483794de3819786d93e0e1ebf/thumbnails/f28bf7eb32e646019bbaf886ff705679/3703397e693c47b2a66894bfb2ae7ea0.jpeg",
   credit: {
@@ -252,7 +255,6 @@ export interface BarcellosContent {
     stage: {
       eyebrow: string;
       title: string;
-      loadLabel: string;
       hint: string;
       priceTag: string;
       fichaCta: string;
@@ -420,8 +422,7 @@ const pt: BarcellosContent = {
     stage: {
       eyebrow: "Destaque da semana",
       title: "Gire o carro — Porsche 911 Carrera 4S",
-      loadLabel: "Ver em 3D",
-      hint: "Arraste para girar · role para zoom",
+      hint: "Arraste para girar o carro",
       priceTag: "R$ 899.900",
       fichaCta: "Ver ficha completa",
     },
@@ -634,8 +635,7 @@ const en: BarcellosContent = {
     stage: {
       eyebrow: "Car of the week",
       title: "Spin the car — Porsche 911 Carrera 4S",
-      loadLabel: "View in 3D",
-      hint: "Drag to rotate · scroll to zoom",
+      hint: "Drag to rotate the car",
       priceTag: "R$ 899.900",
       fichaCta: "See the full spec sheet",
     },
@@ -848,8 +848,7 @@ const es: BarcellosContent = {
     stage: {
       eyebrow: "Destacado de la semana",
       title: "Gira el auto — Porsche 911 Carrera 4S",
-      loadLabel: "Ver en 3D",
-      hint: "Arrastra para girar · rueda para zoom",
+      hint: "Arrastra para girar el auto",
       priceTag: "R$ 899.900",
       fichaCta: "Ver ficha completa",
     },

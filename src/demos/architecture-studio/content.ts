@@ -85,15 +85,18 @@ export type SpaceId = "living" | "dining" | "bath";
 export interface SpaceSeed {
   id: SpaceId;
   uid: string;
+  /** Self-hosted asset, preferred over the embed; see public/models/README.md. */
+  file: string;
   thumb: string;
   credit: { model: string; author: string };
 }
 
-/** CC-BY interior scenes served by the official Sketchfab viewer. */
+/** CC-BY interior scenes, rendered by our own stage once self-hosted. */
 export const SPACES_3D: SpaceSeed[] = [
   {
     id: "living",
     uid: "afb8cb0cbee1488caf61471ef14041e9",
+    file: "/models/white_modern_living_room.glb",
     thumb:
       "https://media.sketchfab.com/models/afb8cb0cbee1488caf61471ef14041e9/thumbnails/bf3165db89564e58a35626c6e7d70a7f/453ee2cf4d2549bd94d493e774f5aea1.jpeg",
     credit: { model: "White Modern Living Room", author: "dylanheyes" },
@@ -101,6 +104,7 @@ export const SPACES_3D: SpaceSeed[] = [
   {
     id: "dining",
     uid: "df3f3c9f6233447eb8b7ee129f3bace5",
+    file: "/models/modern_dining_room.glb",
     thumb:
       "https://media.sketchfab.com/models/df3f3c9f6233447eb8b7ee129f3bace5/thumbnails/b7916b9f24fa46c29dd9eae8494b0524/1b9fd78d91f94f8989191bc64fc767dc.jpeg",
     credit: { model: "Modern Dining Room", author: "dylanheyes" },
@@ -108,6 +112,7 @@ export const SPACES_3D: SpaceSeed[] = [
   {
     id: "bath",
     uid: "9ba7e0a094694335bd8f4656611c0676",
+    file: "/models/modern_bathroom.glb",
     thumb:
       "https://media.sketchfab.com/models/9ba7e0a094694335bd8f4656611c0676/thumbnails/82fd335d3c2749aebdb02c0d93973a88/b564bee78b5c412c9a26b6f78f6aa190.jpeg",
     credit: { model: "Modern Bathroom", author: "dylanheyes" },
@@ -206,7 +211,6 @@ export interface PrumoContent {
     intro: string;
     body: string;
     bullets: string[];
-    loadLabel: string;
     hint: string;
     note: string;
     tabsAria: string;
@@ -423,9 +427,8 @@ const en: PrumoContent = {
       "Real materials and lighting studied before a single brick",
       "Revisions decided together, on screen, in days — not weeks",
     ],
-    loadLabel: "Explore in 3D",
-    hint: "Drag to orbit · scroll to zoom",
-    note: "Illustrative scenes — CC BY models embedded via the official Sketchfab viewer.",
+    hint: "Drag to orbit the room",
+    note: "Illustrative scenes — CC BY models, rendered in real time on this page.",
     tabsAria: "Choose a room to explore",
     items: [
       {
@@ -735,9 +738,8 @@ const pt: PrumoContent = {
       "Materiais e luz reais estudados antes do primeiro tijolo",
       "Revisões decididas juntos, na tela, em dias — não semanas",
     ],
-    loadLabel: "Explorar em 3D",
-    hint: "Arraste para orbitar · role para zoom",
-    note: "Cenas ilustrativas — modelos CC BY incorporados pelo viewer oficial do Sketchfab.",
+    hint: "Arraste para orbitar o ambiente",
+    note: "Cenas ilustrativas — modelos CC BY renderizados em tempo real nesta página.",
     tabsAria: "Escolha um ambiente para explorar",
     items: [
       {
@@ -1048,9 +1050,8 @@ const es: PrumoContent = {
       "Materiales y luz reales estudiados antes del primer ladrillo",
       "Revisiones decididas juntos, en pantalla, en días — no semanas",
     ],
-    loadLabel: "Explorar en 3D",
-    hint: "Arrastra para orbitar · rueda para zoom",
-    note: "Escenas ilustrativas — modelos CC BY incrustados con el visor oficial de Sketchfab.",
+    hint: "Arrastra para orbitar el ambiente",
+    note: "Escenas ilustrativas — modelos CC BY renderizados en tiempo real en esta página.",
     tabsAria: "Elige un ambiente para explorar",
     items: [
       {

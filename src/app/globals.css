@@ -46,6 +46,7 @@
   --font-mono: var(--font-mono);
   --animate-marquee: marquee var(--marquee-duration, 40s) linear infinite;
   --animate-spin-slow: spin 12s linear infinite;
+  --animate-model-sweep: model-sweep 1.5s ease-in-out infinite;
 
   @keyframes marquee {
     from {
@@ -53,6 +54,16 @@
     }
     to {
       transform: translateX(-50%);
+    }
+  }
+
+  /* Loading sweep for the in-page 3D viewports. */
+  @keyframes model-sweep {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(300%);
     }
   }
 }

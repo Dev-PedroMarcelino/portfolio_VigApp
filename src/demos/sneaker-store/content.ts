@@ -141,7 +141,6 @@ export interface Vista360Content {
   intro: string;
   badge: string;
   modelTitle: string;
-  loadLabel: string;
   hint: string;
   featureNote: string;
   name: string;
@@ -268,10 +267,13 @@ const IMG = {
 
 /** Sketchfab model powering the "Vista 360°" feature. */
 export const VISTA_MODEL = {
-  uid: "a4b434181fbb48008ad460722fd53725",
+  /* Self-hosted asset wins when present; see public/models/README.md. */
+  file: "/models/air_jordan_1_chicago_black_toe.glb",
+  /* Source of the deployed asset, and the fallback viewer's model. */
+  uid: "60804072d9614d2f943ba379fbb642a8",
   thumb:
-    "https://media.sketchfab.com/models/a4b434181fbb48008ad460722fd53725/thumbnails/577b3a9d947647dab36453f6bb421f8a/037293e320844915801713f0a797e030.jpeg",
-  credit: { model: "Air Jordan 1", author: "makoto" },
+    "https://media.sketchfab.com/models/60804072d9614d2f943ba379fbb642a8/thumbnails/77b7a62a4b4a4a3da92de3364004d935/3aae9a3d6a71421aa6c91f56c2d7d1a1.jpeg",
+  credit: { model: "Air Jordan 1 (Chicago Black Toe)", author: "Shane Vince Marcos" },
 };
 
 /* Sizes shared by every catalog sneaker (BR numbering). */
@@ -430,14 +432,13 @@ export const vielaDict: DemoDictionary<VielaContent> = {
       title: "360° view",
       intro: "A real 3D scan, live on the page. Drag the shoe, spin it, zoom into the stitching — then take it home.",
       badge: "VISTA 360°",
-      modelTitle: "AJ1 High 'Panda' — interactive 3D model",
-      loadLabel: "Load in 3D",
-      hint: "Drag to spin · scroll to zoom",
-      featureNote: "Real-time 3D — model 'Air Jordan 1' by makoto, via Sketchfab.",
-      name: "AJ1 High 'Panda'",
-      colorway: "White / Black",
+      modelTitle: "AJ1 High 'Chicago Black Toe' — interactive 3D model",
+      hint: "Drag to spin the sneaker",
+      featureNote: "Real-time 3D, rendered on this page — model by Shane Vince Marcos (CC BY).",
+      name: "AJ1 High 'Chicago Black Toe'",
+      colorway: "White / Black / Red",
       price: 1199,
-      description: "The alley classic in the sharpest black-and-white cut. Full-grain leather, vintage sole and the collar that shows up in every fit pic. Curated pairs, verified one by one by the VIELA crew.",
+      description: "The alley classic in its loudest cut: white leather, black toe and that red that carries the whole fit. Full-grain leather, vintage sole, curated pairs verified one by one by the VIELA crew.",
       sizeLabel: "Select size",
       sizeUnit: "BR",
       sizes: ["38", "39", "40", "41", "42", "43", "44"],
@@ -680,14 +681,13 @@ export const vielaDict: DemoDictionary<VielaContent> = {
       title: "Vista 360°",
       intro: "Um scan 3D de verdade, rodando na página. Arrasta o tênis, gira, dá zoom na costura — e depois leva pra casa.",
       badge: "VISTA 360°",
-      modelTitle: "AJ1 High 'Panda' — modelo 3D interativo",
-      loadLabel: "Carregar em 3D",
-      hint: "Arraste para girar · role para zoom",
-      featureNote: "3D em tempo real — modelo 'Air Jordan 1' por makoto, via Sketchfab.",
-      name: "AJ1 High 'Panda'",
-      colorway: "Branco / Preto",
+      modelTitle: "AJ1 High 'Chicago Black Toe' — modelo 3D interativo",
+      hint: "Arraste para girar o tênis",
+      featureNote: "3D em tempo real, renderizado nesta página — modelo de Shane Vince Marcos (CC BY).",
+      name: "AJ1 High 'Chicago Black Toe'",
+      colorway: "Branco / Preto / Vermelho",
       price: 1199,
-      description: "O clássico da viela no recorte preto e branco mais afiado. Couro de flor integral, sola vintage e o colarinho que aparece em toda foto de fit. Pares selecionados, conferidos um a um pela equipe VIELA.",
+      description: "O clássico da viela no recorte mais barulhento: couro branco, bico preto e aquele vermelho que carrega o fit inteiro. Couro de flor integral, sola vintage e pares conferidos um a um pela equipe VIELA.",
       sizeLabel: "Escolha o número",
       sizeUnit: "BR",
       sizes: ["38", "39", "40", "41", "42", "43", "44"],
@@ -930,14 +930,13 @@ export const vielaDict: DemoDictionary<VielaContent> = {
       title: "Vista 360°",
       intro: "Un escaneo 3D real, en vivo en la página. Arrastra la zapatilla, gírala, haz zoom a la costura — y luego llévatela.",
       badge: "VISTA 360°",
-      modelTitle: "AJ1 High 'Panda' — modelo 3D interactivo",
-      loadLabel: "Cargar en 3D",
-      hint: "Arrastra para girar · rueda para zoom",
-      featureNote: "3D en tiempo real — modelo 'Air Jordan 1' por makoto, vía Sketchfab.",
-      name: "AJ1 High 'Panda'",
-      colorway: "Blanco / Negro",
+      modelTitle: "AJ1 High 'Chicago Black Toe' — modelo 3D interactivo",
+      hint: "Arrastra para girar el tenis",
+      featureNote: "3D en tiempo real, renderizado en esta página — modelo de Shane Vince Marcos (CC BY).",
+      name: "AJ1 High 'Chicago Black Toe'",
+      colorway: "Blanco / Negro / Rojo",
       price: 1199,
-      description: "El clásico del callejón en el corte blanco y negro más afilado. Cuero plena flor, suela vintage y el cuello que aparece en cada foto de fit. Pares seleccionados, verificados uno a uno por el equipo VIELA.",
+      description: "El clásico del callejón en su corte más ruidoso: cuero blanco, punta negra y ese rojo que carga el fit entero. Cuero plena flor, suela vintage y pares verificados uno a uno por el equipo VIELA.",
       sizeLabel: "Elige tu talla",
       sizeUnit: "BR",
       sizes: ["38", "39", "40", "41", "42", "43", "44"],

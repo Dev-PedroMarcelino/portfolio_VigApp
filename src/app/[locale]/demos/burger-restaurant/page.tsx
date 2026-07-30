@@ -25,7 +25,7 @@ const mono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   title: "Garagem Burger — concept by VigApp",
   description:
-    "Brazilian rock-bar burger joint in Cambuí, Campinas: smash burgers with rock'n'roll names, a digital menu board, live cover bands and a 3D guitar on stage.",
+    "Brazilian rock-bar burger joint in Cambuí, Campinas: smash burgers with rock'n'roll names, a poster-style hero, a digital menu board and live cover bands.",
 };
 
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {

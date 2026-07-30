@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { useReducedMotionSafe as useReducedMotion } from "@/components/demos/use-reduced-motion-safe";
 import { Check, Plus, Rotate3d, Ruler } from "lucide-react";
-import { SketchfabEmbed } from "@/components/demos/sketchfab-embed";
+import { Model3D } from "@/components/demos/model-3d";
 import type { CartLine, Vista360Content } from "./content";
 import { Kicker, Chip, money, VISTA_ACCENT } from "./ui";
 import { VISTA_MODEL } from "./content";
@@ -76,12 +76,11 @@ export function Vista360({
               <span aria-hidden className="absolute -bottom-px -left-px h-6 w-6 rounded-bl-[2rem] border-b-2 border-l-2 border-[var(--d-accent)]" />
               <span aria-hidden className="absolute -bottom-px -right-px h-6 w-6 rounded-br-[2rem] border-b-2 border-r-2 border-[var(--d-accent)]" />
 
-              <SketchfabEmbed
+              <Model3D
                 uid={VISTA_MODEL.uid}
+                file={VISTA_MODEL.file}
                 title={content.modelTitle}
                 thumb={VISTA_MODEL.thumb}
-                credit={VISTA_MODEL.credit}
-                loadLabel={content.loadLabel}
                 hint={content.hint}
                 accent={VISTA_ACCENT}
                 autospin

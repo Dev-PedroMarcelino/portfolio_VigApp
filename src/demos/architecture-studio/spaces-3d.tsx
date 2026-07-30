@@ -3,15 +3,15 @@
 import * as Tabs from "@radix-ui/react-tabs";
 import { useState } from "react";
 import { Check } from "lucide-react";
-import { SketchfabEmbed } from "@/components/demos/sketchfab-embed";
+import { Model3D, ModelCredit } from "@/components/demos/model-3d";
 import type { PrumoContent, SpaceId } from "./content";
 import { BRONZE, SPACES_3D } from "./content";
 import { Kicker, Reveal, SectionTitle } from "./ui";
 
 /**
  * Centerpiece: interactive 3D rooms. Radix tabs switch between three CC-BY
- * Sketchfab interiors behind a click-to-load facade — the pitch is that every
- * Prumo client approves the house in orbit before the site opens.
+ * interiors rendered inline in the page — the pitch is that every Prumo client
+ * approves the house in orbit before the site opens.
  */
 export function Spaces3D({ content }: { content: PrumoContent["spaces"] }) {
   const [active, setActive] = useState<SpaceId>("living");
@@ -75,14 +75,14 @@ export function Spaces3D({ content }: { content: PrumoContent["spaces"] }) {
                 const seed = SPACES_3D.find((s) => s.id === item.id)!;
                 return (
                   <Tabs.Content key={item.id} value={item.id} className="pt-8 outline-none">
-                    <SketchfabEmbed
+                    <Model3D
                       uid={seed.uid}
+                      file={seed.file}
                       title={item.name}
                       thumb={seed.thumb}
-                      credit={seed.credit}
-                      loadLabel={content.loadLabel}
                       hint={content.hint}
                       accent={BRONZE}
+                      framing="interior"
                       className="aspect-[4/3] w-full sm:aspect-[16/10]"
                     />
                     <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between">
@@ -93,6 +93,10 @@ export function Spaces3D({ content }: { content: PrumoContent["spaces"] }) {
                         {item.blurb}
                       </p>
                     </div>
+                    <ModelCredit
+                      credit={seed.credit}
+                      className="mt-3 [font-family:var(--demo-mono)] text-[10px] uppercase tracking-[0.14em] text-[var(--d-ink-faint)]"
+                    />
                   </Tabs.Content>
                 );
               })}

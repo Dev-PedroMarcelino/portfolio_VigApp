@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { useReducedMotionSafe as useReducedMotion } from "@/components/demos/use-reduced-motion-safe";
 import { ArrowUpRight, BadgeCheck, MessageCircle, ShieldCheck, Truck } from "lucide-react";
-import { SketchfabEmbed } from "@/components/demos/sketchfab-embed";
+import { Model3D, ModelCredit } from "@/components/demos/model-3d";
 import type { BarcellosContent } from "./content";
 import { SKETCHFAB_911, waLink } from "./content";
 import { EASE, FOCUS, scrollToId } from "./ui";
@@ -162,12 +162,11 @@ export function HeroSection({
             <span aria-hidden className="absolute -bottom-2 -left-2 z-20 h-5 w-5 border-b border-l border-[var(--d-gold)]/60" />
             <span aria-hidden className="absolute -bottom-2 -right-2 z-20 h-5 w-5 border-b border-r border-[var(--d-gold)]/60" />
 
-            <SketchfabEmbed
+            <Model3D
               uid={SKETCHFAB_911.uid}
+              file={SKETCHFAB_911.file}
               title={content.stage.title}
               thumb={SKETCHFAB_911.thumb}
-              credit={SKETCHFAB_911.credit}
-              loadLabel={content.stage.loadLabel}
               hint={content.stage.hint}
               accent="#D9A441"
               autospin
@@ -186,7 +185,12 @@ export function HeroSection({
             />
           </div>
 
-          <div className="mt-7 flex justify-center">
+          <ModelCredit
+            credit={SKETCHFAB_911.credit}
+            className="mt-6 text-center text-[0.6rem] uppercase tracking-[0.16em] text-[var(--d-ink-soft)]/60 [font-family:var(--demo-mono)]"
+          />
+
+          <div className="mt-4 flex justify-center">
             <button
               type="button"
               onClick={() => scrollToId("destaque")}

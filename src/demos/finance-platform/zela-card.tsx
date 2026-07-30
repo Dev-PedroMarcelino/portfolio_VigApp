@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useReducedMotionSafe as useReducedMotion } from "@/components/demos/use-reduced-motion-safe";
 import { CircleCheck, HandCoins, Smartphone, Zap } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { SketchfabEmbed } from "@/components/demos/sketchfab-embed";
+import { Model3D, ModelCredit } from "@/components/demos/model-3d";
 import type { BenefitIcon, ZelaContent } from "./content";
 import { CARD_MODEL } from "./content";
 import { Blob, EASE, SectionLabel } from "./ui";
@@ -39,22 +39,25 @@ export function ZelaCard({ content }: { content: ZelaContent["card"] }) {
       <Blob color="rgba(232,161,61,0.1)" className="-bottom-32 right-0 h-[24rem] w-[24rem]" />
 
       <div className="relative mx-auto grid max-w-6xl items-center gap-14 px-5 lg:grid-cols-[1.05fr_0.95fr]">
-        {/* Real 3D card via Sketchfab, click-to-load facade */}
+        {/* The real 3D card, rendered inline in the section */}
         <motion.div {...reveal(0.08)} className="relative">
           <div
             aria-hidden
             className="absolute -inset-4 rounded-[2.6rem] bg-gradient-to-br from-[var(--d-lime)]/18 via-transparent to-[var(--d-amber)]/12 blur-xl"
           />
-          <SketchfabEmbed
+          <Model3D
             uid={CARD_MODEL.uid}
+            file={CARD_MODEL.file}
             title={content.viewerTitle}
             thumb={CARD_MODEL.thumb}
-            credit={CARD_MODEL.credit}
-            loadLabel={content.loadLabel}
             hint={content.hint}
             accent="#7CB342"
             autospin
             className="aspect-[4/3] w-full rounded-[2.2rem] border border-white/10 bg-black/30 shadow-[0_60px_120px_-50px_rgba(0,0,0,0.8)]"
+          />
+          <ModelCredit
+            credit={CARD_MODEL.credit}
+            className="relative mt-4 text-center text-[0.62rem] uppercase tracking-[0.14em] text-[#F3EEDF]/40"
           />
         </motion.div>
 

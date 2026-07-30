@@ -25,7 +25,7 @@ const mono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   title: "Zela — concept by VigApp",
   description:
-    "Warm Brazilian digital-account concept: a cream-and-green anti-obsidian fintech with an interactive Pix flow, compounding savings boxes, a real 3D metal card and a fee-transparency table.",
+    "Warm Brazilian digital-account concept: a cream-and-green anti-obsidian fintech with an interactive Pix flow, compounding savings boxes, a real 3D metal card, a crypto screen with a live-rendered Bitcoin and a fee-transparency table.",
 };
 
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {

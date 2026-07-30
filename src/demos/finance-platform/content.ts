@@ -104,10 +104,57 @@ export const FEE_TOTAL_YEAR = FEE_ROWS.reduce((sum, r) => sum + r.bankPerYear, 0
 /* Sketchfab model for the Zela Metal card (CC-BY). */
 export const CARD_MODEL = {
   uid: "b6cff2460421408f84c9af7a85ce906e",
+  /* Self-hosted asset wins when present; see public/models/README.md. */
+  file: "/models/metal_credit_card.glb",
   thumb:
     "https://media.sketchfab.com/models/b6cff2460421408f84c9af7a85ce906e/thumbnails/9a39a45965a74faa808d3c4cee76fd2d/32cc070606934640b0f268baf0b1abba.jpeg",
   credit: { model: "Metal Credit Card", author: "Maxitaxx" },
 };
+
+/* Bitcoin coin for the crypto screen, rendered on our own stage. */
+export const CRYPTO_MODEL = {
+  file: "/models/jeremy_george_lake_charles_bitcoin_metal_coin.glb",
+  credit: { model: "Bitcoin Metal Coin", author: "Jeremy George Lake Charles" },
+};
+
+/**
+ * Illustrative market data for the crypto screen. Fixed on purpose: a demo
+ * must never look like a live quote or like investment advice.
+ */
+export const BTC_PRICE_BRL = 348_920;
+export const BTC_CHANGE_PCT = 2.4;
+/** 24 points of a plausible session, normalised 0..1 for the sparkline. */
+export const BTC_SPARK = [
+  0.32, 0.35, 0.31, 0.38, 0.44, 0.41, 0.47, 0.52, 0.49, 0.55, 0.62, 0.58, 0.64,
+  0.61, 0.68, 0.72, 0.69, 0.75, 0.71, 0.78, 0.83, 0.79, 0.86, 0.91,
+];
+/** Quick-pick amounts in BRL. */
+export const CRYPTO_PRESETS = [50, 100, 500];
+export const CRYPTO_MIN = 25;
+export const CRYPTO_MAX = 5_000;
+export const CRYPTO_STEP = 25;
+export const CRYPTO_DEFAULT = 100;
+
+export type CryptoCoinId = "btc" | "eth" | "sol";
+
+export interface CryptoCoinSeed {
+  id: CryptoCoinId;
+  symbol: string;
+  priceBRL: number;
+  changePct: number;
+  color: string;
+}
+
+export const CRYPTO_COINS: CryptoCoinSeed[] = [
+  { id: "btc", symbol: "BTC", priceBRL: BTC_PRICE_BRL, changePct: BTC_CHANGE_PCT, color: "#E8A13D" },
+  { id: "eth", symbol: "ETH", priceBRL: 18_640, changePct: 1.1, color: "#7CB342" },
+  { id: "sol", symbol: "SOL", priceBRL: 892, changePct: -0.8, color: "#166B4A" },
+];
+
+/** Satoshis bought with a given amount of reais, at the illustrative rate. */
+export function btcForBRL(amountBRL: number): number {
+  return amountBRL / BTC_PRICE_BRL;
+}
 
 /* ------------------------------------------------------------------ */
 /* Content shape                                                        */
@@ -120,6 +167,7 @@ export interface NavLink {
 
 export type PixBulletIcon = "users" | "receipt" | "moon-star";
 export type BenefitIcon = "circle-check" | "hand-coins" | "zap" | "smartphone";
+export type CryptoBulletIcon = "coins" | "lock" | "repeat";
 export type SecurityIcon = "eye-off" | "shield-alert" | "scan-face" | "moon-star";
 
 export interface ZelaContent {
@@ -210,9 +258,35 @@ export interface ZelaContent {
     titleAccent: string;
     intro: string;
     viewerTitle: string;
-    loadLabel: string;
     hint: string;
     benefits: { icon: BenefitIcon; title: string; body: string }[];
+  };
+  crypto: {
+    label: string;
+    titleLead: string;
+    titleAccent: string;
+    titleEnd: string;
+    intro: string;
+    bullets: { icon: CryptoBulletIcon; title: string; body: string }[];
+    screen: {
+      tag: string;
+      walletLabel: string;
+      walletValue: string;
+      modelTitle: string;
+      hint: string;
+      priceLabel: string;
+      changeLabel: string;
+      sessionLabel: string;
+      amountLabel: string;
+      sliderAria: string;
+      receiveLabel: string;
+      feeLabel: string;
+      feeValue: string;
+      cta: string;
+      listLabel: string;
+      note: string;
+      coins: Record<CryptoCoinId, string>;
+    };
   };
   security: {
     label: string;
@@ -270,6 +344,7 @@ export const zelaDict: DemoDictionary<ZelaContent> = {
         { href: "pix", label: "Pix" },
         { href: "caixinhas", label: "Caixinhas" },
         { href: "cartao", label: "Card" },
+        { href: "cripto", label: "Crypto" },
         { href: "seguranca", label: "Security" },
         { href: "tarifas", label: "Fees" },
       ],
@@ -393,7 +468,6 @@ export const zelaDict: DemoDictionary<ZelaContent> = {
       intro:
         "Spin it around — it's real metal, with none of the fake-premium fees. Credit and debit in one piece, fully controlled from the app.",
       viewerTitle: "Zela Metal card in 3D",
-      loadLabel: "View the card in 3D",
       hint: "Drag to spin the card",
       benefits: [
         {
@@ -417,6 +491,50 @@ export const zelaDict: DemoDictionary<ZelaContent> = {
           body: "Lock it, tune limits and follow purchases in real time.",
         },
       ],
+    },
+    crypto: {
+      label: "Crypto inside your account",
+      titleLead: "Bitcoin without",
+      titleAccent: "leaving",
+      titleEnd: "the app.",
+      intro:
+        "The same account, one extra tab. Buy from R$ 25, watch it next to your balance and take it out via Pix whenever you want — no brokerage account, no separate app, no wire transfer.",
+      bullets: [
+        {
+          icon: "coins",
+          title: "From R$ 25 in",
+          body: "Buy fractions of a coin. You never need a whole Bitcoin to start.",
+        },
+        {
+          icon: "lock",
+          title: "Custody on us",
+          body: "Coins held by a regulated custodian, segregated from Zela's own balance sheet.",
+        },
+        {
+          icon: "repeat",
+          title: "Out via Pix",
+          body: "Sell and the reais land in your account balance in seconds, any day of the week.",
+        },
+      ],
+      screen: {
+        tag: "Crypto",
+        walletLabel: "Your crypto",
+        walletValue: "0,0428 BTC",
+        modelTitle: "Bitcoin coin in 3D",
+        hint: "Drag to spin the coin",
+        priceLabel: "BTC / BRL",
+        changeLabel: "24h",
+        sessionLabel: "Last 24 hours",
+        amountLabel: "How much do you want to put in?",
+        sliderAria: "Amount in reais",
+        receiveLabel: "You get",
+        feeLabel: "Spread",
+        feeValue: "0,5%",
+        cta: "Buy Bitcoin",
+        listLabel: "Also available",
+        note: "Illustrative figures for a concept screen — not a live quote and not investment advice. Crypto is volatile and can lose value.",
+        coins: { btc: "Bitcoin", eth: "Ethereum", sol: "Solana" },
+      },
     },
     security: {
       label: "Security",
@@ -506,6 +624,7 @@ export const zelaDict: DemoDictionary<ZelaContent> = {
         { href: "pix", label: "Pix" },
         { href: "caixinhas", label: "Caixinhas" },
         { href: "cartao", label: "Cartão" },
+        { href: "cripto", label: "Cripto" },
         { href: "seguranca", label: "Segurança" },
         { href: "tarifas", label: "Tarifas" },
       ],
@@ -629,7 +748,6 @@ export const zelaDict: DemoDictionary<ZelaContent> = {
       intro:
         "Gire o cartão na tela: é metal de verdade, sem taxa de mentira. Crédito e débito na mesma peça, no seu controle pelo app.",
       viewerTitle: "Cartão Zela Metal em 3D",
-      loadLabel: "Ver o cartão em 3D",
       hint: "Arraste para girar o cartão",
       benefits: [
         {
@@ -653,6 +771,50 @@ export const zelaDict: DemoDictionary<ZelaContent> = {
           body: "Bloqueie, ajuste limites e acompanhe cada compra em tempo real.",
         },
       ],
+    },
+    crypto: {
+      label: "Cripto dentro da conta",
+      titleLead: "Bitcoin sem",
+      titleAccent: "sair",
+      titleEnd: "do app.",
+      intro:
+        "A mesma conta, uma aba a mais. Compra a partir de R$ 25, acompanha do lado do seu saldo e tira por Pix quando quiser — sem abrir corretora, sem outro app, sem TED.",
+      bullets: [
+        {
+          icon: "coins",
+          title: "Começa com R$ 25",
+          body: "Você compra frações da moeda. Nunca precisa de um Bitcoin inteiro pra começar.",
+        },
+        {
+          icon: "lock",
+          title: "Custódia é nossa",
+          body: "Moedas guardadas em custodiante regulado, separadas do balanço da Zela.",
+        },
+        {
+          icon: "repeat",
+          title: "Saída por Pix",
+          body: "Vendeu, o reais cai no saldo da conta em segundos, qualquer dia da semana.",
+        },
+      ],
+      screen: {
+        tag: "Cripto",
+        walletLabel: "Sua cripto",
+        walletValue: "0,0428 BTC",
+        modelTitle: "Moeda de Bitcoin em 3D",
+        hint: "Arraste para girar a moeda",
+        priceLabel: "BTC / BRL",
+        changeLabel: "24h",
+        sessionLabel: "Últimas 24 horas",
+        amountLabel: "Quanto você quer colocar?",
+        sliderAria: "Valor em reais",
+        receiveLabel: "Você recebe",
+        feeLabel: "Spread",
+        feeValue: "0,5%",
+        cta: "Comprar Bitcoin",
+        listLabel: "Também disponíveis",
+        note: "Valores ilustrativos de uma tela conceito — não é cotação ao vivo nem recomendação de investimento. Cripto oscila e pode perder valor.",
+        coins: { btc: "Bitcoin", eth: "Ethereum", sol: "Solana" },
+      },
     },
     security: {
       label: "Segurança",
@@ -742,6 +904,7 @@ export const zelaDict: DemoDictionary<ZelaContent> = {
         { href: "pix", label: "Pix" },
         { href: "caixinhas", label: "Caixinhas" },
         { href: "cartao", label: "Tarjeta" },
+        { href: "cripto", label: "Cripto" },
         { href: "seguranca", label: "Seguridad" },
         { href: "tarifas", label: "Tarifas" },
       ],
@@ -865,7 +1028,6 @@ export const zelaDict: DemoDictionary<ZelaContent> = {
       intro:
         "Gira la tarjeta en pantalla: es metal de verdad, sin tasas de mentira. Crédito y débito en una sola pieza, bajo tu control en la app.",
       viewerTitle: "Tarjeta Zela Metal en 3D",
-      loadLabel: "Ver la tarjeta en 3D",
       hint: "Arrastra para girar la tarjeta",
       benefits: [
         {
@@ -889,6 +1051,50 @@ export const zelaDict: DemoDictionary<ZelaContent> = {
           body: "Bloquéala, ajusta límites y sigue cada compra en tiempo real.",
         },
       ],
+    },
+    crypto: {
+      label: "Cripto dentro de la cuenta",
+      titleLead: "Bitcoin sin",
+      titleAccent: "salir",
+      titleEnd: "de la app.",
+      intro:
+        "La misma cuenta, una pestaña más. Compra desde R$ 25, míralo al lado de tu saldo y retíralo por Pix cuando quieras — sin abrir una corredora, sin otra app, sin transferencias.",
+      bullets: [
+        {
+          icon: "coins",
+          title: "Desde R$ 25",
+          body: "Compras fracciones de la moneda. Nunca necesitas un Bitcoin entero para empezar.",
+        },
+        {
+          icon: "lock",
+          title: "La custodia es nuestra",
+          body: "Monedas guardadas en un custodio regulado, separadas del balance de Zela.",
+        },
+        {
+          icon: "repeat",
+          title: "Salida por Pix",
+          body: "Vendes y los reales caen en el saldo de la cuenta en segundos, cualquier día.",
+        },
+      ],
+      screen: {
+        tag: "Cripto",
+        walletLabel: "Tu cripto",
+        walletValue: "0,0428 BTC",
+        modelTitle: "Moneda de Bitcoin en 3D",
+        hint: "Arrastra para girar la moneda",
+        priceLabel: "BTC / BRL",
+        changeLabel: "24h",
+        sessionLabel: "Últimas 24 horas",
+        amountLabel: "¿Cuánto quieres poner?",
+        sliderAria: "Monto en reales",
+        receiveLabel: "Recibes",
+        feeLabel: "Spread",
+        feeValue: "0,5%",
+        cta: "Comprar Bitcoin",
+        listLabel: "También disponibles",
+        note: "Cifras ilustrativas de una pantalla concepto — no es cotización en vivo ni recomendación de inversión. Cripto oscila y puede perder valor.",
+        coins: { btc: "Bitcoin", eth: "Ethereum", sol: "Solana" },
+      },
     },
     security: {
       label: "Seguridad",

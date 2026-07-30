@@ -126,11 +126,12 @@ export const MAP_EMBED_URL =
 export const MAP_LINK_URL =
   "https://www.openstreetmap.org/?mlat=-22.8985&mlon=-47.0539#map=16/-22.8985/-47.0539";
 
-/* Sketchfab guitar (hero centerpiece). */
-export const GUITAR_UID = "daeadd913644438aa3096bb357a02016";
-export const GUITAR_THUMB =
-  "https://media.sketchfab.com/models/daeadd913644438aa3096bb357a02016/thumbnails/a6e8e24887114ebf98b6c1e261e400a2/f34abfce4cb74ad1b022462436f794cf.jpeg";
-export const GUITAR_CREDIT = { model: "Ibanez JEM Guitar", author: "abazibiz" };
+/**
+ * Hero centerpiece: a still shot of the house smash inside the amp cabinet.
+ * Deliberately flat art, not 3D — this frame is the poster of the joint.
+ */
+export const HOUSE_BURGER_SHOT =
+  "https://images.unsplash.com/photo-1561758033-d89a9ad46330?q=85&w=1800&auto=format&fit=crop";
 
 /* ------------------------------------------------------------------ */
 /* Content shape                                                        */
@@ -154,10 +155,8 @@ export interface GaragemContent {
     ctaReserve: string;
     marquee: string[];
     stageTag: string;
-    guitarCaption: string;
-    guitarTitle: string;
-    loadLabel: string;
-    hint: string;
+    stageCaption: string;
+    stageTitle: string;
   };
   menu: {
     label: string;
@@ -240,12 +239,10 @@ const en: GaragemContent = {
     ctaMenu: "See the menu",
     ctaReserve: "Book a table",
     marquee: ["Smash", "Rock'n'roll", "Ice-cold beer", "Campinas"],
-    stageTag: "On stage",
-    guitarCaption:
-      "The house relic: the superstrat that hangs over our stage. Spin it around — it earned every scratch.",
-    guitarTitle: "The house guitar in 3D",
-    loadLabel: "View in 3D",
-    hint: "Drag to orbit · scroll to zoom",
+    stageTag: "On the griddle",
+    stageCaption:
+      "The house smash, exactly as it leaves the griddle: double patty, crown of melted cheese, buttered bun. No filter, no styling.",
+    stageTitle: "The house smash, straight off the griddle",
   },
   menu: {
     label: "The menu",
@@ -387,12 +384,10 @@ const pt: GaragemContent = {
     ctaMenu: "Ver cardápio",
     ctaReserve: "Reservar mesa",
     marquee: ["Smash", "Rock'n'roll", "Cerveja gelada", "Campinas"],
-    stageTag: "No palco",
-    guitarCaption:
-      "A relíquia da casa: a superstrat pendurada em cima do palco. Pode girar à vontade — cada arranhão foi merecido.",
-    guitarTitle: "A guitarra da casa em 3D",
-    loadLabel: "Ver em 3D",
-    hint: "Arraste para girar · scroll dá zoom",
+    stageTag: "Na chapa",
+    stageCaption:
+      "O smash da casa do jeito que ele sai da chapa: blend duplo, coroa de queijo derretido e pão selado na manteiga. Sem filtro, sem produção.",
+    stageTitle: "O smash da casa, direto da chapa",
   },
   menu: {
     label: "O cardápio",
@@ -534,12 +529,10 @@ const es: GaragemContent = {
     ctaMenu: "Ver la carta",
     ctaReserve: "Reservar mesa",
     marquee: ["Smash", "Rock'n'roll", "Cerveza helada", "Campinas"],
-    stageTag: "En el escenario",
-    guitarCaption:
-      "La reliquia de la casa: la superstrat que cuelga sobre el escenario. Gírala tranquilo — cada rayón fue merecido.",
-    guitarTitle: "La guitarra de la casa en 3D",
-    loadLabel: "Ver en 3D",
-    hint: "Arrastra para girar · scroll para zoom",
+    stageTag: "En la plancha",
+    stageCaption:
+      "El smash de la casa tal como sale de la plancha: blend doble, corona de queso fundido y pan sellado en mantequilla. Sin filtro, sin producción.",
+    stageTitle: "El smash de la casa, directo de la plancha",
   },
   menu: {
     label: "La carta",

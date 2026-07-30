@@ -8,6 +8,7 @@ import { ZelaHero } from "./zela-hero";
 import { ZelaPix } from "./zela-pix";
 import { ZelaBoxes } from "./zela-caixinhas";
 import { ZelaCard } from "./zela-card";
+import { ZelaCrypto } from "./zela-cripto";
 import { ZelaSecurity } from "./zela-security";
 import { ZelaFees } from "./zela-fees";
 import { ZelaCta } from "./zela-cta";
@@ -50,6 +51,7 @@ export function Zela({ locale }: { locale: string }) {
         <ZelaPix content={content.pix} />
         <ZelaBoxes content={content.boxes} />
         <ZelaCard content={content.card} />
+        <ZelaCrypto content={content.crypto} />
         <ZelaSecurity content={content.security} />
         <ZelaFees content={content.fees} />
         <ZelaCta content={content.cta} />
