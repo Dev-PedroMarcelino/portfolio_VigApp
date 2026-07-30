@@ -1,6 +1,6 @@
 "use client";
 
-import { Component, useEffect, useState } from "react";
+import { Component, useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
@@ -30,10 +30,12 @@ export function Model3D({
   file,
   title,
   thumb,
-  hint,
   accent = "#ffffff",
   autospin,
   framing,
+  motion = "drag",
+  spinTurns,
+  introSpin,
   embedFallback = true,
   className,
 }: {
@@ -45,14 +47,22 @@ export function Model3D({
   title: string;
   /** Poster shown until the first frame is painted; omit for a bare viewport. */
   thumb?: string;
-  /** Localized orbit hint, shown briefly once the model is live. */
-  hint?: string;
   /** Accent for the loading sweep and the rim light. */
   accent?: string;
   /** Slow turntable; ignored when the visitor asked for reduced motion. */
   autospin?: boolean;
   /** Room scans want a tighter camera than props do. */
   framing?: "object" | "interior";
+  /**
+   * "scroll" hands the rotation to the page: the model turns as the visitor
+   * scrolls past and unwinds as they scroll back. Without it the object turns
+   * on its own. Either way nothing is draggable. Ignored by the embed fallback.
+   */
+  motion?: "drag" | "scroll";
+  /** Full turns across one pass through the viewport, in scroll mode. */
+  spinTurns?: number;
+  /** Spin the model in on arrival before handing over to the scroll. */
+  introSpin?: boolean;
   /**
    * When false, a missing self-hosted asset leaves the poster in place instead
    * of borrowing the third-party viewer. Use it where the surrounding design
@@ -65,7 +75,6 @@ export function Model3D({
   const [mode, setMode] = useState<"idle" | "local" | "embed" | "poster">("idle");
   const [embedSrc, setEmbedSrc] = useState<string | null>(null);
   const [ready, setReady] = useState(false);
-  const [showHint, setShowHint] = useState(false);
 
   /* Pick a source the first time the frame is seen: our own asset if it is
      actually deployed, the viewer otherwise. Decided once, never re-run. */
@@ -94,13 +103,42 @@ export function Model3D({
     // eslint-disable-next-line react-hooks/exhaustive-deps -- decided once, on first sight
   }, [inView, mode]);
 
-  /* The hint is a nudge, not a permanent label. */
+  /* Scroll position of the frame, kept in a ref: the viewer reads it every
+     frame, so scrolling drives the model without re-rendering React. Reduced
+     motion opts out entirely and keeps the draggable viewer. */
+  const scrollProgress = useRef(0);
+  const scrollDriven = motion === "scroll" && allowMotion;
+
   useEffect(() => {
-    if (!ready || !hint) return;
-    setShowHint(true);
-    const t = window.setTimeout(() => setShowHint(false), 4600);
-    return () => window.clearTimeout(t);
-  }, [ready, hint]);
+    if (!scrollDriven || mode !== "local") return;
+    const node = ref.current;
+    if (!node) return;
+
+    let frame = 0;
+    const measure = () => {
+      frame = 0;
+      const rect = node.getBoundingClientRect();
+      const travel = window.innerHeight + rect.height;
+      /* 0 as the top edge reaches the fold, 1 as the bottom edge clears it. */
+      scrollProgress.current = Math.min(
+        1,
+        Math.max(0, (window.innerHeight - rect.top) / travel),
+      );
+    };
+    const onScroll = () => {
+      if (!frame) frame = window.requestAnimationFrame(measure);
+    };
+
+    measure();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => {
+      if (frame) window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [scrollDriven, mode, ref]);
+
 
   return (
     <div ref={ref} className={cn("relative isolate overflow-hidden", className)}>
@@ -144,6 +182,9 @@ export function Model3D({
               autospin={!!autospin && allowMotion}
               framing={framing}
               active={inView}
+              scrollProgress={scrollDriven ? scrollProgress : undefined}
+              spinTurns={spinTurns}
+              introSpin={introSpin && scrollDriven}
               onReady={() => setReady(true)}
               /* Out of GPU memory on a weak device: keep the poster, not a
                  black rectangle. Never the embed — it would fare no better. */
@@ -187,17 +228,6 @@ export function Model3D({
         </span>
       )}
 
-      {hint && (
-        <span
-          aria-hidden
-          className={cn(
-            "pointer-events-none absolute bottom-3 left-1/2 z-30 -translate-x-1/2 whitespace-nowrap rounded-full bg-black/45 px-3.5 py-1.5 text-[10px] font-medium uppercase tracking-[0.16em] text-white/85 backdrop-blur-md transition-opacity duration-700",
-            showHint ? "opacity-100" : "opacity-0",
-          )}
-        >
-          {hint}
-        </span>
-      )}
     </div>
   );
 }
@@ -247,7 +277,7 @@ function viewerSrc(uid: string, accent: string, spin: boolean) {
     ui_stop: "0",
     ui_start: "0",
     ui_loading: "0", // our own poster covers the download
-    ui_hint: "0", // our own hint chip replaces it
+    ui_hint: "0", // no instructional overlay of theirs either
     ui_help: "0",
     ui_settings: "0",
     ui_inspector: "0",

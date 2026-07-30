@@ -50,9 +50,11 @@ export function ZelaCard({ content }: { content: ZelaContent["card"] }) {
             file={CARD_MODEL.file}
             title={content.viewerTitle}
             thumb={CARD_MODEL.thumb}
-            hint={content.hint}
             accent="#7CB342"
-            autospin
+            /* Spins in on arrival, then follows the scroll. */
+            motion="scroll"
+            spinTurns={1.15}
+            introSpin
             className="aspect-[4/3] w-full rounded-[2.2rem] border border-white/10 bg-black/30 shadow-[0_60px_120px_-50px_rgba(0,0,0,0.8)]"
           />
           <ModelCredit

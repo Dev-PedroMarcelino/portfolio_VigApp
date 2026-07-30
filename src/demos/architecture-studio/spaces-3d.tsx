@@ -80,9 +80,13 @@ export function Spaces3D({ content }: { content: PrumoContent["spaces"] }) {
                       file={seed.file}
                       title={item.name}
                       thumb={seed.thumb}
-                      hint={content.hint}
                       accent={BRONZE}
                       framing="interior"
+                      /* The room pans as the visitor reads down the page. A
+                         short sweep on purpose: a full turn on a scanned room
+                         swings the camera through its walls. */
+                      motion="scroll"
+                      spinTurns={0.13}
                       className="aspect-[4/3] w-full sm:aspect-[16/10]"
                     />
                     <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between">

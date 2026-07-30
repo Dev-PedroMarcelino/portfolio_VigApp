@@ -32,7 +32,7 @@ export function Vista360({
   const add = () => {
     if (!size) return;
     onAdd({
-      key: `aj1-panda-${size}`,
+      key: `sb-charge-${size}`,
       name: content.name,
       size,
       price: content.price,
@@ -81,7 +81,6 @@ export function Vista360({
                 file={VISTA_MODEL.file}
                 title={content.modelTitle}
                 thumb={VISTA_MODEL.thumb}
-                hint={content.hint}
                 accent={VISTA_ACCENT}
                 autospin
                 className="aspect-square w-full rounded-[1.6rem] bg-[var(--d-panel)]"

@@ -258,7 +258,6 @@ export interface ZelaContent {
     titleAccent: string;
     intro: string;
     viewerTitle: string;
-    hint: string;
     benefits: { icon: BenefitIcon; title: string; body: string }[];
   };
   crypto: {
@@ -273,7 +272,6 @@ export interface ZelaContent {
       walletLabel: string;
       walletValue: string;
       modelTitle: string;
-      hint: string;
       priceLabel: string;
       changeLabel: string;
       sessionLabel: string;
@@ -468,7 +466,6 @@ export const zelaDict: DemoDictionary<ZelaContent> = {
       intro:
         "Spin it around — it's real metal, with none of the fake-premium fees. Credit and debit in one piece, fully controlled from the app.",
       viewerTitle: "Zela Metal card in 3D",
-      hint: "Drag to spin the card",
       benefits: [
         {
           icon: "circle-check",
@@ -521,7 +518,6 @@ export const zelaDict: DemoDictionary<ZelaContent> = {
         walletLabel: "Your crypto",
         walletValue: "0,0428 BTC",
         modelTitle: "Bitcoin coin in 3D",
-        hint: "Drag to spin the coin",
         priceLabel: "BTC / BRL",
         changeLabel: "24h",
         sessionLabel: "Last 24 hours",
@@ -748,7 +744,6 @@ export const zelaDict: DemoDictionary<ZelaContent> = {
       intro:
         "Gire o cartão na tela: é metal de verdade, sem taxa de mentira. Crédito e débito na mesma peça, no seu controle pelo app.",
       viewerTitle: "Cartão Zela Metal em 3D",
-      hint: "Arraste para girar o cartão",
       benefits: [
         {
           icon: "circle-check",
@@ -801,7 +796,6 @@ export const zelaDict: DemoDictionary<ZelaContent> = {
         walletLabel: "Sua cripto",
         walletValue: "0,0428 BTC",
         modelTitle: "Moeda de Bitcoin em 3D",
-        hint: "Arraste para girar a moeda",
         priceLabel: "BTC / BRL",
         changeLabel: "24h",
         sessionLabel: "Últimas 24 horas",
@@ -1028,7 +1022,6 @@ export const zelaDict: DemoDictionary<ZelaContent> = {
       intro:
         "Gira la tarjeta en pantalla: es metal de verdad, sin tasas de mentira. Crédito y débito en una sola pieza, bajo tu control en la app.",
       viewerTitle: "Tarjeta Zela Metal en 3D",
-      hint: "Arrastra para girar la tarjeta",
       benefits: [
         {
           icon: "circle-check",
@@ -1081,7 +1074,6 @@ export const zelaDict: DemoDictionary<ZelaContent> = {
         walletLabel: "Tu cripto",
         walletValue: "0,0428 BTC",
         modelTitle: "Moneda de Bitcoin en 3D",
-        hint: "Arrastra para girar la moneda",
         priceLabel: "BTC / BRL",
         changeLabel: "24h",
         sessionLabel: "Últimas 24 horas",

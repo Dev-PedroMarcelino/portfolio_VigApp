@@ -211,7 +211,6 @@ export interface PrumoContent {
     intro: string;
     body: string;
     bullets: string[];
-    hint: string;
     note: string;
     tabsAria: string;
     items: SpaceCopy[];
@@ -421,13 +420,12 @@ const en: PrumoContent = {
     titleLead: "Walk into the project",
     titleItalic: "before construction begins.",
     intro: "Interactive rooms, straight from our design workflow",
-    body: "Every Prumo client receives the preliminary design as a navigable 3D model — not still renders. You orbit each room, check heights and finishes, and approve the house you will actually live in. Decisions happen on screen, not on the construction site, where they cost ten times more.",
+    body: "Every Prumo client receives the preliminary design as a navigable 3D model — not still renders. Each room turns as you scroll, so you check heights and finishes and approve the house you will actually live in. Decisions happen on screen, not on the construction site, where they cost ten times more.",
     bullets: [
       "Navigable model delivered at preliminary design stage",
       "Real materials and lighting studied before a single brick",
       "Revisions decided together, on screen, in days — not weeks",
     ],
-    hint: "Drag to orbit the room",
     note: "Illustrative scenes — CC BY models, rendered in real time on this page.",
     tabsAria: "Choose a room to explore",
     items: [
@@ -732,13 +730,12 @@ const pt: PrumoContent = {
     titleLead: "Entre no projeto",
     titleItalic: "antes de a obra começar.",
     intro: "Ambientes interativos, direto do nosso fluxo de projeto",
-    body: "Todo cliente Prumo recebe o anteprojeto como um modelo 3D navegável — não como renders estáticos. Você orbita cada ambiente, confere alturas e acabamentos e aprova a casa em que vai realmente morar. As decisões acontecem na tela, não no canteiro, onde custam dez vezes mais.",
+    body: "Todo cliente Prumo recebe o anteprojeto como um modelo 3D navegável — não como renders estáticos. Cada ambiente gira conforme você desce a página, então você confere alturas e acabamentos e aprova a casa em que vai realmente morar. As decisões acontecem na tela, não no canteiro, onde custam dez vezes mais.",
     bullets: [
       "Modelo navegável entregue já no anteprojeto",
       "Materiais e luz reais estudados antes do primeiro tijolo",
       "Revisões decididas juntos, na tela, em dias — não semanas",
     ],
-    hint: "Arraste para orbitar o ambiente",
     note: "Cenas ilustrativas — modelos CC BY renderizados em tempo real nesta página.",
     tabsAria: "Escolha um ambiente para explorar",
     items: [
@@ -1044,13 +1041,12 @@ const es: PrumoContent = {
     titleLead: "Entra al proyecto",
     titleItalic: "antes de que empiece la obra.",
     intro: "Ambientes interactivos, directo de nuestro flujo de proyecto",
-    body: "Todo cliente Prumo recibe el anteproyecto como un modelo 3D navegable — no como renders estáticos. Orbitas cada ambiente, verificas alturas y acabados y apruebas la casa en la que realmente vas a vivir. Las decisiones ocurren en pantalla, no en la obra, donde cuestan diez veces más.",
+    body: "Todo cliente Prumo recibe el anteproyecto como un modelo 3D navegable — no como renders estáticos. Cada ambiente gira mientras te desplazas, así verificas alturas y acabados y apruebas la casa en la que realmente vas a vivir. Las decisiones ocurren en pantalla, no en la obra, donde cuestan diez veces más.",
     bullets: [
       "Modelo navegable entregado ya en el anteproyecto",
       "Materiales y luz reales estudiados antes del primer ladrillo",
       "Revisiones decididas juntos, en pantalla, en días — no semanas",
     ],
-    hint: "Arrastra para orbitar el ambiente",
     note: "Escenas ilustrativas — modelos CC BY renderizados en tiempo real en esta página.",
     tabsAria: "Elige un ambiente para explorar",
     items: [

@@ -167,7 +167,6 @@ export function HeroSection({
               file={SKETCHFAB_911.file}
               title={content.stage.title}
               thumb={SKETCHFAB_911.thumb}
-              hint={content.stage.hint}
               accent="#D9A441"
               autospin
               className="aspect-[4/3] rounded-2xl border border-[var(--d-line)] bg-[var(--d-surface)] shadow-[0_30px_80px_rgba(0,0,0,0.55)]"

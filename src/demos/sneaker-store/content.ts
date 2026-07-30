@@ -141,7 +141,6 @@ export interface Vista360Content {
   intro: string;
   badge: string;
   modelTitle: string;
-  hint: string;
   featureNote: string;
   name: string;
   colorway: string;
@@ -268,12 +267,12 @@ const IMG = {
 /** Sketchfab model powering the "Vista 360°" feature. */
 export const VISTA_MODEL = {
   /* Self-hosted asset wins when present; see public/models/README.md. */
-  file: "/models/air_jordan_1_chicago_black_toe.glb",
+  file: "/models/nike_sb_charge_cnvs.glb",
   /* Source of the deployed asset, and the fallback viewer's model. */
-  uid: "60804072d9614d2f943ba379fbb642a8",
+  uid: "46261bacdcbe4f2381edd5d1afc8df91",
   thumb:
-    "https://media.sketchfab.com/models/60804072d9614d2f943ba379fbb642a8/thumbnails/77b7a62a4b4a4a3da92de3364004d935/3aae9a3d6a71421aa6c91f56c2d7d1a1.jpeg",
-  credit: { model: "Air Jordan 1 (Chicago Black Toe)", author: "Shane Vince Marcos" },
+    "https://media.sketchfab.com/models/46261bacdcbe4f2381edd5d1afc8df91/thumbnails/afb104326de94d938af79f9477fe9cab/ef57f6326fd54ca896def7ed31669370.jpeg",
+  credit: { model: "Nike SB Charge CNVS", author: "wolkoed" },
 };
 
 /* Sizes shared by every catalog sneaker (BR numbering). */
@@ -430,15 +429,14 @@ export const vielaDict: DemoDictionary<VielaContent> = {
     vista: {
       label: "Spin the sneaker",
       title: "360° view",
-      intro: "A real 3D scan, live on the page. Drag the shoe, spin it, zoom into the stitching — then take it home.",
+      intro: "A real 3D scan, live on the page, turning on its own so you see every side of the pair — then take it home.",
       badge: "VISTA 360°",
-      modelTitle: "AJ1 High 'Chicago Black Toe' — interactive 3D model",
-      hint: "Drag to spin the sneaker",
-      featureNote: "Real-time 3D, rendered on this page — model by Shane Vince Marcos (CC BY).",
-      name: "AJ1 High 'Chicago Black Toe'",
-      colorway: "White / Black / Red",
-      price: 1199,
-      description: "The alley classic in its loudest cut: white leather, black toe and that red that carries the whole fit. Full-grain leather, vintage sole, curated pairs verified one by one by the VIELA crew.",
+      modelTitle: "SB Charge CNVS — interactive 3D model",
+      featureNote: "Real-time 3D, rendered on this page — model by wolkoed (CC BY).",
+      name: "Nike SB Charge CNVS",
+      colorway: "Khaki / White",
+      price: 649,
+      description: "Skate canvas that takes a beating and looks better for it. Khaki upper, vulcanised white sole, low profile that goes with everything. Curated pairs, checked one by one by the VIELA crew.",
       sizeLabel: "Select size",
       sizeUnit: "BR",
       sizes: ["38", "39", "40", "41", "42", "43", "44"],
@@ -679,15 +677,14 @@ export const vielaDict: DemoDictionary<VielaContent> = {
     vista: {
       label: "Gira o tênis",
       title: "Vista 360°",
-      intro: "Um scan 3D de verdade, rodando na página. Arrasta o tênis, gira, dá zoom na costura — e depois leva pra casa.",
+      intro: "Um scan 3D de verdade, girando sozinho na página pra você ver o par de todos os lados — e depois levar pra casa.",
       badge: "VISTA 360°",
-      modelTitle: "AJ1 High 'Chicago Black Toe' — modelo 3D interativo",
-      hint: "Arraste para girar o tênis",
-      featureNote: "3D em tempo real, renderizado nesta página — modelo de Shane Vince Marcos (CC BY).",
-      name: "AJ1 High 'Chicago Black Toe'",
-      colorway: "Branco / Preto / Vermelho",
-      price: 1199,
-      description: "O clássico da viela no recorte mais barulhento: couro branco, bico preto e aquele vermelho que carrega o fit inteiro. Couro de flor integral, sola vintage e pares conferidos um a um pela equipe VIELA.",
+      modelTitle: "SB Charge CNVS — modelo 3D interativo",
+      featureNote: "3D em tempo real, renderizado nesta página — modelo de wolkoed (CC BY).",
+      name: "Nike SB Charge CNVS",
+      colorway: "Cáqui / Branco",
+      price: 649,
+      description: "Lona de skate que apanha e fica melhor por isso. Cabedal cáqui, sola vulcanizada branca e cano baixo que combina com tudo. Pares selecionados, conferidos um a um pela equipe VIELA.",
       sizeLabel: "Escolha o número",
       sizeUnit: "BR",
       sizes: ["38", "39", "40", "41", "42", "43", "44"],
@@ -928,15 +925,14 @@ export const vielaDict: DemoDictionary<VielaContent> = {
     vista: {
       label: "Gira la zapatilla",
       title: "Vista 360°",
-      intro: "Un escaneo 3D real, en vivo en la página. Arrastra la zapatilla, gírala, haz zoom a la costura — y luego llévatela.",
+      intro: "Un escaneo 3D real, girando solo en la página para que veas el par por todos lados — y luego te lo lleves.",
       badge: "VISTA 360°",
-      modelTitle: "AJ1 High 'Chicago Black Toe' — modelo 3D interactivo",
-      hint: "Arrastra para girar el tenis",
-      featureNote: "3D en tiempo real, renderizado en esta página — modelo de Shane Vince Marcos (CC BY).",
-      name: "AJ1 High 'Chicago Black Toe'",
-      colorway: "Blanco / Negro / Rojo",
-      price: 1199,
-      description: "El clásico del callejón en su corte más ruidoso: cuero blanco, punta negra y ese rojo que carga el fit entero. Cuero plena flor, suela vintage y pares verificados uno a uno por el equipo VIELA.",
+      modelTitle: "SB Charge CNVS — modelo 3D interactivo",
+      featureNote: "3D en tiempo real, renderizado en esta página — modelo de wolkoed (CC BY).",
+      name: "Nike SB Charge CNVS",
+      colorway: "Caqui / Blanco",
+      price: 649,
+      description: "Lona de skate que aguanta y se ve mejor por eso. Empeine caqui, suela vulcanizada blanca y caña baja que combina con todo. Pares seleccionados, verificados uno a uno por el equipo VIELA.",
       sizeLabel: "Elige tu talla",
       sizeUnit: "BR",
       sizes: ["38", "39", "40", "41", "42", "43", "44"],

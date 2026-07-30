@@ -255,7 +255,6 @@ export interface BarcellosContent {
     stage: {
       eyebrow: string;
       title: string;
-      hint: string;
       priceTag: string;
       fichaCta: string;
     };
@@ -422,7 +421,6 @@ const pt: BarcellosContent = {
     stage: {
       eyebrow: "Destaque da semana",
       title: "Gire o carro — Porsche 911 Carrera 4S",
-      hint: "Arraste para girar o carro",
       priceTag: "R$ 899.900",
       fichaCta: "Ver ficha completa",
     },
@@ -635,7 +633,6 @@ const en: BarcellosContent = {
     stage: {
       eyebrow: "Car of the week",
       title: "Spin the car — Porsche 911 Carrera 4S",
-      hint: "Drag to rotate the car",
       priceTag: "R$ 899.900",
       fichaCta: "See the full spec sheet",
     },
@@ -848,7 +845,6 @@ const es: BarcellosContent = {
     stage: {
       eyebrow: "Destacado de la semana",
       title: "Gira el auto — Porsche 911 Carrera 4S",
-      hint: "Arrastra para girar el auto",
       priceTag: "R$ 899.900",
       fichaCta: "Ver ficha completa",
     },

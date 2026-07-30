@@ -160,7 +160,6 @@ export function ZelaCrypto({ content }: { content: ZelaContent["crypto"] }) {
             <Model3D
               file={CRYPTO_MODEL.file}
               title={screen.modelTitle}
-              hint={screen.hint}
               accent="#E8A13D"
               autospin
               embedFallback={false}
