@@ -3,9 +3,9 @@
 import { motion } from "framer-motion";
 import { useReducedMotionSafe as useReducedMotion } from "@/components/demos/use-reduced-motion-safe";
 import { ArrowUpRight, BadgeCheck, MessageCircle, ShieldCheck, Truck } from "lucide-react";
-import { Model3D, ModelCredit } from "@/components/demos/model-3d";
 import type { BarcellosContent } from "./content";
-import { SKETCHFAB_911, waLink } from "./content";
+import { FEATURED, waLink } from "./content";
+import { ShowroomStage } from "./showroom-stage";
 import { EASE, FOCUS, scrollToId } from "./ui";
 
 const BULLET_ICONS = [ShieldCheck, BadgeCheck, Truck];
@@ -136,7 +136,7 @@ export function HeroSection({
           </motion.dl>
         </div>
 
-        {/* Showroom stage with the real 3D model */}
+        {/* Showroom stage: the car of the week, audited live */}
         <motion.div
           initial={reduced ? false : { opacity: 0, scale: 0.94, y: 24 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -156,40 +156,24 @@ export function HeroSection({
           </div>
 
           <div className="relative">
-            {/* Corner ticks framing the stage */}
-            <span aria-hidden className="absolute -left-2 -top-2 z-20 h-5 w-5 border-l border-t border-[var(--d-gold)]/60" />
-            <span aria-hidden className="absolute -right-2 -top-2 z-20 h-5 w-5 border-r border-t border-[var(--d-gold)]/60" />
-            <span aria-hidden className="absolute -bottom-2 -left-2 z-20 h-5 w-5 border-b border-l border-[var(--d-gold)]/60" />
-            <span aria-hidden className="absolute -bottom-2 -right-2 z-20 h-5 w-5 border-b border-r border-[var(--d-gold)]/60" />
-
-            <Model3D
-              uid={SKETCHFAB_911.uid}
-              file={SKETCHFAB_911.file}
-              title={content.stage.title}
-              thumb={SKETCHFAB_911.thumb}
-              accent="#D9A441"
-              autospin
-              className="aspect-[4/3] rounded-2xl border border-[var(--d-line)] bg-[var(--d-surface)] shadow-[0_30px_80px_rgba(0,0,0,0.55)]"
+            <ShowroomStage
+              photo={FEATURED.photo}
+              alt={content.stage.photoAlt}
+              scanLabel={content.stage.scanLabel}
+              scanDone={content.stage.scanDone}
+              pins={content.stage.pins}
+              meters={content.stage.meters}
             />
 
             {/* Showroom plinth: champagne baseline + elliptical floor glow */}
             <div
               aria-hidden
-              className="absolute -bottom-7 left-1/2 h-14 w-[86%] -translate-x-1/2 rounded-[100%] opacity-60 blur-2xl"
+              className="absolute -bottom-8 left-1/2 h-14 w-[86%] -translate-x-1/2 rounded-[100%] opacity-60 blur-2xl"
               style={{ background: "radial-gradient(ellipse, rgba(217,164,65,0.3), transparent 70%)" }}
-            />
-            <div
-              aria-hidden
-              className="absolute -bottom-0.5 left-1/2 h-px w-[72%] -translate-x-1/2 bg-gradient-to-r from-transparent via-[var(--d-gold)]/70 to-transparent"
             />
           </div>
 
-          <ModelCredit
-            credit={SKETCHFAB_911.credit}
-            className="mt-6 text-center text-[0.6rem] uppercase tracking-[0.16em] text-[var(--d-ink-soft)]/60 [font-family:var(--demo-mono)]"
-          />
-
-          <div className="mt-4 flex justify-center">
+          <div className="mt-8 flex justify-center">
             <button
               type="button"
               onClick={() => scrollToId("destaque")}

@@ -6,8 +6,8 @@ import { useReducedMotionSafe as useReducedMotion } from "@/components/demos/use
 import * as Slider from "@radix-ui/react-slider";
 import { Coins, Lock, Repeat, TrendingDown, TrendingUp } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { Model3D, ModelCredit } from "@/components/demos/model-3d";
 import type { CryptoBulletIcon, ZelaContent } from "./content";
+import { Coin } from "./coin";
 import {
   BTC_CHANGE_PCT,
   BTC_PRICE_BRL,
@@ -16,7 +16,6 @@ import {
   CRYPTO_DEFAULT,
   CRYPTO_MAX,
   CRYPTO_MIN,
-  CRYPTO_MODEL,
   CRYPTO_PRESETS,
   CRYPTO_STEP,
   btcForBRL,
@@ -76,8 +75,8 @@ function Sparkline({ points, className }: { points: number[]; className?: string
 /**
  * "Cripto" — the crypto tab of the account, presented as an app screen rather
  * than a full-bleed dark section, so the demo keeps its single dark passage
- * (the metal card). The real Bitcoin model sits on our own three.js stage at
- * the top of the screen, spinning slowly over the quote.
+ * (the metal card). A struck coin turns slowly over the quote at the top of
+ * the screen, built in CSS like the rest of the interface around it.
  */
 export function ZelaCrypto({ content }: { content: ZelaContent["crypto"] }) {
   const reduced = useReducedMotion() ?? false;
@@ -156,15 +155,8 @@ export function ZelaCrypto({ content }: { content: ZelaContent["crypto"] }) {
               </span>
             </div>
 
-            {/* The coin, on our own stage — transparent, so it floats on the screen */}
-            <Model3D
-              file={CRYPTO_MODEL.file}
-              title={screen.modelTitle}
-              accent="#E8A13D"
-              autospin
-              embedFallback={false}
-              className="mt-2 h-44 w-full sm:h-52"
-            />
+            {/* The coin, struck in CSS, turning over the quote */}
+            <Coin label={screen.coinTitle} className="mt-2 h-44 w-full sm:h-52" />
 
             {/* Quote */}
             <div className="px-6">
@@ -302,10 +294,6 @@ export function ZelaCrypto({ content }: { content: ZelaContent["crypto"] }) {
           <p className="mt-5 text-[0.68rem] leading-relaxed text-[var(--d-ink-soft)]">
             {screen.note}
           </p>
-          <ModelCredit
-            credit={CRYPTO_MODEL.credit}
-            className="mt-2 text-[0.62rem] uppercase tracking-[0.14em] text-[var(--d-ink-soft)]/55 [font-family:var(--demo-mono)]"
-          />
         </motion.div>
       </div>
     </section>

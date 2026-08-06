@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { BadgeCheck, CalendarCheck, MessageCircle, Rotate3d } from "lucide-react";
+import { BadgeCheck, CalendarCheck, MessageCircle, ScanLine } from "lucide-react";
 import type { BarcellosContent } from "./content";
-import { FEATURED, SKETCHFAB_911, waLink } from "./content";
+import { FEATURED, waLink } from "./content";
 import { FOCUS, Reveal, SectionLabel, fmtBRL, scrollToId } from "./ui";
 
 export function FeaturedSection({ content }: { content: BarcellosContent["featured"] }) {
@@ -16,10 +16,10 @@ export function FeaturedSection({ content }: { content: BarcellosContent["featur
 
         <div className="mt-8 overflow-hidden rounded-3xl border border-[var(--d-line)] bg-[var(--d-surface)] shadow-[0_40px_100px_rgba(0,0,0,0.45)]">
           <div className="grid lg:grid-cols-[1.02fr_0.98fr]">
-            {/* Poster of the same car that spins on the hero stage */}
+            {/* Same car that is audited on the hero stage */}
             <Reveal className="relative min-h-[280px] lg:min-h-[460px]">
               <Image
-                src={SKETCHFAB_911.thumb}
+                src={FEATURED.photo}
                 alt={`${content.title} — ${content.label}`}
                 fill
                 sizes="(min-width: 1024px) 50vw, 100vw"
@@ -34,8 +34,8 @@ export function FeaturedSection({ content }: { content: BarcellosContent["featur
                 onClick={() => scrollToId("top")}
                 className={`absolute bottom-4 left-4 flex items-center gap-2 rounded-full border border-white/15 bg-black/55 px-4 py-2 text-[0.72rem] font-medium uppercase tracking-[0.16em] text-white/85 backdrop-blur-md transition-colors hover:border-[var(--d-gold)]/60 hover:text-[var(--d-gold)] ${FOCUS}`}
               >
-                <Rotate3d className="h-4 w-4 text-[var(--d-gold)]" strokeWidth={1.8} />
-                {content.back3d}
+                <ScanLine className="h-4 w-4 text-[var(--d-gold)]" strokeWidth={1.8} />
+                {content.backToStage}
               </button>
             </Reveal>
 

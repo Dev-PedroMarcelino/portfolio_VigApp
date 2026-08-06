@@ -101,22 +101,6 @@ export const FEE_ROWS: FeeSeed[] = [
 
 export const FEE_TOTAL_YEAR = FEE_ROWS.reduce((sum, r) => sum + r.bankPerYear, 0);
 
-/* Sketchfab model for the Zela Metal card (CC-BY). */
-export const CARD_MODEL = {
-  uid: "b6cff2460421408f84c9af7a85ce906e",
-  /* Self-hosted asset wins when present; see public/models/README.md. */
-  file: "/models/metal_credit_card.glb",
-  thumb:
-    "https://media.sketchfab.com/models/b6cff2460421408f84c9af7a85ce906e/thumbnails/9a39a45965a74faa808d3c4cee76fd2d/32cc070606934640b0f268baf0b1abba.jpeg",
-  credit: { model: "Metal Credit Card", author: "Maxitaxx" },
-};
-
-/* Bitcoin coin for the crypto screen, rendered on our own stage. */
-export const CRYPTO_MODEL = {
-  file: "/models/jeremy_george_lake_charles_bitcoin_metal_coin.glb",
-  credit: { model: "Bitcoin Metal Coin", author: "Jeremy George Lake Charles" },
-};
-
 /**
  * Illustrative market data for the crypto screen. Fixed on purpose: a demo
  * must never look like a live quote or like investment advice.
@@ -257,7 +241,16 @@ export interface ZelaContent {
     titleLead: string;
     titleAccent: string;
     intro: string;
+    /** Caption under the card. */
     viewerTitle: string;
+    /** Engraved cardholder line. */
+    cardHolder: string;
+    /** Grouped card number engraved on the front face. */
+    cardNumber: string;
+    cardValidLabel: string;
+    cardValid: string;
+    /** Product line stamped on the front face, e.g. "METAL". */
+    cardTier: string;
     benefits: { icon: BenefitIcon; title: string; body: string }[];
   };
   crypto: {
@@ -271,7 +264,7 @@ export interface ZelaContent {
       tag: string;
       walletLabel: string;
       walletValue: string;
-      modelTitle: string;
+      coinTitle: string;
       priceLabel: string;
       changeLabel: string;
       sessionLabel: string;
@@ -464,8 +457,13 @@ export const zelaDict: DemoDictionary<ZelaContent> = {
       titleLead: "Metal outside,",
       titleAccent: "care inside.",
       intro:
-        "Spin it around — it's real metal, with none of the fake-premium fees. Credit and debit in one piece, fully controlled from the app.",
-      viewerTitle: "Zela Metal card in 3D",
+        "Keep scrolling and it turns: real metal, milled edge and all, with none of the fake-premium fees. Credit and debit in one piece, fully controlled from the app.",
+      viewerTitle: "Zela Metal — scroll to turn it over",
+      cardHolder: "A. Nogueira",
+      cardNumber: "4271  ••••  ••••  0925",
+      cardValidLabel: "Valid thru",
+      cardValid: "09/31",
+      cardTier: "Metal",
       benefits: [
         {
           icon: "circle-check",
@@ -517,7 +515,7 @@ export const zelaDict: DemoDictionary<ZelaContent> = {
         tag: "Crypto",
         walletLabel: "Your crypto",
         walletValue: "0,0428 BTC",
-        modelTitle: "Bitcoin coin in 3D",
+        coinTitle: "Bitcoin",
         priceLabel: "BTC / BRL",
         changeLabel: "24h",
         sessionLabel: "Last 24 hours",
@@ -742,8 +740,13 @@ export const zelaDict: DemoDictionary<ZelaContent> = {
       titleLead: "Metal por fora,",
       titleAccent: "zelo por dentro.",
       intro:
-        "Gire o cartão na tela: é metal de verdade, sem taxa de mentira. Crédito e débito na mesma peça, no seu controle pelo app.",
-      viewerTitle: "Cartão Zela Metal em 3D",
+        "Continue rolando e ele vira: metal de verdade, com a lateral usinada e tudo, sem taxa de mentira. Crédito e débito na mesma peça, no seu controle pelo app.",
+      viewerTitle: "Zela Metal — role a página para virar",
+      cardHolder: "A. Nogueira",
+      cardNumber: "4271  ••••  ••••  0925",
+      cardValidLabel: "Validade",
+      cardValid: "09/31",
+      cardTier: "Metal",
       benefits: [
         {
           icon: "circle-check",
@@ -795,7 +798,7 @@ export const zelaDict: DemoDictionary<ZelaContent> = {
         tag: "Cripto",
         walletLabel: "Sua cripto",
         walletValue: "0,0428 BTC",
-        modelTitle: "Moeda de Bitcoin em 3D",
+        coinTitle: "Bitcoin",
         priceLabel: "BTC / BRL",
         changeLabel: "24h",
         sessionLabel: "Últimas 24 horas",
@@ -1020,8 +1023,13 @@ export const zelaDict: DemoDictionary<ZelaContent> = {
       titleLead: "Metal por fuera,",
       titleAccent: "cuidado por dentro.",
       intro:
-        "Gira la tarjeta en pantalla: es metal de verdad, sin tasas de mentira. Crédito y débito en una sola pieza, bajo tu control en la app.",
-      viewerTitle: "Tarjeta Zela Metal en 3D",
+        "Sigue desplazándote y gira: metal de verdad, con el canto fresado incluido, sin tasas de mentira. Crédito y débito en una sola pieza, bajo tu control en la app.",
+      viewerTitle: "Zela Metal — desplázate para girarla",
+      cardHolder: "A. Nogueira",
+      cardNumber: "4271  ••••  ••••  0925",
+      cardValidLabel: "Válida hasta",
+      cardValid: "09/31",
+      cardTier: "Metal",
       benefits: [
         {
           icon: "circle-check",
@@ -1073,7 +1081,7 @@ export const zelaDict: DemoDictionary<ZelaContent> = {
         tag: "Cripto",
         walletLabel: "Tu cripto",
         walletValue: "0,0428 BTC",
-        modelTitle: "Moneda de Bitcoin en 3D",
+        coinTitle: "Bitcoin",
         priceLabel: "BTC / BRL",
         changeLabel: "24h",
         sessionLabel: "Últimas 24 horas",

@@ -7,7 +7,7 @@ import { useReducedMotionSafe as useReducedMotion } from "@/components/demos/use
 import { Bell, ArrowDownRight } from "lucide-react";
 import type { HeroContent } from "./content";
 import { Kicker, Chip, scrollToId, shot } from "./ui";
-import { KineticStage } from "./kinetic-stage";
+import { KineticBackdrop } from "./kinetic-backdrop";
 
 /** Fixed launch moment — countdown is computed against this constant. */
 const DROP_AT = new Date("2026-09-27T20:00:00Z").getTime();
@@ -137,8 +137,8 @@ export function DropHero({ content }: { content: HeroContent }) {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="relative"
         >
-          {/* real-time kinetic drop stage — electrified backdrop behind the shoe */}
-          <KineticStage className="pointer-events-none absolute -inset-[12%] -z-10" />
+          {/* the drop's soundsystem, electrified behind the shoe */}
+          <KineticBackdrop className="pointer-events-none absolute -inset-[12%] -z-10" />
           <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-[var(--d-line)]">
             <Image
               src={shot("photo-1542291026-7eec264c27ff", 1200)}

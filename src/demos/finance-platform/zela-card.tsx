@@ -4,9 +4,8 @@ import { motion } from "framer-motion";
 import { useReducedMotionSafe as useReducedMotion } from "@/components/demos/use-reduced-motion-safe";
 import { CircleCheck, HandCoins, Smartphone, Zap } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { Model3D, ModelCredit } from "@/components/demos/model-3d";
 import type { BenefitIcon, ZelaContent } from "./content";
-import { CARD_MODEL } from "./content";
+import { MetalCard } from "./metal-card";
 import { Blob, EASE, SectionLabel } from "./ui";
 
 const BENEFIT_ICONS: Record<BenefitIcon, LucideIcon> = {
@@ -18,7 +17,7 @@ const BENEFIT_ICONS: Record<BenefitIcon, LucideIcon> = {
 
 /**
  * The one deliberately dark passage in an otherwise cream demo: a deep
- * forest stage so the real 3D metal card gets a dramatic spotlight.
+ * forest stage so the metal card gets a dramatic spotlight as it turns.
  */
 export function ZelaCard({ content }: { content: ZelaContent["card"] }) {
   const reduced = useReducedMotion() ?? false;
@@ -39,28 +38,23 @@ export function ZelaCard({ content }: { content: ZelaContent["card"] }) {
       <Blob color="rgba(232,161,61,0.1)" className="-bottom-32 right-0 h-[24rem] w-[24rem]" />
 
       <div className="relative mx-auto grid max-w-6xl items-center gap-14 px-5 lg:grid-cols-[1.05fr_0.95fr]">
-        {/* The real 3D card, rendered inline in the section */}
-        <motion.div {...reveal(0.08)} className="relative">
+        {/* The card itself, turned by the page's own scroll */}
+        <motion.div {...reveal(0.08)} className="relative py-10">
           <div
             aria-hidden
             className="absolute -inset-4 rounded-[2.6rem] bg-gradient-to-br from-[var(--d-lime)]/18 via-transparent to-[var(--d-amber)]/12 blur-xl"
           />
-          <Model3D
-            uid={CARD_MODEL.uid}
-            file={CARD_MODEL.file}
-            title={content.viewerTitle}
-            thumb={CARD_MODEL.thumb}
-            accent="#7CB342"
-            /* Spins in on arrival, then follows the scroll. */
-            motion="scroll"
-            spinTurns={1.15}
-            introSpin
-            className="aspect-[4/3] w-full rounded-[2.2rem] border border-white/10 bg-black/30 shadow-[0_60px_120px_-50px_rgba(0,0,0,0.8)]"
+          <MetalCard
+            holder={content.cardHolder}
+            number={content.cardNumber}
+            validLabel={content.cardValidLabel}
+            valid={content.cardValid}
+            tier={content.cardTier}
+            className="relative"
           />
-          <ModelCredit
-            credit={CARD_MODEL.credit}
-            className="relative mt-4 text-center text-[0.62rem] uppercase tracking-[0.14em] text-[#F3EEDF]/40"
-          />
+          <p className="relative mt-6 text-center text-[0.62rem] uppercase tracking-[0.18em] text-[#F3EEDF]/40 [font-family:var(--demo-mono)]">
+            {content.viewerTitle}
+          </p>
         </motion.div>
 
         <div>

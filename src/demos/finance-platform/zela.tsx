@@ -29,7 +29,7 @@ const PALETTE = {
   "--d-ink": "#1C2B24", // deep green-black text
   "--d-ink-soft": "#57675D", // muted text (AA on cream)
   "--d-green": "#166B4A", // brand deep green (AA on cream)
-  "--d-forest": "#0E3B29", // dark stage for the 3D card + CTA
+  "--d-forest": "#0E3B29", // dark stage for the metal card + CTA
   "--d-lime": "#7CB342", // soft lime accent (decorative / on dark)
   "--d-lime-deep": "#47691F", // lime for small text on cream (AA)
   "--d-amber": "#E8A13D", // warm amber accent (decorative / on dark)

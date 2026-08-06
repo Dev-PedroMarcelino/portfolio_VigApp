@@ -1,7 +1,7 @@
 import type { DemoDictionary } from "@/demos/content";
 
 /* ------------------------------------------------------------------ */
-/* Shared, locale-independent data (photos, videos, 3D models, ids)    */
+/* Shared, locale-independent data (photos, videos, ids)               */
 /* ------------------------------------------------------------------ */
 
 const img = (id: string, w = 1600) =>
@@ -82,43 +82,6 @@ export const VIDEOS = {
 
 export type SpaceId = "living" | "dining" | "bath";
 
-export interface SpaceSeed {
-  id: SpaceId;
-  uid: string;
-  /** Self-hosted asset, preferred over the embed; see public/models/README.md. */
-  file: string;
-  thumb: string;
-  credit: { model: string; author: string };
-}
-
-/** CC-BY interior scenes, rendered by our own stage once self-hosted. */
-export const SPACES_3D: SpaceSeed[] = [
-  {
-    id: "living",
-    uid: "afb8cb0cbee1488caf61471ef14041e9",
-    file: "/models/white_modern_living_room.glb",
-    thumb:
-      "https://media.sketchfab.com/models/afb8cb0cbee1488caf61471ef14041e9/thumbnails/bf3165db89564e58a35626c6e7d70a7f/453ee2cf4d2549bd94d493e774f5aea1.jpeg",
-    credit: { model: "White Modern Living Room", author: "dylanheyes" },
-  },
-  {
-    id: "dining",
-    uid: "df3f3c9f6233447eb8b7ee129f3bace5",
-    file: "/models/modern_dining_room.glb",
-    thumb:
-      "https://media.sketchfab.com/models/df3f3c9f6233447eb8b7ee129f3bace5/thumbnails/b7916b9f24fa46c29dd9eae8494b0524/1b9fd78d91f94f8989191bc64fc767dc.jpeg",
-    credit: { model: "Modern Dining Room", author: "dylanheyes" },
-  },
-  {
-    id: "bath",
-    uid: "9ba7e0a094694335bd8f4656611c0676",
-    file: "/models/modern_bathroom.glb",
-    thumb:
-      "https://media.sketchfab.com/models/9ba7e0a094694335bd8f4656611c0676/thumbnails/82fd335d3c2749aebdb02c0d93973a88/b564bee78b5c412c9a26b6f78f6aa190.jpeg",
-    credit: { model: "Modern Bathroom", author: "dylanheyes" },
-  },
-];
-
 export const STUDIO_IMAGES = {
   portrait: img("photo-1614010966237-74489a16848b", 1200),
   gallery: [
@@ -160,6 +123,10 @@ export interface SpaceCopy {
   tab: string;
   name: string;
   blurb: string;
+  /** Schedule figures printed in the drawing's title block. */
+  specs: { label: string; value: string }[];
+  /** Finish names, paired index-for-index with the room palette in `plan-stage`. */
+  materials: string[];
 }
 
 export interface ProcessStep {
@@ -213,6 +180,10 @@ export interface PrumoContent {
     bullets: string[];
     note: string;
     tabsAria: string;
+    /** Unit suffix for the dimension chains on the plan. */
+    unitLabel: string;
+    /** Title-block scale note. */
+    scaleLabel: string;
     items: SpaceCopy[];
   };
   process: {
@@ -297,7 +268,7 @@ const en: PrumoContent = {
     navAria: "Main navigation",
     nav: [
       { href: "#projetos", label: "Projects" },
-      { href: "#ambientes", label: "3D Spaces" },
+      { href: "#ambientes", label: "Spaces" },
       { href: "#processo", label: "Process" },
       { href: "#escritorio", label: "Studio" },
       { href: "#contato", label: "Contact" },
@@ -376,7 +347,7 @@ const en: PrumoContent = {
         concept:
           "To preserve the root systems of the native forest, the house touches the ground on just six points. The access walkway crosses through the tree canopy, and every room frames a different stretch of Atlantic forest.",
         quote:
-          "We follow every site visit through the 3D model. Watching the slab being poured exactly where we walked virtually is surreal.",
+          "We follow every site visit with the drawings in hand. Watching the slab being poured exactly where it was dimensioned is surreal.",
         owner: "Rodrigo Tavares",
         mainAlt: "Concrete and wood house among trees",
         extraAlts: [
@@ -416,18 +387,20 @@ const en: PrumoContent = {
     ],
   },
   spaces: {
-    label: "3D spaces",
+    label: "Drawn spaces",
     titleLead: "Walk into the project",
     titleItalic: "before construction begins.",
-    intro: "Interactive rooms, straight from our design workflow",
-    body: "Every Prumo client receives the preliminary design as a navigable 3D model — not still renders. Each room turns as you scroll, so you check heights and finishes and approve the house you will actually live in. Decisions happen on screen, not on the construction site, where they cost ten times more.",
+    intro: "Dimensioned plans, straight from our design workflow",
+    body: "Every Prumo client receives the preliminary design as a dimensioned plan — not a showroom render. Each room plots itself in front of you, wall by wall, with the afternoon sun crossing the floor, so you check clearances, openings and finishes before you sign. Decisions happen on paper, not on the construction site, where they cost ten times more.",
     bullets: [
-      "Navigable model delivered at preliminary design stage",
+      "Dimensioned plan delivered at preliminary design stage",
       "Real materials and lighting studied before a single brick",
       "Revisions decided together, on screen, in days — not weeks",
     ],
-    note: "Illustrative scenes — CC BY models, rendered in real time on this page.",
+    note: "Illustrative plans, drawn for this page — your own dimensions come from your own lot.",
     tabsAria: "Choose a room to explore",
+    unitLabel: "m",
+    scaleLabel: "scale 1:50",
     items: [
       {
         id: "living",
@@ -435,6 +408,11 @@ const en: PrumoContent = {
         name: "Living room",
         blurb:
           "The social heart of the house: double-check sofa clearances, natural light and the TV wall before they exist.",
+        specs: [
+          { label: "Floor area", value: "21.6 m²" },
+          { label: "Ceiling", value: "2.90 m" },
+        ],
+        materials: ["Oak", "Walnut", "Graphite", "Linen"],
       },
       {
         id: "dining",
@@ -442,13 +420,23 @@ const en: PrumoContent = {
         name: "Dining room",
         blurb:
           "Test the table for ten, circulation around chairs and pendant heights in real proportion.",
+        specs: [
+          { label: "Floor area", value: "21.6 m²" },
+          { label: "Table", value: "Seats 10" },
+        ],
+        materials: ["Brass", "Freijó", "Basalt", "Lime"],
       },
       {
         id: "bath",
         tab: "Bath",
         name: "Master bath",
         blurb:
-          "Stone, brass and glazing decisions approved in orbit — no tile surprise on delivery day.",
+          "Stone, brass and glazing decisions approved on paper — no tile surprise on delivery day.",
+        specs: [
+          { label: "Floor area", value: "14.4 m²" },
+          { label: "Ventilation", value: "Natural" },
+        ],
+        materials: ["Travertine", "Brass", "Slate", "Marble"],
       },
     ],
   },
@@ -472,8 +460,8 @@ const en: PrumoContent = {
         num: "02",
         name: "Preliminary design",
         duration: "4–6 weeks",
-        body: "The house takes shape: floor plans, volumes and the navigable 3D model where every room is approved by you.",
-        deliverables: ["Floor plans & sections", "Navigable 3D model", "Construction cost estimate"],
+        body: "The house takes shape: floor plans, sections and the dimensioned drawing set where every room is approved by you.",
+        deliverables: ["Floor plans & sections", "Dimensioned drawing set", "Construction cost estimate"],
       },
       {
         num: "03",
@@ -548,7 +536,7 @@ const en: PrumoContent = {
       },
       {
         quote:
-          "The 3D model settled every argument we had about the kitchen in one evening. What we approved on screen is exactly what was built.",
+          "The plan settled every argument we had about the kitchen in one evening. What we approved on paper is exactly what was built.",
         name: "Rodrigo Tavares",
         project: "Casa da Serra · Cantareira",
       },
@@ -595,7 +583,7 @@ const en: PrumoContent = {
     tagline: "High-end residential architecture — Campinas · SP",
     navAria: "Footer navigation",
     fictionalNote: "Prumo Arquitetura is a fictional concept created by VigApp.",
-    credits: "Photos: Unsplash · Video: Pexels · 3D models: Sketchfab (CC BY)",
+    credits: "Photos: Unsplash · Video: Pexels",
     backToTop: "Back to top",
   },
 };
@@ -609,7 +597,7 @@ const pt: PrumoContent = {
     navAria: "Navegação principal",
     nav: [
       { href: "#projetos", label: "Projetos" },
-      { href: "#ambientes", label: "Ambientes 3D" },
+      { href: "#ambientes", label: "Ambientes" },
       { href: "#processo", label: "Processo" },
       { href: "#escritorio", label: "Escritório" },
       { href: "#contato", label: "Contato" },
@@ -687,7 +675,7 @@ const pt: PrumoContent = {
         concept:
           "Para preservar as raízes da mata nativa, a casa toca o solo em apenas seis pontos. A passarela de acesso atravessa a copa das árvores e cada ambiente emoldura um trecho diferente de Mata Atlântica.",
         quote:
-          "Acompanhamos cada visita de obra pelo modelo 3D. Ver a laje sendo concretada exatamente onde caminhamos virtualmente é surreal.",
+          "Acompanhamos cada visita de obra com a planta na mão. Ver a laje sendo concretada exatamente onde foi cotada é surreal.",
         owner: "Rodrigo Tavares",
         mainAlt: "Casa de concreto e madeira entre árvores",
         extraAlts: [
@@ -726,18 +714,20 @@ const pt: PrumoContent = {
     ],
   },
   spaces: {
-    label: "Ambientes 3D",
+    label: "Ambientes desenhados",
     titleLead: "Entre no projeto",
     titleItalic: "antes de a obra começar.",
-    intro: "Ambientes interativos, direto do nosso fluxo de projeto",
-    body: "Todo cliente Prumo recebe o anteprojeto como um modelo 3D navegável — não como renders estáticos. Cada ambiente gira conforme você desce a página, então você confere alturas e acabamentos e aprova a casa em que vai realmente morar. As decisões acontecem na tela, não no canteiro, onde custam dez vezes mais.",
+    intro: "Plantas cotadas, direto do nosso fluxo de projeto",
+    body: "Todo cliente Prumo recebe o anteprojeto como planta cotada — não como render de vitrine. Cada ambiente se desenha na sua frente, parede por parede, com o sol da tarde atravessando a sala, e você confere circulação, esquadrias e acabamentos antes de assinar. As decisões acontecem no papel, não no canteiro, onde custam dez vezes mais.",
     bullets: [
-      "Modelo navegável entregue já no anteprojeto",
+      "Planta cotada entregue já no anteprojeto",
       "Materiais e luz reais estudados antes do primeiro tijolo",
       "Revisões decididas juntos, na tela, em dias — não semanas",
     ],
-    note: "Cenas ilustrativas — modelos CC BY renderizados em tempo real nesta página.",
+    note: "Plantas ilustrativas, desenhadas para esta página — as medidas do seu projeto saem do seu terreno.",
     tabsAria: "Escolha um ambiente para explorar",
+    unitLabel: "m",
+    scaleLabel: "esc. 1:50",
     items: [
       {
         id: "living",
@@ -745,6 +735,11 @@ const pt: PrumoContent = {
         name: "Sala de estar",
         blurb:
           "O coração social da casa: confira a circulação do sofá, a luz natural e o painel da TV antes de existirem.",
+        specs: [
+          { label: "Área útil", value: "21,6 m²" },
+          { label: "Pé-direito", value: "2,90 m" },
+        ],
+        materials: ["Carvalho", "Nogueira", "Grafite", "Linho"],
       },
       {
         id: "dining",
@@ -752,13 +747,23 @@ const pt: PrumoContent = {
         name: "Sala de jantar",
         blurb:
           "Teste a mesa para dez pessoas, o giro das cadeiras e a altura dos pendentes em proporção real.",
+        specs: [
+          { label: "Área útil", value: "21,6 m²" },
+          { label: "Mesa", value: "10 lugares" },
+        ],
+        materials: ["Latão", "Freijó", "Basalto", "Cal"],
       },
       {
         id: "bath",
         tab: "Banho",
         name: "Banho master",
         blurb:
-          "Pedra, metais e vidros aprovados em órbita — sem surpresa de revestimento no dia da entrega.",
+          "Pedra, metais e vidros aprovados no papel — sem surpresa de revestimento no dia da entrega.",
+        specs: [
+          { label: "Área útil", value: "14,4 m²" },
+          { label: "Ventilação", value: "Natural" },
+        ],
+        materials: ["Travertino", "Latão", "Ardósia", "Mármore"],
       },
     ],
   },
@@ -786,8 +791,8 @@ const pt: PrumoContent = {
         num: "02",
         name: "Anteprojeto",
         duration: "4–6 semanas",
-        body: "A casa ganha forma: plantas, volumetria e o modelo 3D navegável em que cada ambiente é aprovado por você.",
-        deliverables: ["Plantas e cortes", "Modelo 3D navegável", "Estimativa de custo de obra"],
+        body: "A casa ganha forma: plantas, cortes e o caderno de desenhos cotados em que cada ambiente é aprovado por você.",
+        deliverables: ["Plantas e cortes", "Caderno de desenhos cotados", "Estimativa de custo de obra"],
       },
       {
         num: "03",
@@ -862,7 +867,7 @@ const pt: PrumoContent = {
       },
       {
         quote:
-          "O modelo 3D resolveu numa noite todas as discussões que tivemos sobre a cozinha. O que aprovamos na tela é exatamente o que foi construído.",
+          "A planta resolveu numa noite todas as discussões que tivemos sobre a cozinha. O que aprovamos no papel é exatamente o que foi construído.",
         name: "Rodrigo Tavares",
         project: "Casa da Serra · Cantareira",
       },
@@ -909,7 +914,7 @@ const pt: PrumoContent = {
     tagline: "Arquitetura residencial de alto padrão — Campinas · SP",
     navAria: "Navegação do rodapé",
     fictionalNote: "Prumo Arquitetura é um conceito fictício criado pela VigApp.",
-    credits: "Fotos: Unsplash · Vídeos: Pexels · Modelos 3D: Sketchfab (CC BY)",
+    credits: "Fotos: Unsplash · Vídeos: Pexels",
     backToTop: "Voltar ao topo",
   },
 };
@@ -923,7 +928,7 @@ const es: PrumoContent = {
     navAria: "Navegación principal",
     nav: [
       { href: "#projetos", label: "Proyectos" },
-      { href: "#ambientes", label: "Espacios 3D" },
+      { href: "#ambientes", label: "Espacios" },
       { href: "#processo", label: "Proceso" },
       { href: "#escritorio", label: "Estudio" },
       { href: "#contato", label: "Contacto" },
@@ -1001,7 +1006,7 @@ const es: PrumoContent = {
         concept:
           "Para preservar las raíces del bosque nativo, la casa toca el suelo en solo seis puntos. La pasarela de acceso cruza la copa de los árboles y cada ambiente enmarca un tramo distinto de Mata Atlántica.",
         quote:
-          "Seguimos cada visita de obra por el modelo 3D. Ver la losa hormigonada exactamente donde caminamos virtualmente es surreal.",
+          "Seguimos cada visita de obra con los planos en la mano. Ver la losa hormigonada exactamente donde fue acotada es surreal.",
         owner: "Rodrigo Tavares",
         mainAlt: "Casa de hormigón y madera entre árboles",
         extraAlts: [
@@ -1037,18 +1042,20 @@ const es: PrumoContent = {
     ],
   },
   spaces: {
-    label: "Espacios 3D",
+    label: "Espacios dibujados",
     titleLead: "Entra al proyecto",
     titleItalic: "antes de que empiece la obra.",
-    intro: "Ambientes interactivos, directo de nuestro flujo de proyecto",
-    body: "Todo cliente Prumo recibe el anteproyecto como un modelo 3D navegable — no como renders estáticos. Cada ambiente gira mientras te desplazas, así verificas alturas y acabados y apruebas la casa en la que realmente vas a vivir. Las decisiones ocurren en pantalla, no en la obra, donde cuestan diez veces más.",
+    intro: "Plantas acotadas, directo de nuestro flujo de proyecto",
+    body: "Todo cliente Prumo recibe el anteproyecto como planta acotada — no como render de vitrina. Cada ambiente se dibuja frente a ti, muro por muro, con el sol de la tarde cruzando la sala, y verificas circulaciones, carpinterías y acabados antes de firmar. Las decisiones ocurren en el papel, no en la obra, donde cuestan diez veces más.",
     bullets: [
-      "Modelo navegable entregado ya en el anteproyecto",
+      "Planta acotada entregada ya en el anteproyecto",
       "Materiales y luz reales estudiados antes del primer ladrillo",
       "Revisiones decididas juntos, en pantalla, en días — no semanas",
     ],
-    note: "Escenas ilustrativas — modelos CC BY renderizados en tiempo real en esta página.",
+    note: "Plantas ilustrativas, dibujadas para esta página — las medidas de tu proyecto salen de tu terreno.",
     tabsAria: "Elige un ambiente para explorar",
+    unitLabel: "m",
+    scaleLabel: "esc. 1:50",
     items: [
       {
         id: "living",
@@ -1056,6 +1063,11 @@ const es: PrumoContent = {
         name: "Sala de estar",
         blurb:
           "El corazón social de la casa: verifica circulaciones, luz natural y el panel del TV antes de que existan.",
+        specs: [
+          { label: "Superficie", value: "21,6 m²" },
+          { label: "Altura libre", value: "2,90 m" },
+        ],
+        materials: ["Roble", "Nogal", "Grafito", "Lino"],
       },
       {
         id: "dining",
@@ -1063,13 +1075,23 @@ const es: PrumoContent = {
         name: "Comedor",
         blurb:
           "Prueba la mesa para diez, el giro de las sillas y la altura de las lámparas en proporción real.",
+        specs: [
+          { label: "Superficie", value: "21,6 m²" },
+          { label: "Mesa", value: "10 lugares" },
+        ],
+        materials: ["Latón", "Freijó", "Basalto", "Cal"],
       },
       {
         id: "bath",
         tab: "Baño",
         name: "Baño principal",
         blurb:
-          "Piedra, grifería y cristales aprobados en órbita — sin sorpresas de revestimiento el día de la entrega.",
+          "Piedra, grifería y cristales aprobados en el papel — sin sorpresas de revestimiento el día de la entrega.",
+        specs: [
+          { label: "Superficie", value: "14,4 m²" },
+          { label: "Ventilación", value: "Natural" },
+        ],
+        materials: ["Travertino", "Latón", "Pizarra", "Mármol"],
       },
     ],
   },
@@ -1097,8 +1119,8 @@ const es: PrumoContent = {
         num: "02",
         name: "Anteproyecto",
         duration: "4–6 semanas",
-        body: "La casa toma forma: plantas, volumetría y el modelo 3D navegable donde apruebas cada ambiente.",
-        deliverables: ["Plantas y cortes", "Modelo 3D navegable", "Estimación de costo de obra"],
+        body: "La casa toma forma: plantas, cortes y el legajo de dibujos acotados donde apruebas cada ambiente.",
+        deliverables: ["Plantas y cortes", "Legajo de dibujos acotados", "Estimación de costo de obra"],
       },
       {
         num: "03",
@@ -1173,7 +1195,7 @@ const es: PrumoContent = {
       },
       {
         quote:
-          "El modelo 3D resolvió en una noche todas las discusiones que teníamos sobre la cocina. Lo que aprobamos en pantalla es exactamente lo que se construyó.",
+          "El plano resolvió en una noche todas las discusiones que teníamos sobre la cocina. Lo que aprobamos en el papel es exactamente lo que se construyó.",
         name: "Rodrigo Tavares",
         project: "Casa da Serra · Cantareira",
       },
@@ -1220,7 +1242,7 @@ const es: PrumoContent = {
     tagline: "Arquitectura residencial de alto nivel — Campinas · SP",
     navAria: "Navegación del pie de página",
     fictionalNote: "Prumo Arquitetura es un concepto ficticio creado por VigApp.",
-    credits: "Fotos: Unsplash · Videos: Pexels · Modelos 3D: Sketchfab (CC BY)",
+    credits: "Fotos: Unsplash · Videos: Pexels",
     backToTop: "Volver arriba",
   },
 };

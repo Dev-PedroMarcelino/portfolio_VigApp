@@ -1,7 +1,7 @@
 import type { DemoDictionary } from "@/demos/content";
 
 /* ------------------------------------------------------------------ */
-/* Shared, locale-independent data (vehicles, prices, 3D references)   */
+/* Shared, locale-independent data (vehicles, prices, photography)     */
 /* ------------------------------------------------------------------ */
 
 /** Fictitious dealership WhatsApp — used by every conversion CTA. */
@@ -10,21 +10,6 @@ export const WHATSAPP_NUMBER = "5511981230911";
 export function waLink(message: string): string {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
-
-/** Real Sketchfab model shown on the hero showroom stage (CC BY-SA). */
-export const SKETCHFAB_911 = {
-  uid: "d01b254483794de3819786d93e0e1ebf",
-  /* Rendered by our own three.js stage; falls back to the embedded viewer if
-     the asset is missing. See public/models/README.md. */
-  file: "/models/free_porsche_911_carrera_4s.glb",
-  thumb:
-    "https://media.sketchfab.com/models/d01b254483794de3819786d93e0e1ebf/thumbnails/f28bf7eb32e646019bbaf886ff705679/3703397e693c47b2a66894bfb2ae7ea0.jpeg",
-  credit: {
-    model: "Porsche 911 Carrera 4S",
-    author: "Lionsharp Studios",
-    license: "CC BY-SA",
-  },
-} as const;
 
 export type BrandId =
   | "audi"
@@ -203,13 +188,14 @@ export const BRAND_FILTERS: { id: BrandId; label: string }[] = [
   { id: "toyota", label: "Toyota" },
 ];
 
-/** Featured car of the week — the one on the 3D showroom stage. */
+/** Featured car of the week — the one being audited on the hero stage. */
 export const FEATURED = {
   id: "911c4s",
   name: "Porsche 911 Carrera 4S",
   year: 2022,
   km: 18400,
   price: 899900,
+  photo: `https://images.unsplash.com/photo-1580274455191-1c62238fa333${U}`,
 } as const;
 
 /** Financing constants — Price table, monthly rate. */
@@ -257,6 +243,15 @@ export interface BarcellosContent {
       title: string;
       priceTag: string;
       fichaCta: string;
+      photoAlt: string;
+      /** Mono caption that rides with the inspection laser. */
+      scanLabel: string;
+      /** Verdict stamped once the sweep clears the frame. */
+      scanDone: string;
+      /** Three callouts pinned to the bodywork. */
+      pins: { label: string; value: string }[];
+      /** Audit bars under the stage; `pct` is how full each one settles. */
+      meters: { label: string; pct: number }[];
     };
   };
   featured: {
@@ -269,7 +264,7 @@ export interface BarcellosContent {
     priceNote: string;
     ctaInterest: string;
     ctaTestDrive: string;
-    back3d: string;
+    backToStage: string;
     whatsappMsg: string;
   };
   stock: {
@@ -420,16 +415,29 @@ const pt: BarcellosContent = {
     ],
     stage: {
       eyebrow: "Destaque da semana",
-      title: "Gire o carro — Porsche 911 Carrera 4S",
+      title: "Porsche 911 Carrera 4S · auditoria ao vivo",
       priceTag: "R$ 899.900",
       fichaCta: "Ver ficha completa",
+      photoAlt: "Porsche 911 Carrera 4S preto no showroom Barcellos",
+      scanLabel: "Laudo cautelar · 160 itens",
+      scanDone: "Aprovado",
+      pins: [
+        { label: "Motor", value: "3.0 biturbo · 450 cv" },
+        { label: "Tração", value: "4S integral · PDK 8" },
+        { label: "Rodados", value: "18.400 km reais" },
+      ],
+      meters: [
+        { label: "Procedência auditada", pct: 100 },
+        { label: "Revisões na rede", pct: 100 },
+        { label: "Garantia restante", pct: 72 },
+      ],
     },
   },
   featured: {
     label: "Destaque da semana",
     title: "Porsche 911 Carrera 4S",
     subtitle:
-      "O mesmo carro que você acabou de girar em 3D, esperando na Av. Europa. Seminovo de único dono, com todas as revisões feitas na concessionária.",
+      "O mesmo carro que acabou de passar pela auditoria lá em cima, esperando na Av. Europa. Seminovo de único dono, com todas as revisões feitas na concessionária.",
     specs: [
       { label: "Potência", value: "450 cv" },
       { label: "0–100 km/h", value: "3,8 s" },
@@ -443,7 +451,7 @@ const pt: BarcellosContent = {
     priceNote: "Aceitamos seu usado na troca",
     ctaInterest: "Tenho interesse",
     ctaTestDrive: "Agendar test drive",
-    back3d: "Voltar ao modelo 3D",
+    backToStage: "Rever a auditoria",
     whatsappMsg:
       "Olá! Tenho interesse no Porsche 911 Carrera 4S 2022 (destaque da semana) por R$ 899.900.",
   },
@@ -632,16 +640,29 @@ const en: BarcellosContent = {
     ],
     stage: {
       eyebrow: "Car of the week",
-      title: "Spin the car — Porsche 911 Carrera 4S",
+      title: "Porsche 911 Carrera 4S · audited live",
       priceTag: "R$ 899.900",
       fichaCta: "See the full spec sheet",
+      photoAlt: "Black Porsche 911 Carrera 4S on the Barcellos showroom floor",
+      scanLabel: "Provenance audit · 160 checks",
+      scanDone: "Cleared",
+      pins: [
+        { label: "Engine", value: "3.0 twin-turbo · 450 hp" },
+        { label: "Drivetrain", value: "4S all-wheel · 8-sp PDK" },
+        { label: "Mileage", value: "18,400 km verified" },
+      ],
+      meters: [
+        { label: "Provenance audited", pct: 100 },
+        { label: "Dealer service history", pct: 100 },
+        { label: "Warranty remaining", pct: 72 },
+      ],
     },
   },
   featured: {
     label: "Car of the week",
     title: "Porsche 911 Carrera 4S",
     subtitle:
-      "The very car you just spun in 3D, waiting at Av. Europa. One-owner, every service done at the official dealer.",
+      "The very car you just watched clear its audit, waiting at Av. Europa. One-owner, every service done at the official dealer.",
     specs: [
       { label: "Power", value: "450 hp" },
       { label: "0–100 km/h", value: "3.8 s" },
@@ -655,7 +676,7 @@ const en: BarcellosContent = {
     priceNote: "We take your current car as trade-in",
     ctaInterest: "I'm interested",
     ctaTestDrive: "Book a test drive",
-    back3d: "Back to the 3D model",
+    backToStage: "Replay the audit",
     whatsappMsg:
       "Hi! I'm interested in the Porsche 911 Carrera 4S 2022 (car of the week) listed at R$ 899.900.",
   },
@@ -844,16 +865,29 @@ const es: BarcellosContent = {
     ],
     stage: {
       eyebrow: "Destacado de la semana",
-      title: "Gira el auto — Porsche 911 Carrera 4S",
+      title: "Porsche 911 Carrera 4S · auditoría en vivo",
       priceTag: "R$ 899.900",
       fichaCta: "Ver ficha completa",
+      photoAlt: "Porsche 911 Carrera 4S negro en el showroom Barcellos",
+      scanLabel: "Informe pericial · 160 ítems",
+      scanDone: "Aprobado",
+      pins: [
+        { label: "Motor", value: "3.0 biturbo · 450 cv" },
+        { label: "Tracción", value: "4S integral · PDK 8" },
+        { label: "Kilometraje", value: "18.400 km reales" },
+      ],
+      meters: [
+        { label: "Procedencia auditada", pct: 100 },
+        { label: "Revisiones oficiales", pct: 100 },
+        { label: "Garantía restante", pct: 72 },
+      ],
     },
   },
   featured: {
     label: "Destacado de la semana",
     title: "Porsche 911 Carrera 4S",
     subtitle:
-      "El mismo auto que acabas de girar en 3D, esperándote en Av. Europa. Un solo dueño y todas las revisiones hechas en el concesionario oficial.",
+      "El mismo auto que acaba de pasar la auditoría ahí arriba, esperándote en Av. Europa. Un solo dueño y todas las revisiones hechas en el concesionario oficial.",
     specs: [
       { label: "Potencia", value: "450 cv" },
       { label: "0–100 km/h", value: "3,8 s" },
@@ -867,7 +901,7 @@ const es: BarcellosContent = {
     priceNote: "Aceptamos tu usado como parte de pago",
     ctaInterest: "Me interesa",
     ctaTestDrive: "Agendar test drive",
-    back3d: "Volver al modelo 3D",
+    backToStage: "Ver la auditoría de nuevo",
     whatsappMsg:
       "¡Hola! Me interesa el Porsche 911 Carrera 4S 2022 (destacado de la semana) publicado a R$ 899.900.",
   },

@@ -133,14 +133,21 @@ export interface CatalogContent {
   items: CatalogItem[];
 }
 
-/* -------------------------- Vista 360° ---------------------------- */
+/* ------------------------ Featured stage --------------------------- */
 
 export interface Vista360Content {
   label: string;
   title: string;
   intro: string;
   badge: string;
-  modelTitle: string;
+  /** Alt text for the pair on the stage. */
+  photoAlt: string;
+  /** Sentence that laps the stage on the brand ring. */
+  ringText: string;
+  /** Accessible label for the colorway switcher. */
+  swatchLabel: string;
+  /** Three callouts pinned to the pair. */
+  pins: { label: string; value: string }[];
   featureNote: string;
   name: string;
   colorway: string;
@@ -264,16 +271,25 @@ const IMG = {
   chain: "photo-1625908733875-efa9c75c084d",
 };
 
-/** Sketchfab model powering the "Vista 360°" feature. */
-export const VISTA_MODEL = {
-  /* Self-hosted asset wins when present; see public/models/README.md. */
-  file: "/models/nike_sb_charge_cnvs.glb",
-  /* Source of the deployed asset, and the fallback viewer's model. */
-  uid: "46261bacdcbe4f2381edd5d1afc8df91",
-  thumb:
-    "https://media.sketchfab.com/models/46261bacdcbe4f2381edd5d1afc8df91/thumbnails/afb104326de94d938af79f9477fe9cab/ef57f6326fd54ca896def7ed31669370.jpeg",
-  credit: { model: "Nike SB Charge CNVS", author: "wolkoed" },
+/** The pair on the featured stage. */
+export const VISTA_PRODUCT = {
+  photo: IMG.runner,
 };
+
+export interface Colorway {
+  id: string;
+  /** Proper noun — a colorway name is the same in every language. */
+  name: string;
+  from: string;
+  to: string;
+}
+
+/** Duotone pairs the stage grades the pair into. */
+export const VISTA_COLORWAYS: Colorway[] = [
+  { id: "noir", name: "Neon Noir", from: "#FF3D81", to: "#B026FF" },
+  { id: "volt", name: "Volt Alley", from: "#D8FF3D", to: "#166B4A" },
+  { id: "ice", name: "Ice Cruzeiro", from: "#7FE7FF", to: "#2C2AF0" },
+];
 
 /* Sizes shared by every catalog sneaker (BR numbering). */
 const SNKR = {
@@ -295,7 +311,7 @@ export const vielaDict: DemoDictionary<VielaContent> = {
       nav: [
         { href: "#drop", label: "The Drop" },
         { href: "#catalogo", label: "Catalog" },
-        { href: "#vista", label: "360° View" },
+        { href: "#vista", label: "The Pair" },
         { href: "#raffle", label: "Raffle" },
         { href: "#studio", label: "The Alley" },
       ],
@@ -427,12 +443,19 @@ export const vielaDict: DemoDictionary<VielaContent> = {
       ],
     },
     vista: {
-      label: "Spin the sneaker",
-      title: "360° view",
-      intro: "A real 3D scan, live on the page, turning on its own so you see every side of the pair — then take it home.",
-      badge: "VISTA 360°",
-      modelTitle: "SB Charge CNVS — interactive 3D model",
-      featureNote: "Real-time 3D, rendered on this page — model by wolkoed (CC BY).",
+      label: "Featured pair",
+      title: "The whole pair, graded",
+      intro: "One pair on the turntable, three colorways, every spec called out where it lives. Pick the grade you want and take it home.",
+      badge: "DROP 07",
+      photoAlt: "Low-top sneaker on a lit studio plinth",
+      ringText: "VIELA · DROP 07 · SÃO PAULO",
+      swatchLabel: "Choose a colorway",
+      pins: [
+        { label: "Upper", value: "Waxed canvas" },
+        { label: "Sole", value: "Vulcanised gum" },
+        { label: "Collar", value: "Foam-lined" },
+      ],
+      featureNote: "Colorways graded live on this page — the pair ships in the grade you pick.",
       name: "Nike SB Charge CNVS",
       colorway: "Khaki / White",
       price: 649,
@@ -513,7 +536,7 @@ export const vielaDict: DemoDictionary<VielaContent> = {
           links: [
             { href: "#drop", label: "The Drop" },
             { href: "#catalogo", label: "Catalog" },
-            { href: "#vista", label: "360° View" },
+            { href: "#vista", label: "The Pair" },
             { href: "#raffle", label: "Raffle" },
           ],
         },
@@ -543,7 +566,7 @@ export const vielaDict: DemoDictionary<VielaContent> = {
       nav: [
         { href: "#drop", label: "O Drop" },
         { href: "#catalogo", label: "Catálogo" },
-        { href: "#vista", label: "Vista 360°" },
+        { href: "#vista", label: "O Par" },
         { href: "#raffle", label: "Sorteio" },
         { href: "#studio", label: "A Viela" },
       ],
@@ -675,12 +698,19 @@ export const vielaDict: DemoDictionary<VielaContent> = {
       ],
     },
     vista: {
-      label: "Gira o tênis",
-      title: "Vista 360°",
-      intro: "Um scan 3D de verdade, girando sozinho na página pra você ver o par de todos os lados — e depois levar pra casa.",
-      badge: "VISTA 360°",
-      modelTitle: "SB Charge CNVS — modelo 3D interativo",
-      featureNote: "3D em tempo real, renderizado nesta página — modelo de wolkoed (CC BY).",
+      label: "Par em destaque",
+      title: "O par inteiro, colorizado",
+      intro: "Um par no prato, três colorways, cada detalhe apontado onde ele mora. Escolha a cor que você quer e leve pra casa.",
+      badge: "DROP 07",
+      photoAlt: "Tênis cano baixo sobre plinto iluminado de estúdio",
+      ringText: "VIELA · DROP 07 · SÃO PAULO",
+      swatchLabel: "Escolha um colorway",
+      pins: [
+        { label: "Cabedal", value: "Lona encerada" },
+        { label: "Sola", value: "Vulcanizada gum" },
+        { label: "Colarinho", value: "Forrado em espuma" },
+      ],
+      featureNote: "Colorways aplicados ao vivo nesta página — o par sai na cor que você escolher.",
       name: "Nike SB Charge CNVS",
       colorway: "Cáqui / Branco",
       price: 649,
@@ -761,7 +791,7 @@ export const vielaDict: DemoDictionary<VielaContent> = {
           links: [
             { href: "#drop", label: "O Drop" },
             { href: "#catalogo", label: "Catálogo" },
-            { href: "#vista", label: "Vista 360°" },
+            { href: "#vista", label: "O Par" },
             { href: "#raffle", label: "Sorteio" },
           ],
         },
@@ -791,7 +821,7 @@ export const vielaDict: DemoDictionary<VielaContent> = {
       nav: [
         { href: "#drop", label: "El Drop" },
         { href: "#catalogo", label: "Catálogo" },
-        { href: "#vista", label: "Vista 360°" },
+        { href: "#vista", label: "El Par" },
         { href: "#raffle", label: "Sorteo" },
         { href: "#studio", label: "El Callejón" },
       ],
@@ -923,12 +953,19 @@ export const vielaDict: DemoDictionary<VielaContent> = {
       ],
     },
     vista: {
-      label: "Gira la zapatilla",
-      title: "Vista 360°",
-      intro: "Un escaneo 3D real, girando solo en la página para que veas el par por todos lados — y luego te lo lleves.",
-      badge: "VISTA 360°",
-      modelTitle: "SB Charge CNVS — modelo 3D interactivo",
-      featureNote: "3D en tiempo real, renderizado en esta página — modelo de wolkoed (CC BY).",
+      label: "Par destacado",
+      title: "El par entero, coloreado",
+      intro: "Un par en el plato, tres colorways, cada detalle señalado donde vive. Elige el color que quieres y llévatelo.",
+      badge: "DROP 07",
+      photoAlt: "Zapatilla de caña baja sobre un plinto iluminado de estudio",
+      ringText: "VIELA · DROP 07 · SÃO PAULO",
+      swatchLabel: "Elige un colorway",
+      pins: [
+        { label: "Empeine", value: "Lona encerada" },
+        { label: "Suela", value: "Vulcanizada gum" },
+        { label: "Cuello", value: "Forrado en espuma" },
+      ],
+      featureNote: "Colorways aplicados en vivo en esta página — el par sale en el color que elijas.",
       name: "Nike SB Charge CNVS",
       colorway: "Caqui / Blanco",
       price: 649,
@@ -1009,7 +1046,7 @@ export const vielaDict: DemoDictionary<VielaContent> = {
           links: [
             { href: "#drop", label: "El Drop" },
             { href: "#catalogo", label: "Catálogo" },
-            { href: "#vista", label: "Vista 360°" },
+            { href: "#vista", label: "El Par" },
             { href: "#raffle", label: "Sorteo" },
           ],
         },

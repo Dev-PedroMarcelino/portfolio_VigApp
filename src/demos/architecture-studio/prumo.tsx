@@ -6,7 +6,7 @@ import { prumoDict } from "./content";
 import { PrumoHeader } from "./prumo-header";
 import { Hero } from "./hero";
 import { Projects } from "./projects";
-import { Spaces3D } from "./spaces-3d";
+import { Spaces } from "./spaces";
 import { Process } from "./process";
 import { Tour } from "./tour";
 import { Studio } from "./studio";
@@ -44,7 +44,7 @@ export function Prumo({ locale }: { locale: string }) {
       <main>
         <Hero content={content.hero} />
         <Projects content={content.projects} />
-        <Spaces3D content={content.spaces} />
+        <Spaces content={content.spaces} />
         <Process content={content.process} />
         <Tour content={content.tour} />
         <Studio content={content.studio} />
